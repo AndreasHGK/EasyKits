@@ -1,0 +1,29 @@
+#don't touch this
+version: 0
+
+# the command name. Don't change this or the command won't work.
+createkit:
+  # the command label is what the user types to execute the command. Add multiple ones for aliases. The first label will be the main label.
+  labels:
+    - "createkit"
+    - "makekit"
+    - "addkit"
+  # the description is what will appear next to the command in the command list.
+  description: "make a kit"
+  # the usage is how to execute the command. It is best to leave it like this.
+  usage: "/createkit [name]"
+
+kit:
+  labels:
+    - "kit"
+    - "ekit"
+  description: "claim a kit"
+  usage: "/kit [name]"
+
+deletekit:
+  labels:
+    - "deletekit"
+    - "delkit"
+    - "removekit"
+  description: "delete a kit"
+  usage: "/deletekit [name]"

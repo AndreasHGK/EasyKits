@@ -1,0 +1,56 @@
+#don't touch this
+version: 0
+
+# messages
+
+sender-not-player: "§l§4> §r§7sender needs to be a player"
+
+# this appears when trying to claim a kit with a cost when no compatible economy plugin is found
+no-economy: "§c§l> §r§7There is no economy installed."
+
+unknown-exception: "§c§l> §r§7There was an unknown exception."
+
+# /createkit UI + messages
+createkit-title: "§0Kit creation menu"
+createkit-text: "§7When making a kit, all the items in your inventory will be added to the kit. Make sure you have the correct items before you submit the kit."
+createkit-kitname: "§e§l> §rkit name"
+createkit-price: "§e§l> §rPrice §7(0 for no price)"
+createkit-cooldown: "§e§l> §rCooldown §7(in seconds)"
+createkit-flags: "§e§l> §rFlags"
+createkit-lockedToggle: "locked §7(= permission required)"
+createkit-emptyOnClaimToggle: "emptyOnClaim"
+createkit-doOverrideToggle: "doOverrideItems"
+createkit-doOverrideArmorToggle: "doOverrideArmor"
+createkit-alwaysClaimToggle: "alwaysClaim"
+
+createkit-cancelled: "§c§l> §r§7Kit creation cancelled."
+createkit-no-name: "§c§l> §r§7Please enter a name for your kit."
+createkit-duplicate: "§c§l> §r§7A kit with that name already exists."
+createkit-empty-inventory: "§c§l> §r§7You need to hold items in your inventory to create a kit with."
+createkit-invalid-price: "§c§l> §r§7Please enter a valid price."
+createkit-invalid-cooldown: "§c§l> §r§7Please enter a valid cooldown time."
+
+createkit-success: "§a§l> §r§7A kit with name §a{NAME}§r§7 has been created!"
+
+# /deletekit UI + messages
+deletekit-title: "§0Kit deletion menu"
+deletekit-text: "§7Please select the kit you want to delete and comfirm it by submitting."
+deletekit-select: "§e§l> §rSelect kit"
+
+deletekit-cancelled: "§c§l> §r§7Kit deletion cancelled."
+deletekit-empty: "§c§l> §r§7Please select a kit to delete."
+deletekit-not-found: "§c§l> §r§7Selected kit not found."
+
+deletekit-success: "§a§l> §r§7Successfully deleted kit §a{NAME}§r§7."
+
+# /kit UI + messages
+kit-list: "§e§l> §r§7Available kits: §f{KITS}"
+
+kit-none-available: "§c§l> §r§7There are no available kits."
+kit-no-permission: "§c§l> §r§7You don't have permission to claim this kit."
+kit-not-found: "§c§l> §r§7A kit with that name does not exist."
+kit-insufficient-funds: "§c§l> §r§7You have insufficient funds to claim this kit."
+kit-insufficient-space: "§c§l> §r§7You don't have enough inventory space to claim this kit."
+kit-cooldown-active: "§c§l> §r§7You can't claim this kit for another §c{TIME}§7."
+
+kit-claim-success: "§a§l> §r§7Claimed kit §a{NAME}§r§7."

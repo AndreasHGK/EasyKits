@@ -1,0 +1,33 @@
+name: EasyKits
+main: AndreasHGK\EasyKits\EasyKits
+version: 1.0.0-beta
+api: 3.9.0
+load: POSTWORLD
+author: AndreasHGK
+description: A kit plugin for everyone
+website: http://hgk.me/
+depend:
+- FormAPI
+- EconomyAPI
+
+permissions:
+ easykits:
+  default: op
+  description: "easykits root permission"
+  children:
+   easykits.command:
+    default: op
+    description: "easykits root command permission"
+    children:
+     easykits.command.kit:
+      default: true
+      description: "permission for the /kit command"
+     easykits.command.createkit:
+      default: op
+      description: "permission for the /createkit command"
+     easykits.command.deletekit:
+      default: op
+      description: "permission for the /deletekit command"
+   easykits.kit:
+    default: op
+    description: "permission for specific kits"

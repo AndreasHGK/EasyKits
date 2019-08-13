@@ -1,0 +1,13 @@
+#don't touch this
+version: 0
+
+# the default values for the kit flags when creating a kit
+default-flags:
+  locked: true
+  emptyOnClaim: false
+  doOverride: false
+  doOverrideArmor: false
+  alwaysClaim: false
+
+# this will only change /kit, not /createkit.
+use-forms: true

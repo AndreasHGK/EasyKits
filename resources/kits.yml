@@ -1,0 +1,56 @@
+examplekit:
+  # Items to put in the inventory. 0-8 -> hotbar (from left to right). 9-35 -> everything else
+  items:
+    0:
+      id: 276
+      damage: 0
+      count: 1
+    1:
+      id: 278
+      damage: 0
+      count: 1
+    2:
+      id: 279
+      damage: 0
+      count: 1
+    3:
+      id: 277
+      damage: 0
+      count: 1
+    8:
+      id: 364
+      damage: 0
+      count: 64
+  # Items to put in the armor slots. 0 -> boots, 1 -> leggings, 2 -> chestplate, 3 -> helmet
+  armor:
+    0:
+      id: 306
+      damage: 0
+      count: 1
+    1:
+      id: 307
+      damage: 0
+      count: 1
+    2:
+      id: 308
+      damage: 0
+      count: 1
+    3:
+      id: 309
+      damage: 0
+      count: 1
+  # The price a user has to pay to claim a kit
+  price: 10.000000
+  # The time a user has to wait before being able to claim a new kit
+  cooldown: 60
+  flags:
+    # The user will need permission (easykits.kit.<kitname>) to claim the kit
+    locked: true
+    # When claimed, the kit's items will be put in the exact slot is was when created, even if it is occupied
+    doOverride: false
+    # Same as before, but with armor. When false, armor from occupied slots will be put in the inventory
+    doOverrideArmor: false
+    # Claim the kit even when the inventory is full
+    alwaysClaim: false
+    # Clear a player's whole inventory before putting the kit items in
+    emptyOnClaim: false
