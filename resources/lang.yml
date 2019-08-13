@@ -44,7 +44,13 @@ deletekit-not-found: "§c§l> §r§7Selected kit not found."
 deletekit-success: "§a§l> §r§7Successfully deleted kit §a{NAME}§r§7."
 
 # /kit UI + messages
-kit-list: "§e§l> §r§7Available kits: §f{KITS}"
+kit-title: "§OKit selection"
+kit-text: "" #this is optional
+kit-available-free-format: "{NAME}\n§aUnlocked"
+kit-available-priced-format: "{NAME}\n§6${PRICE}"
+kit-locked-format: "{NAME}\n§cLocked" # only shows when enabled in config
+
+kit-list: "§e§l> §r§7Available kits: §f{KITS}" # when UI is turned off
 
 kit-none-available: "§c§l> §r§7There are no available kits."
 kit-no-permission: "§c§l> §r§7You don't have permission to claim this kit."

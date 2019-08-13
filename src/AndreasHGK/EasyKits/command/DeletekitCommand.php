@@ -8,6 +8,7 @@ use AndreasHGK\EasyKits\DataManager;
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\KitManager;
+use AndreasHGK\EasyKits\utils\LangUtils;
 use jojoe77777\FormAPI\CustomForm;
 use pocketmine\command\CommandExecutor;
 use pocketmine\Player;
@@ -30,17 +31,16 @@ class DeletekitCommand extends EKExecutor {
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
     {
         if(!$sender instanceof Player){
-            $sender->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "sender-not-player")));
+            $sender->sendMessage(LangUtils::getMessage("sender-not-player"));
             return true;
         }
 
         if(isset($args[0])){
             if(!KitManager::exists((string)$args[0])){
-                $sender->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "deletekit-not-found")));
+                $sender->sendMessage(LangUtils::getMessage("deletekit-not-found"));
                 return true;
             }
-            KitManager::remove((string)$args[0]);
-            $sender->sendMessage(TextFormat::colorize(str_replace("{NAME}", (string)$args[0], DataManager::getKey(DataManager::LANG, "deletekit-success"))));
+            if(KitManager::remove(KitManager::get((string)$args[0]))) $sender->sendMessage(LangUtils::getMessage("deletekit-success", true, ["{NAME}" => (string)$args[0]]));
             return true;
         }
 
@@ -51,24 +51,24 @@ class DeletekitCommand extends EKExecutor {
 
         $ui = new CustomForm(function(Player $player, $data) use($kits){
             if($data === null){
-                $player->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "deletekit-cancelled")));
+                $player->sendMessage(LangUtils::getMessage("deletekit-cancelled"));
                 return;
             }
             if(!isset($data["kit"])){
-                $player->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "deletekit-empty")));
+                $player->sendMessage(LangUtils::getMessage("deletekit-empty"));
                 return;
             }
             if(!KitManager::exists($kits[$data["kit"]])){
-                $player->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "deletekit-not-found")));
+                $player->sendMessage(LangUtils::getMessage("deletekit-not-found"));
                 return;
             }
             KitManager::remove($kits[$data["kit"]]);
-            $player->sendMessage(TextFormat::colorize(str_replace("{NAME}", $kits[$data["kit"]], DataManager::getKey(DataManager::LANG, "deletekit-success"))));
+            $player->sendMessage(LangUtils::getMessage("deletekit-success", true, ["{NAME}" => $kits[$data["kit"]]]));
             return;
         });
-        $ui->setTitle(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "deletekit-title")));
-        $ui->addLabel(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "deletekit-text")));
-        $ui->addDropdown(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "deletekit-text")), $kits, null, "kit");
+        $ui->setTitle(LangUtils::getMessage("deletekit-title"));
+        $ui->addLabel(LangUtils::getMessage("deletekit-text"));
+        $ui->addDropdown(LangUtils::getMessage("deletekit-select"), $kits, null, "kit");
         $sender->sendForm($ui);
         return true;
     }

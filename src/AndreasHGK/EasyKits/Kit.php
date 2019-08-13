@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits;
 
+use AndreasHGK\EasyKits\event\KitClaimEvent;
 use AndreasHGK\EasyKits\utils\KitException;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\item\Item;
@@ -65,7 +66,8 @@ class Kit
      * claim a kit as a player
      * @param Player $player
      */
-    public function claimFor(Player $player) : void {
+    public function claimFor(Player $player) : bool {
+        if(!$this->hasPermission($player)) throw new KitException("Player is not permitted to claim this kit", 4);
         if($this->getCooldown() > 0){
             if(CooldownManager::hasKitCooldown($this, $player)){
                 throw new KitException("Kit is on cooldown", 0);
@@ -105,25 +107,34 @@ class Kit
             }
         }
 
-        if($this->getCooldown() > 0){
-            CooldownManager::setKitCooldown($this, $player);
+        $event = new KitClaimEvent($this, $player);
+        $event->call();
+
+        if($event->isCancelled()) return false;
+
+        $player = $event->getPlayer();
+        $kit = $event->getKit();
+
+        if($kit->getCooldown() > 0){
+            CooldownManager::setKitCooldown($kit, $player);
         }
-        if($this->getPrice() > 0){
-            $economy->reduceMoney($player, $this->getPrice());
+        if($kit->getPrice() > 0){
+            $economy->reduceMoney($player, $kit->getPrice(), true);
         }
-        if($this->emptyOnClaim()){
+        if($kit->emptyOnClaim()){
             $playerInv->clearAll();
             $playerArmorInv->clearAll();
         }
         foreach($invSlots as $key => $invSlot){
-            if($this->doOverride()) $playerInv->setItem($key, $invSlot);
+            if($kit->doOverride()) $playerInv->setItem($key, $invSlot);
             else $playerInv->addItem($invSlot);
         }
         foreach($armorSlots as $key => $armorSlot){
-            if($this->doOverrideArmor()) $playerArmorInv->setItem($key, $armorSlot);
+            if($kit->doOverrideArmor()) $playerArmorInv->setItem($key, $armorSlot);
             elseif($playerArmorInv->getItem($key)->getId() !== Item::AIR) $playerInv->addItem($armorSlot);
             else $playerArmorInv->addItem($armorSlot);
         }
+        return true;
     }
 
     /**

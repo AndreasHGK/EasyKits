@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits;
 
+use AndreasHGK\EasyKits\event\KitCreateEvent;
+use AndreasHGK\EasyKits\event\KitDeleteEvent;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
@@ -50,6 +52,10 @@ class KitManager {
      */
     public $kits = [];
 
+    /**
+     * @param Permissible $permissible
+     * @return Kit[]
+     */
     public static function getPermittedKitsFor(Permissible $permissible) : array {
         $kits = [];
         foreach(KitManager::getAll() as $kit){
@@ -60,9 +66,27 @@ class KitManager {
         return $kits;
     }
 
+    public static function add(Kit $kit, bool $silent = false) : bool {
+        $event = new KitCreateEvent($kit);
+        if(!$silent) $event->call();
 
-    public static function add(Kit $kit) : void {
-        self::getInstance()->kits[$kit->getName()] = $kit;
+        if($event->isCancelled()) return false;
+
+        self::getInstance()->kits[$kit->getName()] = $event->getKit();
+        return true;
+    }
+
+    public static function remove(Kit $kit, bool $silent = false) : bool {
+        $event = new KitDeleteEvent($kit);
+        if(!$silent) $event->call();
+
+        if($event->isCancelled()) return false;
+
+        $kits = self::getKitFile();
+        $kits->remove($event->getKit()->getName());
+        DataManager::save(DataManager::KITS);
+        self::unload($event->getKit()->getName());
+        return true;
     }
 
     /**
@@ -95,13 +119,6 @@ class KitManager {
 
     public static function unload(string $kit) : void {
         unset(self::getInstance()->kits[$kit]);
-    }
-
-    public static function remove(string $kit) : void {
-        $kits = self::getKitFile();
-        $kits->remove($kit);
-        DataManager::save(DataManager::KITS);
-        self::unload($kit);
     }
 
     public static function exists(string $file) : bool{

@@ -9,5 +9,8 @@ default-flags:
   doOverrideArmor: false
   alwaysClaim: false
 
-# this will only change /kit, not /createkit.
+# this will only change /kit, not /createkit or /deletekit
 use-forms: true
+
+# show players kits they don't have permission to claim
+show-locked: false

@@ -7,8 +7,11 @@ namespace AndreasHGK\EasyKits\command;
 use AndreasHGK\EasyKits\CooldownManager;
 use AndreasHGK\EasyKits\DataManager;
 use AndreasHGK\EasyKits\EasyKits;
+use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\KitManager;
 use AndreasHGK\EasyKits\utils\KitException;
+use AndreasHGK\EasyKits\utils\LangUtils;
+use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\Player;
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
@@ -29,28 +32,62 @@ class KitCommand extends EKExecutor {
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
     {
         if(!$sender instanceof Player){
-            $sender->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "sender-not-player")));
+            $sender->sendMessage(LangUtils::getMessage("sender-not-player"));
             return true;
         }
 
-
         if(!isset($args[0])){
-            $list = implode("§7, §f", KitManager::getPermittedKitsFor($sender));
-            $sender->sendMessage(TextFormat::colorize(str_replace("{KITS}", $list, DataManager::getKey(DataManager::LANG, "kit-list"))));
+            if(!DataManager::getKey(DataManager::CONFIG, "use-forms")){
+                $list = implode("§7, §f", KitManager::getPermittedKitsFor($sender));
+                $sender->sendMessage(LangUtils::getMessage("kit-list", true, ["{KITS}" => $list]));
+                return true;
+            }
+
+            $ui = new SimpleForm(function (Player $player, $data){
+                if($data === null){
+                    return;
+                }
+                if(!KitManager::exists($data)){
+                    $player->sendMessage(LangUtils::getMessage("kit-not-found"));
+                    return;
+                }
+                $this->tryClaim(KitManager::get($data), $player);
+            });
+            $ui->setTitle(LangUtils::getMessage("kit-title"));
+            $ui->setContent(LangUtils::getMessage("kit-text"));
+
+            foreach(KitManager::getPermittedKitsFor($sender) as $kit) {
+                if ($kit->getPrice() > 0) {
+                    $ui->addButton(LangUtils::getMessage("kit-available-priced-format", true, ["{NAME}" => $kit->getName(), "{PRICE}" => $kit->getPrice()]), -1, "", $kit->getName());
+                } else {
+                    $ui->addButton(LangUtils::getMessage("kit-available-free-format", true, ["{NAME}" => $kit->getName()]), -1, "", $kit->getName());
+                }
+            }
+            if(DataManager::getKey(DataManager::CONFIG, "show-locked")){
+                foreach(KitManager::getAll() - KitManager::getPermittedKitsFor($sender) as $kit) {
+                    $ui->addButton(LangUtils::getMessage("kit-locked-format", true, ["{NAME}" => $kit->getName(), "{PRICE}" => $kit->getPrice()]), -1, "", $kit->getName());
+                }
+            }
+            $sender->sendForm($ui);
             return true;
         }
 
         if(!KitManager::exists($args[0])){
-            $sender->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "kit-not-found")));
+            $sender->sendMessage(LangUtils::getMessage("kit-not-found"));
             return true;
         }
+        $this->tryClaim(KitManager::get($args[0]), $sender);
+        return true;
+    }
+
+    public function tryClaim(Kit $kit, Player $player) : void {
         try{
-            KitManager::get($args[0])->claimFor($sender);
-            $sender->sendMessage(TextFormat::colorize(str_replace("{NAME}", KitManager::get($args[0])->getName(), DataManager::getKey(DataManager::LANG, "kit-claim-success"))));
+            if($kit->claimFor($player)) $player->sendMessage(LangUtils::getMessage("kit-claim-success", true, ["{NAME}" => $kit->getName()]));
+
         }catch(KitException $e){
             switch ($e->getCode()){
                 case 0:
-                    $time = CooldownManager::getKitCooldown(KitManager::get($args[0]), $sender);
+                    $time = CooldownManager::getKitCooldown($kit, $player);
                     $timeString = "";
                     $timeArray = [];
                     if($time >= 86400){
@@ -80,23 +117,25 @@ class KitCommand extends EKExecutor {
                             $timeString .= ", ".$value;
                         }
                     }
-                    $sender->sendMessage(TextFormat::colorize(str_replace("{TIME}", $timeString, DataManager::getKey(DataManager::LANG, "kit-cooldown-active"))));
+                    $player->sendMessage(LangUtils::getMessage("kit-cooldown-active", true, ["{TIME}" => $timeString]));
                     break;
                 case 1:
-                    $sender->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "kit-insufficient-funds")));
+                    $player->sendMessage(LangUtils::getMessage("kit-insufficient-funds"));
                     break;
                 case 2:
-                    $sender->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "no-economy")));
+                    $player->sendMessage(LangUtils::getMessage("no-economy"));
                     break;
                 case 3:
-                    $sender->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "kit-insufficient-space")));
+                    $player->sendMessage(LangUtils::getMessage("kit-insufficient-space"));
+                    break;
+                case 4:
+                    $player->sendMessage(LangUtils::getMessage("kit-no-permission"));
                     break;
                 default:
-                    $sender->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "unknown-exception")));
+                    $player->sendMessage(LangUtils::getMessage("unknown-exception"));
                     break;
             }
         }
-        return true;
     }
 
 }

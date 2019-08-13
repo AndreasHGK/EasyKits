@@ -8,6 +8,7 @@ use AndreasHGK\EasyKits\DataManager;
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\KitManager;
+use AndreasHGK\EasyKits\utils\LangUtils;
 use jojoe77777\FormAPI\CustomForm;
 use pocketmine\command\CommandExecutor;
 use pocketmine\Player;
@@ -31,31 +32,31 @@ class CreatekitCommand extends EKExecutor {
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
     {
         if(!$sender instanceof Player){
-            $sender->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "sender-not-player")));
+            $sender->sendMessage(LangUtils::getMessage("sender-not-player"));
             return true;
         }
 
         $ui = new CustomForm(function(Player $player, $data){
             if($data === null){
-                $player->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-cancelled")));
+                $player->sendMessage(LangUtils::getMessage("createkit-cancelled"));
                 return;
             }
             if(!isset($data["name"])){
-                $player->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-no-name")));
+                $player->sendMessage(LangUtils::getMessage("createkit-no-name"));
                 return;
             }
 
             $name = $data["name"];
 
             if(KitManager::exists($name)){
-                $player->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-duplicate")));
+                $player->sendMessage(LangUtils::getMessage("createkit-duplicate"));
                 return;
             }
 
             if(!isset($data["price"])){
                 $price = 0;
             }elseif(!is_numeric((float)$data["price"])){
-                $player->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-invalid-price")));
+                $player->sendMessage(LangUtils::getMessage("createkit-invalid-price"));
                 return;
             }else{
                 $price = (float)$data["price"];
@@ -65,7 +66,7 @@ class CreatekitCommand extends EKExecutor {
                 $cooldown = 0;
             }elseif(!is_numeric((float)$data["cooldown"])){
                 //todo: date format to time
-                $player->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-invalid-cooldown")));
+                $player->sendMessage(LangUtils::getMessage("createkit-invalid-cooldown"));
                 return;
             }else{
                 $cooldown = (int)$data["cooldown"];
@@ -80,7 +81,7 @@ class CreatekitCommand extends EKExecutor {
             $items = $player->getInventory()->getContents();
             $armor = $player->getArmorInventory()->getContents();
             if(empty($items) && empty($armor)){
-                $player->sendMessage(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-empty-inventory")));
+                $player->sendMessage(LangUtils::getMessage("createkit-empty-inventory"));
                 return;
             }
 
@@ -91,22 +92,21 @@ class CreatekitCommand extends EKExecutor {
             $kit->setDoOverrideArmor($doOverrideArmor);
             $kit->setAlwaysClaim($alwaysClaim);
 
-            KitManager::add($kit);
+            if(KitManager::add($kit)) $player->sendMessage(LangUtils::getMessage("createkit-success", true, ["{NAME}", $name]));
             KitManager::saveAll();
-            $player->sendMessage(TextFormat::colorize(str_replace("{NAME}", $name, DataManager::getKey(DataManager::LANG, "createkit-success"))));
             return;
         });
-        $ui->setTitle(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-title")));
-        $ui->addLabel(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-text")));
-        $ui->addInput(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-kitname")), "", null, "name");
-        $ui->addInput(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-price")), "", "0", "price");
-        $ui->addInput(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-cooldown")), "", "60", "cooldown");
-        $ui->addLabel(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-flags")));
-        $ui->addToggle(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-lockedToggle")), DataManager::getKey(DataManager::CONFIG, "default-flags")["locked"], "locked");
-        $ui->addToggle(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-emptyOnClaimToggle")), DataManager::getKey(DataManager::CONFIG, "default-flags")["emptyOnClaim"], "emptyOnClaim");
-        $ui->addToggle(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-doOverrideToggle")), DataManager::getKey(DataManager::CONFIG, "default-flags")["doOverride"], "doOverride");
-        $ui->addToggle(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-doOverrideArmorToggle")), DataManager::getKey(DataManager::CONFIG, "default-flags")["doOverrideArmor"], "doOverrideArmor");
-        $ui->addToggle(TextFormat::colorize(DataManager::getKey(DataManager::LANG, "createkit-alwaysClaimToggle")), DataManager::getKey(DataManager::CONFIG, "default-flags")["alwaysClaim"], "alwaysClaim");
+        $ui->setTitle(LangUtils::getMessage("createkit-title"));
+        $ui->addLabel(LangUtils::getMessage("createkit-text"));
+        $ui->addInput(LangUtils::getMessage("createkit-kitname"), "", null, "name");
+        $ui->addInput(LangUtils::getMessage("createkit-price"), "", "0", "price");
+        $ui->addInput(LangUtils::getMessage("createkit-cooldown"), "", "60", "cooldown");
+        $ui->addLabel(LangUtils::getMessage("createkit-flags"));
+        $ui->addToggle(LangUtils::getMessage("createkit-lockedToggle"), DataManager::getKey(DataManager::CONFIG, "default-flags")["locked"], "locked");
+        $ui->addToggle(LangUtils::getMessage("createkit-emptyOnClaimToggle"), DataManager::getKey(DataManager::CONFIG, "default-flags")["emptyOnClaim"], "emptyOnClaim");
+        $ui->addToggle(LangUtils::getMessage("createkit-doOverrideToggle"), DataManager::getKey(DataManager::CONFIG, "default-flags")["doOverride"], "doOverride");
+        $ui->addToggle(LangUtils::getMessage("createkit-doOverrideArmorToggle"), DataManager::getKey(DataManager::CONFIG, "default-flags")["doOverrideArmor"], "doOverrideArmor");
+        $ui->addToggle(LangUtils::getMessage("createkit-alwaysClaimToggle"), DataManager::getKey(DataManager::CONFIG, "default-flags")["alwaysClaim"], "alwaysClaim");
         $sender->sendForm($ui);
         return true;
     }
