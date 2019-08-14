@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits\importer;
 
-use AndreasHGK\EasyKits\DataManager;
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\Kit;
-use AndreasHGK\EasyKits\KitManager;
+use AndreasHGK\EasyKits\manager\DataManager;
+use AndreasHGK\EasyKits\manager\KitManager;
 use Infernus101\KitUI\Main;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;

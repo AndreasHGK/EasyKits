@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace AndreasHGK\EasyKits\importer;
 
 use AdvancedKits\Main;
-use AndreasHGK\EasyKits\DataManager;
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\Kit;
-use AndreasHGK\EasyKits\KitManager;
+use AndreasHGK\EasyKits\manager\DataManager;
+use AndreasHGK\EasyKits\manager\KitManager;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 

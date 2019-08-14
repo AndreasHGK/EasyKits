@@ -16,6 +16,12 @@ All messages in the plugin can be changed within the lang.yml file. You can also
 - [x] **Flexible:**
 With all this customizability you can use it for tons of gamemodes from kitpvp to factions.
 
+- [x] **Easy conversion:** Already have another kit plugin fully set up? 
+Don't worry! You can use the /ekimport command to import kits from KitUI and AdvancedKits
+
+- [x] **Chestkits:** Each kit has the option to be a chestkit.
+These kits will be a chest when claimed, and when you tap with them you will equip them.
+
 ## Setup
 
 #### Config
@@ -23,7 +29,7 @@ In the config you can change the general behaviour of the plugin.
 
 ```YAML
 #don't touch this
-version: 0
+version: 1
 
 # the default values for the kit flags when creating a kit
 default-flags:
@@ -32,12 +38,18 @@ default-flags:
   doOverride: false
   doOverrideArmor: false
   alwaysClaim: false
+  chestKit: false
 
 # this will only change /kit, not /createkit or /deletekit
 use-forms: true
 
 # show players kits they don't have permission to claim
 show-locked: false
+
+# if true, the player also needs the easykits.kit.<kitname> permission to equip the chestkit.
+chestKit-locked: false
+
+chestKit-itemid: 54
 ```
 
 #### Lang
@@ -46,7 +58,7 @@ Sometimes it is handy to look at the message itself to see when it is used.
 
 ```YAML
 #don't touch this
-version: 0
+version: 1
 
 # messages
 
@@ -56,6 +68,11 @@ sender-not-player: "§l§4> §r§7sender needs to be a player"
 no-economy: "§c§l> §r§7There is no economy installed."
 
 unknown-exception: "§c§l> §r§7There was an unknown exception."
+
+# chestkit item
+chestkit-name: "§r§a{NAME}§r§7 kit"
+chestkit-lore:
+  - "§r§7Tap with this item in your hand to equip this kit."
 
 # /createkit UI + messages
 createkit-title: "§0Kit creation menu"
@@ -69,6 +86,7 @@ createkit-emptyOnClaimToggle: "emptyOnClaim"
 createkit-doOverrideToggle: "doOverrideItems"
 createkit-doOverrideArmorToggle: "doOverrideArmor"
 createkit-alwaysClaimToggle: "alwaysClaim"
+createkit-chestKitToggle: "chestKit"
 
 createkit-cancelled: "§c§l> §r§7Kit creation cancelled."
 createkit-no-name: "§c§l> §r§7Please enter a name for your kit."
@@ -77,7 +95,7 @@ createkit-empty-inventory: "§c§l> §r§7You need to hold items in your invento
 createkit-invalid-price: "§c§l> §r§7Please enter a valid price."
 createkit-invalid-cooldown: "§c§l> §r§7Please enter a valid cooldown time."
 
-createkit-success: "§a§l> §r§7A kit with name §a{NAME}§r§7 has been created!"
+createkit-success: "§a§l> §r§7A kit with name§a {NAME} §r§7has been created!"
 
 # /deletekit UI + messages
 deletekit-title: "§0Kit deletion menu"
@@ -107,6 +125,19 @@ kit-insufficient-space: "§c§l> §r§7You don't have enough inventory space to 
 kit-cooldown-active: "§c§l> §r§7You can't claim this kit for another §c{TIME}§7."
 
 kit-claim-success: "§a§l> §r§7Claimed kit §a{NAME}§r§7."
+
+# Kit interact claiming
+chestclaim-success: "§a§l> §r§7Equipped kit §a{NAME}§r§7."
+
+# /ekimport UI + messages
+ekimport-title: "§oKit importing"
+ekimport-text: "§7Please select a plugin to import kits from"
+ekimport-select: "§e§l> §rSelect plugin"
+
+ekimport-cancelled: "§c§l> §r§7Kit importing cancelled."
+ekimport-not-loaded: "§c§l> §r§7Selected plugin not loaded."
+
+ekimport-success: "§a§l> §r§7Import from §a{PLUGIN} §7succeeded. §a{SUCCESS} §7success, §a{FAILED} §7failed."
 ```
 
 #### Commands
@@ -142,6 +173,13 @@ deletekit:
     - "removekit"
   description: "delete a kit"
   usage: "/deletekit [name]"
+
+ekimport:
+  labels:
+    - "ekimport"
+    - "importkit"
+  description: "import kits from other plugins"
+  usage: "/ekimport [plugin]"
 
 ```
 
@@ -227,11 +265,11 @@ examplekit:
     alwaysClaim: false
     # Clear a player's whole inventory before putting the kit items in
     emptyOnClaim: false
+    # Wether or not to make this kit a Chestkit
+    chestKit: false
 ```
 
 ## Todo
-- [ ] **AdvancedKits & KitUI importer:** Make it so people can easily switch from another kit plugin.
-- [ ] **Kit Chests:** Make it so you can put kits in chests or any item which you have to right click to claim. (This will be optional)
 - [ ] **Multi Economy:** Support multiple economy plugins.
 - [ ] **One-per-life:** Support the option of only being able to claim 1 kit per life.
 - [ ] **Potion effects:** Support the option to add potion effects to kits.

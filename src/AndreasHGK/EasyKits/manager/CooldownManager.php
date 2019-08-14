@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AndreasHGK\EasyKits;
+namespace AndreasHGK\EasyKits\manager;
 
+use AndreasHGK\EasyKits\Kit;
 use pocketmine\Player;
 
 class CooldownManager {

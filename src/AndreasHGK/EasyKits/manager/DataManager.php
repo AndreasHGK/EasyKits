@@ -2,11 +2,18 @@
 
 declare(strict_types=1);
 
-namespace AndreasHGK\EasyKits;
+namespace AndreasHGK\EasyKits\manager;
 
+use AndreasHGK\EasyKits\EasyKits;
 use pocketmine\utils\Config;
 
 class DataManager {
+
+    public const VERSIONS = [
+        "config" => 1,
+        "commands" => 0,
+        "lang" => 1,
+    ];
 
     public const CONFIG = "config.yml";
     public const LANG = "lang.yml";
@@ -85,10 +92,19 @@ class DataManager {
     public static function loadDefault() : void {
         if(EasyKits::get()->saveResource(self::CONFIG)) EasyKits::get()->getLogger()->debug("creating ".self::CONFIG);
         self::get(self::CONFIG);
+        if(self::getKey(self::CONFIG, "version") !== self::VERSIONS["config"]){
+            EasyKits::get()->getLogger()->warning(self::CONFIG." version incorrect. Please regenerate your config to avoid errors.");
+        }
         if(EasyKits::get()->saveResource(self::LANG)) EasyKits::get()->getLogger()->debug("creating ".self::LANG);
         self::get(self::LANG);
+        if(self::getKey(self::LANG, "version") !== self::VERSIONS["lang"]){
+            EasyKits::get()->getLogger()->warning(self::LANG." version incorrect. Please regenerate your config to avoid errors.");
+        }
         if(EasyKits::get()->saveResource(self::COMMANDS)) EasyKits::get()->getLogger()->debug("creating ".self::COMMANDS);
         self::get(self::COMMANDS);
+        if(self::getKey(self::COMMANDS, "version") !== self::VERSIONS["commands"]){
+            EasyKits::get()->getLogger()->warning(self::COMMANDS." version incorrect. Please regenerate your config to avoid errors.");
+        }
         if(EasyKits::get()->saveResource(self::KITS)) EasyKits::get()->getLogger()->debug("creating ".self::KITS);
         self::get(self::KITS);
         self::get(self::COOLDOWN);

@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace AndreasHGK\EasyKits;
+namespace AndreasHGK\EasyKits\manager;
 
+use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\event\KitCreateEvent;
 use AndreasHGK\EasyKits\event\KitDeleteEvent;
+use AndreasHGK\EasyKits\Kit;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
@@ -192,6 +194,7 @@ class KitManager {
             $kit->setDoOverrideArmor($kitdata["flags"]["doOverrideArmor"]);
             $kit->setAlwaysClaim($kitdata["flags"]["alwaysClaim"]);
             $kit->setEmptyOnClaim($kitdata["flags"]["emptyOnClaim"]);
+            $kit->setChestKit($kitdata["flags"]["chestKit"] ?? DataManager::getKey(DataManager::CONFIG, "default-flags")["chestKit"]);
             self::getInstance()->kits[$name] = $kit;
 
         }catch (\Throwable $e){
@@ -214,6 +217,7 @@ class KitManager {
         $kitData["flags"]["doOverrideArmor"] = $kit->doOverrideArmor();
         $kitData["flags"]["alwaysClaim"] = $kit->alwaysClaim();
         $kitData["flags"]["emptyOnClaim"] = $kit->emptyOnClaim();
+        $kitData["flags"]["chestKit"] = $kit->isChestKit();
         foreach($kit->getItems() as $slot => $item){
             $itemData = self::ITEM_FORMAT;
             $itemData["id"] = $item->getId();

@@ -4,4 +4,8 @@ branches:
 projects:
   EasyKits:
     path: ""
+    libs:
+      - src: jojoe77777\FormAPI
+        version: ^1.3.0
+        branch: master
 ...

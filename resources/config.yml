@@ -1,5 +1,5 @@
 #don't touch this
-version: 0
+version: 1
 
 # the default values for the kit flags when creating a kit
 default-flags:
@@ -8,9 +8,15 @@ default-flags:
   doOverride: false
   doOverrideArmor: false
   alwaysClaim: false
+  chestKit: false
 
 # this will only change /kit, not /createkit or /deletekit
 use-forms: true
 
 # show players kits they don't have permission to claim
 show-locked: false
+
+# if true, the player also needs the easykits.kit.<kitname> permission to equip the chestkit.
+chestKit-locked: false
+
+chestKit-itemid: 54

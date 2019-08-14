@@ -9,6 +9,10 @@ use AndreasHGK\EasyKits\command\DeletekitCommand;
 use AndreasHGK\EasyKits\command\EKImport;
 use AndreasHGK\EasyKits\command\KitCommand;
 use AndreasHGK\EasyKits\importer\AdvancedKitsImporter;
+use AndreasHGK\EasyKits\listener\InteractClaimListener;
+use AndreasHGK\EasyKits\manager\CooldownManager;
+use AndreasHGK\EasyKits\manager\DataManager;
+use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\KitException;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\command\PluginCommand;
@@ -51,6 +55,12 @@ class EasyKits extends PluginBase{
             $cmd->setPermission($command->getPermission());
             $cmd->setUsage($command->getUsage());
             $this->getServer()->getCommandMap()->register("easykits", $cmd);
+        }
+        $listeners = [
+            new InteractClaimListener(),
+        ];
+        foreach ($listeners as $listener){
+            $this->getServer()->getPluginManager()->registerEvents($listener, $this);
         }
 	}
 

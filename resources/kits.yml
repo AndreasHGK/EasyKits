@@ -68,3 +68,5 @@ examplekit:
     alwaysClaim: false
     # Clear a player's whole inventory before putting the kit items in
     emptyOnClaim: false
+    # Wether or not to make this kit a Chestkit
+    chestKit: false

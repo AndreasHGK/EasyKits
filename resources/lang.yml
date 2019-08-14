@@ -1,5 +1,5 @@
 #don't touch this
-version: 0
+version: 1
 
 # messages
 
@@ -9,6 +9,11 @@ sender-not-player: "§l§4> §r§7sender needs to be a player"
 no-economy: "§c§l> §r§7There is no economy installed."
 
 unknown-exception: "§c§l> §r§7There was an unknown exception."
+
+# chestkit item
+chestkit-name: "§r§a{NAME}§r§7 kit"
+chestkit-lore:
+  - "§r§7Tap with this item in your hand to equip this kit."
 
 # /createkit UI + messages
 createkit-title: "§0Kit creation menu"
@@ -22,6 +27,7 @@ createkit-emptyOnClaimToggle: "emptyOnClaim"
 createkit-doOverrideToggle: "doOverrideItems"
 createkit-doOverrideArmorToggle: "doOverrideArmor"
 createkit-alwaysClaimToggle: "alwaysClaim"
+createkit-chestKitToggle: "chestKit"
 
 createkit-cancelled: "§c§l> §r§7Kit creation cancelled."
 createkit-no-name: "§c§l> §r§7Please enter a name for your kit."
@@ -30,7 +36,7 @@ createkit-empty-inventory: "§c§l> §r§7You need to hold items in your invento
 createkit-invalid-price: "§c§l> §r§7Please enter a valid price."
 createkit-invalid-cooldown: "§c§l> §r§7Please enter a valid cooldown time."
 
-createkit-success: "§a§l> §r§7A kit with name §a{NAME}§r§7 has been created!"
+createkit-success: "§a§l> §r§7A kit with name§a {NAME} §r§7has been created!"
 
 # /deletekit UI + messages
 deletekit-title: "§0Kit deletion menu"
@@ -60,6 +66,9 @@ kit-insufficient-space: "§c§l> §r§7You don't have enough inventory space to 
 kit-cooldown-active: "§c§l> §r§7You can't claim this kit for another §c{TIME}§7."
 
 kit-claim-success: "§a§l> §r§7Claimed kit §a{NAME}§r§7."
+
+# Kit interact claiming
+chestclaim-success: "§a§l> §r§7Equipped kit §a{NAME}§r§7."
 
 # /ekimport UI + messages
 ekimport-title: "§oKit importing"

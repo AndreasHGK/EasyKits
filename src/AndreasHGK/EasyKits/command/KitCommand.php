@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits\command;
 
-use AndreasHGK\EasyKits\CooldownManager;
-use AndreasHGK\EasyKits\DataManager;
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\Kit;
-use AndreasHGK\EasyKits\KitManager;
+use AndreasHGK\EasyKits\manager\CooldownManager;
+use AndreasHGK\EasyKits\manager\DataManager;
+use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\KitException;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use jojoe77777\FormAPI\SimpleForm;
@@ -81,8 +81,9 @@ class KitCommand extends EKExecutor {
     }
 
     public function tryClaim(Kit $kit, Player $player) : void {
+
         try{
-            if($kit->claimFor($player)) $player->sendMessage(LangUtils::getMessage("kit-claim-success", true, ["{NAME}" => $kit->getName()]));
+            if($kit->claim($player)) $player->sendMessage(LangUtils::getMessage("kit-claim-success", true, ["{NAME}" => $kit->getName()]));
 
         }catch(KitException $e){
             switch ($e->getCode()){

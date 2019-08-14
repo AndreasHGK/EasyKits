@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits\command;
 
-use AndreasHGK\EasyKits\DataManager;
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\Kit;
-use AndreasHGK\EasyKits\KitManager;
+use AndreasHGK\EasyKits\manager\DataManager;
+use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use jojoe77777\FormAPI\CustomForm;
 use pocketmine\command\CommandExecutor;
@@ -77,6 +77,7 @@ class CreatekitCommand extends EKExecutor {
             $doOverride = $data["doOverride"];
             $doOverrideArmor = $data["doOverrideArmor"];
             $alwaysClaim = $data["alwaysClaim"];
+            $chestKit = $data["chestKit"];
 
             $items = $player->getInventory()->getContents();
             $armor = $player->getArmorInventory()->getContents();
@@ -91,8 +92,9 @@ class CreatekitCommand extends EKExecutor {
             $kit->setDoOverride($doOverride);
             $kit->setDoOverrideArmor($doOverrideArmor);
             $kit->setAlwaysClaim($alwaysClaim);
+            $kit->setChestKit($chestKit);
 
-            if(KitManager::add($kit)) $player->sendMessage(LangUtils::getMessage("createkit-success", true, ["{NAME}", $name]));
+            if(KitManager::add($kit)) $player->sendMessage(LangUtils::getMessage("createkit-success", true, ["{NAME}" => $name]));
             KitManager::saveAll();
             return;
         });
@@ -107,6 +109,7 @@ class CreatekitCommand extends EKExecutor {
         $ui->addToggle(LangUtils::getMessage("createkit-doOverrideToggle"), DataManager::getKey(DataManager::CONFIG, "default-flags")["doOverride"], "doOverride");
         $ui->addToggle(LangUtils::getMessage("createkit-doOverrideArmorToggle"), DataManager::getKey(DataManager::CONFIG, "default-flags")["doOverrideArmor"], "doOverrideArmor");
         $ui->addToggle(LangUtils::getMessage("createkit-alwaysClaimToggle"), DataManager::getKey(DataManager::CONFIG, "default-flags")["alwaysClaim"], "alwaysClaim");
+        $ui->addToggle(LangUtils::getMessage("createkit-chestKitToggle"), DataManager::getKey(DataManager::CONFIG, "default-flags")["chestKit"], "chestKit");
         $sender->sendForm($ui);
         return true;
     }

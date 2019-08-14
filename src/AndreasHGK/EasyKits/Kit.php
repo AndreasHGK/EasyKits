@@ -4,14 +4,22 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits;
 
+use AndreasHGK\EasyKits\event\InteractItemClaimEvent;
 use AndreasHGK\EasyKits\event\KitClaimEvent;
+use AndreasHGK\EasyKits\manager\CooldownManager;
+use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\utils\KitException;
+use AndreasHGK\EasyKits\utils\LangUtils;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\item\Item;
+use pocketmine\item\ItemFactory;
 use pocketmine\level\sound\EndermanTeleportSound;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\permission\Permissible;
 use pocketmine\Player;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 class Kit
 {
@@ -40,6 +48,11 @@ class Kit
      */
     protected $cooldown = 60;
 
+    /**
+     * @var Item
+     */
+    protected $interactItem = null;
+
     //flags
     /**
      * @var bool
@@ -61,13 +74,65 @@ class Kit
      * @var bool
      */
     protected $alwaysClaim = false;
+    /**
+     * @var bool
+     */
+    protected $chestKit = false;
+
+    public function claim(Player $player) : bool {
+        if($this->isChestKit()) return $this->claimChestKitFor($player);
+        else return $this->claimFor($player);
+    }
+
+    public function claimChestKitFor(Player $player) : bool {
+        if(!$this->hasPermission($player) && $this->isLocked()) throw new KitException("Player is not permitted to claim this kit", 4);
+        if($this->getCooldown() > 0){
+            if(CooldownManager::hasKitCooldown($this, $player)){
+                throw new KitException("Kit is on cooldown", 0);
+            }
+        }
+        if($this->getPrice() > 0){
+            $economy = Server::getInstance()->getPluginManager()->getPlugin("EconomyAPI");
+            if($economy instanceof EconomyAPI){
+                if($economy->myMoney($player) < $this->getPrice()){
+                    throw new KitException("Player has insufficient funds", 1);
+                }
+            }else{
+                throw new KitException("Economy not found", 2);
+            }
+        }
+
+        if(count($player->getInventory()->getContents(false)) >= $player->getInventory()->getSize()){
+            throw new KitException("Player has insufficient space", 3);
+        }
+
+        $event = new InteractItemClaimEvent($this, $player);
+        $event->call();
+
+        if($event->isCancelled()) return false;
+
+
+        $player = $event->getPlayer();
+        $kit = $event->getKit();
+
+        if($kit->getCooldown() > 0){
+            CooldownManager::setKitCooldown($kit, $player);
+        }
+        if($kit->getPrice() > 0){
+            $economy->reduceMoney($player, $kit->getPrice(), true);
+        }
+        $player->getInventory()->addItem($kit->getInteractItem());
+        return true;
+    }
 
     /**
      * claim a kit as a player
      * @param Player $player
+     * @return bool
+     * @throws KitException
      */
     public function claimFor(Player $player) : bool {
-        if(!$this->hasPermission($player)) throw new KitException("Player is not permitted to claim this kit", 4);
+        if(!$this->hasPermission($player) && $this->isLocked()) throw new KitException("Player is not permitted to claim this kit", 4);
         if($this->getCooldown() > 0){
             if(CooldownManager::hasKitCooldown($this, $player)){
                 throw new KitException("Kit is on cooldown", 0);
@@ -135,6 +200,21 @@ class Kit
             else $playerArmorInv->addItem($armorSlot);
         }
         return true;
+    }
+
+    public function getInteractItem() : ?Item {
+        return $this->interactItem;
+    }
+
+    public function hasInteractItem() : bool {
+        return $this->getItems() !== null;
+    }
+
+    public function setInteractItem(Item $item) : void {
+        if(!$item->getNamedTag()->hasTag("ekit") || $item->getNamedTag()->getTagValue("ekit", StringTag::class) !== $this->getName()){
+            $item->setNamedTagEntry(new StringTag("ekit", $this->name));
+        }
+        $this->interactItem = $item;
     }
 
     /**
@@ -281,6 +361,28 @@ class Kit
     public function setEmptyOnClaim(bool $emptyOnClaim): void
     {
         $this->emptyOnClaim = $emptyOnClaim;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isChestKit() : bool {
+        return $this->chestKit;
+    }
+
+    /**
+     * @param bool $bool
+     */
+    public function setChestKit(bool $bool) : void {
+        $this->chestKit = $bool;
+        if($bool){
+            $item = ItemFactory::get(DataManager::getKey(DataManager::CONFIG, "chestKit-itemid"));
+            $item->setCustomName(LangUtils::getMessage("chestkit-name", true, ["{NAME}" => $this->getName()]));
+            $item->setLore(LangUtils::getMessage("chestkit-lore"));
+            $this->setInteractItem($item);
+        }elseif(isset($this->chestKit)){
+            $this->interactItem = null;
+        }
     }
 
     public function __toString()
