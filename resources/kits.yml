@@ -5,43 +5,57 @@ examplekit:
       id: 276
       damage: 0
       count: 1
+      display_name: "§1Example Sword"
+      enchants:
+        9: 1 # sharpness 1 (ID: LEVEL)
     1:
       id: 278
       damage: 0
       count: 1
+      display_name: "§1Example Pickaxe"
     2:
       id: 279
       damage: 0
       count: 1
+      display_name: "§1Example Axe"
     3:
       id: 277
       damage: 0
       count: 1
+      display_name: "§1Example Shovel"
     8:
-      id: 364
+      id: 264
       damage: 0
-      count: 64
+      count: 1
+      display_name: "§r§aThank you for using EasyKits!"
+      lore:
+        - "§r§7Developed by: §9AndreasHGK"
+        - "§r§fTIP: §7Remove this kit. This is just an example."
   # Items to put in the armor slots. 0 -> boots, 1 -> leggings, 2 -> chestplate, 3 -> helmet
   armor:
     0:
       id: 306
       damage: 0
       count: 1
+      display_name: "§1Example Boots"
     1:
       id: 307
       damage: 0
       count: 1
+      display_name: "§1Example Leggings"
     2:
       id: 308
       damage: 0
       count: 1
+      display_name: "§1Example Chestplate"
     3:
       id: 309
       damage: 0
       count: 1
+      display_name: "§1Example Helmet"
   # The price a user has to pay to claim a kit
   price: 10.000000
-  # The time a user has to wait before being able to claim a new kit
+  # The time a user has to wait before being able to claim a new kit. The cooldown is in seconds
   cooldown: 60
   flags:
     # The user will need permission (easykits.kit.<kitname>) to claim the kit

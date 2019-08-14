@@ -7,8 +7,9 @@ author: AndreasHGK
 description: A kit plugin for everyone
 website: http://hgk.me/
 depend:
-- FormAPI
-- EconomyAPI
+ - FormAPI
+softdepend:
+ - EconomyAPI
 
 permissions:
  easykits:
