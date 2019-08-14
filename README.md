@@ -193,6 +193,7 @@ However, if you wish to edit kits or create kits in the **kits.yml** file direct
 - **doOverrideArmor:** The kit will take up the exact armor slots assigned to the armor pieces.
 - **alwaysClaim:** Claim the kit even if he player lacks inventory space.
 - **emptyOnClaim:** Empty the player's inventory before claiming the kit.
+- **chestKit:** Make it so the kit is a chestkit.
 
 ```YAML
 examplekit:
