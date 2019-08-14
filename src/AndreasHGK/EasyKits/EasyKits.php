@@ -6,12 +6,13 @@ namespace AndreasHGK\EasyKits;
 
 use AndreasHGK\EasyKits\command\CreatekitCommand;
 use AndreasHGK\EasyKits\command\DeletekitCommand;
-use AndreasHGK\EasyKits\command\EKImport;
+use AndreasHGK\EasyKits\command\EKImportCommand;
 use AndreasHGK\EasyKits\command\KitCommand;
 use AndreasHGK\EasyKits\importer\AdvancedKitsImporter;
 use AndreasHGK\EasyKits\listener\InteractClaimListener;
 use AndreasHGK\EasyKits\manager\CooldownManager;
 use AndreasHGK\EasyKits\manager\DataManager;
+use AndreasHGK\EasyKits\manager\EconomyManager;
 use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\KitException;
 use onebone\economyapi\EconomyAPI;
@@ -37,6 +38,8 @@ class EasyKits extends PluginBase{
         DataManager::loadDefault();
         KitManager::loadAll();
         CooldownManager::loadCooldowns();
+        EconomyManager::loadEconomy();
+        if(!EconomyManager::isEconomyLoaded()) $this->getLogger()->notice("no compatible economy loaded");
     }
 
     public function onEnable() : void
@@ -44,7 +47,7 @@ class EasyKits extends PluginBase{
         $commands = [
             new CreatekitCommand(),
             new DeletekitCommand(),
-            new EKImport(),
+            new EKImportCommand(),
             new KitCommand(),
         ];
         foreach($commands as $command){

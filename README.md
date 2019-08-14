@@ -272,6 +272,7 @@ examplekit:
 
 ## Todo
 - [ ] **Multi Economy:** Support multiple economy plugins.
+- [ ] **Ingame kit editor:** Make kits editable ingame.
 - [ ] **One-per-life:** Support the option of only being able to claim 1 kit per life.
 - [ ] **Potion effects:** Support the option to add potion effects to kits.
 - [ ] **Claim effects:** Add (optional)cosmetic effects when claiming kits.

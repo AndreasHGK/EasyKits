@@ -8,6 +8,7 @@ use AndreasHGK\EasyKits\event\InteractItemClaimEvent;
 use AndreasHGK\EasyKits\event\KitClaimEvent;
 use AndreasHGK\EasyKits\manager\CooldownManager;
 use AndreasHGK\EasyKits\manager\DataManager;
+use AndreasHGK\EasyKits\manager\EconomyManager;
 use AndreasHGK\EasyKits\utils\KitException;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use onebone\economyapi\EconomyAPI;
@@ -92,9 +93,8 @@ class Kit
             }
         }
         if($this->getPrice() > 0){
-            $economy = Server::getInstance()->getPluginManager()->getPlugin("EconomyAPI");
-            if($economy instanceof EconomyAPI){
-                if($economy->myMoney($player) < $this->getPrice()){
+            if(EconomyManager::isEconomyLoaded()){
+                if(EconomyManager::getMoney($player) < $this->getPrice()){
                     throw new KitException("Player has insufficient funds", 1);
                 }
             }else{
@@ -123,7 +123,7 @@ class Kit
             CooldownManager::setKitCooldown($kit, $player);
         }
         if($kit->getPrice() > 0){
-            $economy->reduceMoney($player, $kit->getPrice(), true);
+            EconomyManager::reduceMoney($player, $kit->getPrice(), true);
         }
         $player->getInventory()->addItem($kit->getInteractItem());
         return true;
@@ -143,9 +143,8 @@ class Kit
             }
         }
         if($this->getPrice() > 0){
-            $economy = Server::getInstance()->getPluginManager()->getPlugin("EconomyAPI");
-            if($economy instanceof EconomyAPI){
-                if($economy->myMoney($player) < $this->getPrice()){
+            if(EconomyManager::isEconomyLoaded()){
+                if(EconomyManager::getMoney($player) < $this->getPrice()){
                     throw new KitException("Player has insufficient funds", 1);
                 }
             }else{
@@ -190,7 +189,7 @@ class Kit
             CooldownManager::setKitCooldown($kit, $player);
         }
         if($kit->getPrice() > 0){
-            $economy->reduceMoney($player, $kit->getPrice(), true);
+            EconomyManager::reduceMoney($player, $kit->getPrice(), true);
         }
         if($kit->emptyOnClaim()){
             $playerInv->clearAll();

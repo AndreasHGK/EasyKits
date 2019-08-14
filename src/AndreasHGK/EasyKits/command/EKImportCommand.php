@@ -18,7 +18,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
 use pocketmine\utils\TextFormat;
 
-class EKImport extends EKExecutor {
+class EKImportCommand extends EKExecutor {
 
     public function __construct()
     {
