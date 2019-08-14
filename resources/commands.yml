@@ -27,3 +27,10 @@ deletekit:
     - "removekit"
   description: "delete a kit"
   usage: "/deletekit [name]"
+
+ekimport:
+  labels:
+    - "ekimport"
+    - "importkit"
+  description: "import kits from other plugins"
+  usage: "/ekimport [plugin]"

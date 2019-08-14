@@ -6,7 +6,9 @@ namespace AndreasHGK\EasyKits;
 
 use AndreasHGK\EasyKits\command\CreatekitCommand;
 use AndreasHGK\EasyKits\command\DeletekitCommand;
+use AndreasHGK\EasyKits\command\EKImport;
 use AndreasHGK\EasyKits\command\KitCommand;
+use AndreasHGK\EasyKits\importer\AdvancedKitsImporter;
 use AndreasHGK\EasyKits\utils\KitException;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\command\PluginCommand;
@@ -38,6 +40,7 @@ class EasyKits extends PluginBase{
         $commands = [
             new CreatekitCommand(),
             new DeletekitCommand(),
+            new EKImport(),
             new KitCommand(),
         ];
         foreach($commands as $command){

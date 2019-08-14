@@ -60,3 +60,13 @@ kit-insufficient-space: "§c§l> §r§7You don't have enough inventory space to 
 kit-cooldown-active: "§c§l> §r§7You can't claim this kit for another §c{TIME}§7."
 
 kit-claim-success: "§a§l> §r§7Claimed kit §a{NAME}§r§7."
+
+# /ekimport UI + messages
+ekimport-title: "§oKit importing"
+ekimport-text: "§7Please select a plugin to import kits from"
+ekimport-select: "§e§l> §rSelect plugin"
+
+ekimport-cancelled: "§c§l> §r§7Kit importing cancelled."
+ekimport-not-loaded: "§c§l> §r§7Selected plugin not loaded."
+
+ekimport-success: "§a§l> §r§7Import from §a{PLUGIN} §7succeeded. §a{SUCCESS} §7success, §a{FAILED} §7failed."

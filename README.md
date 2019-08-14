@@ -231,4 +231,8 @@ examplekit:
 
 ## Todo
 - [ ] **AdvancedKits & KitUI importer:** Make it so people can easily switch from another kit plugin.
-- [ ] **Kit Chests:** Make it so you can put kits in chests or any item which you have to right click to claim.
+- [ ] **Kit Chests:** Make it so you can put kits in chests or any item which you have to right click to claim. (This will be optional)
+- [ ] **Multi Economy:** Support multiple economy plugins.
+- [ ] **One-per-life:** Support the option of only being able to claim 1 kit per life.
+- [ ] **Potion effects:** Support the option to add potion effects to kits.
+- [ ] **Claim effects:** Add (optional)cosmetic effects when claiming kits.

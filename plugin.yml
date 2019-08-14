@@ -29,6 +29,15 @@ permissions:
      easykits.command.deletekit:
       default: op
       description: "permission for the /deletekit command"
+     easykits.command.ekimport:
+      default: op
+      description: "permission for the /ekimport command"
    easykits.kit:
     default: op
     description: "permission for specific kits"
+   easykits.free:
+    default: false
+    description: "claim kits for free"
+   easykits.instant:
+    default: false
+    description: "claim without a cooldown"
