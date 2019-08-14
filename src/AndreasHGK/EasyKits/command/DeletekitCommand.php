@@ -62,7 +62,7 @@ class DeletekitCommand extends EKExecutor {
                 $player->sendMessage(LangUtils::getMessage("deletekit-not-found"));
                 return;
             }
-            KitManager::remove($kits[$data["kit"]]);
+            KitManager::remove(KitManager::get($kits[$data["kit"]]));
             $player->sendMessage(LangUtils::getMessage("deletekit-success", true, ["{NAME}" => $kits[$data["kit"]]]));
             return;
         });
