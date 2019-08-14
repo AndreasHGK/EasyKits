@@ -37,6 +37,10 @@ class KitCommand extends EKExecutor {
         }
 
         if(!isset($args[0])){
+            if(empty(KitManager::getPermittedKitsFor($sender)) && (empty(KitManager::getAll()) && !DataManager::getKey(DataManager::CONFIG, "show-locked"))){
+                $sender->sendMessage(LangUtils::getMessage("kit-none-available"));
+                return true;
+            }
             if(!DataManager::getKey(DataManager::CONFIG, "use-forms")){
                 $list = implode("§7, §f", KitManager::getPermittedKitsFor($sender));
                 $sender->sendMessage(LangUtils::getMessage("kit-list", true, ["{KITS}" => $list]));
@@ -64,7 +68,8 @@ class KitCommand extends EKExecutor {
                 }
             }
             if(DataManager::getKey(DataManager::CONFIG, "show-locked")){
-                foreach(KitManager::getAll() - KitManager::getPermittedKitsFor($sender) as $kit) {
+
+                foreach(array_diff_key(KitManager::getAll(), KitManager::getPermittedKitsFor($sender)) as $kit) {
                     $ui->addButton(LangUtils::getMessage("kit-locked-format", true, ["{NAME}" => $kit->getName(), "{PRICE}" => $kit->getPrice()]), -1, "", $kit->getName());
                 }
             }

@@ -18,6 +18,8 @@ use pocketmine\level\sound\EndermanTeleportSound;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\permission\Permissible;
+use pocketmine\permission\Permission;
+use pocketmine\permission\PermissionManager;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
@@ -410,6 +412,10 @@ class Kit
         $this->cooldown = $cooldown;
         $this->items = $items;
         $this->armor = $armor;
+
+        PermissionManager::getInstance()->addPermission(new Permission(EasyKits::PERM_ROOT."kit.".$name, "permission to claim kit ".$name, DataManager::getKey(DataManager::CONFIG, "op-has-all-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
+        PermissionManager::getInstance()->addPermission(new Permission(EasyKits::PERM_ROOT."free.".$name, "permission to claim kit ".$name." for free", DataManager::getKey(DataManager::CONFIG, "op-has-free-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
+        PermissionManager::getInstance()->addPermission(new Permission(EasyKits::PERM_ROOT."instant.".$name, "permission to claim kit ".$name." without cooldown", DataManager::getKey(DataManager::CONFIG, "op-has-instant-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
     }
 
 }

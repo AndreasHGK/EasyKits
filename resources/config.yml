@@ -1,5 +1,5 @@
 #don't touch this
-version: 1
+version: 2
 
 # the default values for the kit flags when creating a kit
 default-flags:
@@ -20,3 +20,10 @@ show-locked: false
 chestKit-locked: false
 
 chestKit-itemid: 54
+
+# give all EasyKits.kit.* permissions to operators
+op-has-all-kits: true
+# give all EasyKits.free.* permissions to operators
+op-has-free-kits: false
+# give all EasyKits.instant.* permissions to operators
+op-has-instant-kits: false
