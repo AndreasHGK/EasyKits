@@ -106,7 +106,11 @@ class Kit
             throw new KitException("Player has insufficient space", 3);
         }
 
-        $event = new InteractItemClaimEvent($this, $player);
+        $kit = clone $this;
+        if($player->hasPermission(EasyKits::PERM_ROOT."free.".$kit->name)) $kit->price = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT."instant.".$kit->name)) $kit->cooldown = 0;
+
+        $event = new InteractItemClaimEvent($kit, $player);
         $event->call();
 
         if($event->isCancelled()) return false;
@@ -171,8 +175,10 @@ class Kit
                 throw new KitException("Player has insufficient space", 3);
             }
         }
-
-        $event = new KitClaimEvent($this, $player);
+        $kit = clone $this;
+        if($player->hasPermission(EasyKits::PERM_ROOT."free.".$kit->name)) $kit->price = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT."instant.".$kit->name)) $kit->cooldown = 0;
+        $event = new KitClaimEvent($kit, $player);
         $event->call();
 
         if($event->isCancelled()) return false;
