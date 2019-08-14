@@ -49,6 +49,11 @@ class DeletekitCommand extends EKExecutor {
             $kits[] = $kit->getName();
         }
 
+        if(empty($kits)){
+            $sender->sendMessage(LangUtils::getMessage("deletekit-none-available"));
+            return true;
+        }
+
         $ui = new CustomForm(function(Player $player, $data) use($kits){
             if($data === null){
                 $player->sendMessage(LangUtils::getMessage("deletekit-cancelled"));

@@ -1,5 +1,5 @@
 #don't touch this
-version: 1
+version: 2
 
 # messages
 
@@ -46,6 +46,7 @@ deletekit-select: "§e§l> §rSelect kit"
 deletekit-cancelled: "§c§l> §r§7Kit deletion cancelled."
 deletekit-empty: "§c§l> §r§7Please select a kit to delete."
 deletekit-not-found: "§c§l> §r§7Selected kit not found."
+deletekit-none-available: "§c§l> §r§7There are no available kits."
 
 deletekit-success: "§a§l> §r§7Successfully deleted kit §a{NAME}§r§7."
 
