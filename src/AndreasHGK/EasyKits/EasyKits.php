@@ -6,6 +6,7 @@ namespace AndreasHGK\EasyKits;
 
 use AndreasHGK\EasyKits\command\CreatekitCommand;
 use AndreasHGK\EasyKits\command\DeletekitCommand;
+use AndreasHGK\EasyKits\command\EditkitCommand;
 use AndreasHGK\EasyKits\command\EKImportCommand;
 use AndreasHGK\EasyKits\command\KitCommand;
 use AndreasHGK\EasyKits\importer\AdvancedKitsImporter;
@@ -15,11 +16,15 @@ use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\EconomyManager;
 use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\KitException;
+use Closure;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\command\PluginCommand;
+use pocketmine\entity\Effect;
 use pocketmine\permission\Permissible;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
+use pocketmine\plugin\PluginDescription;
+use pocketmine\plugin\PluginLoader;
 use pocketmine\Server;
 
 class EasyKits extends PluginBase{
@@ -47,6 +52,7 @@ class EasyKits extends PluginBase{
         $commands = [
             new CreatekitCommand(),
             new DeletekitCommand(),
+            new EditkitCommand(),
             new EKImportCommand(),
             new KitCommand(),
         ];
@@ -69,7 +75,7 @@ class EasyKits extends PluginBase{
 
 	public function onDisable()
     {
-        DataManager::save(DataManager::KITS);
+        KitManager::saveAll();
         CooldownManager::saveCooldowns();
     }
 }

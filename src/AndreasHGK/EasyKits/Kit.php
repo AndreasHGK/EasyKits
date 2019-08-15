@@ -223,7 +223,7 @@ class Kit
             $player->addEffect($effect);
         }
         foreach($kit->getCommands() as $command){
-            Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), $command);
+            Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), LangUtils::replaceVariables($command, ["{PLAYER}" => $player->getName(), "{NICK}" => $player->getDisplayName()]));
         }
         return true;
     }
@@ -260,6 +260,13 @@ class Kit
     }
 
     /**
+     * @param string $name
+     */
+    public function setName(string $name) : void {
+        $this->name = $name;
+    }
+
+    /**
      * @return Item[]
      */
     public function getItems(): array
@@ -268,11 +275,25 @@ class Kit
     }
 
     /**
+     * @param array|Item[] $items
+     */
+    public function setItems(array $items) : void {
+        $this->items = $items;
+    }
+
+    /**
      * @return Item[]
      */
     public function getArmor(): array
     {
         return $this->armor;
+    }
+
+    /**
+     * @param array|Item[] $armor
+     */
+    public function setArmor(array $armor) : void {
+        $this->armor = $armor;
     }
 
     /**

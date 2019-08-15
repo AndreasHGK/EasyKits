@@ -6,6 +6,7 @@
 ## Features
 - [x] **Easy:**
 You can easily create kits with a simple form. All the items in your inventory will be added to the kit. No configs needed!
+All the kits can also be edited ingame.
 
 - [x] **Customizable:**
 You can change the claim behavior of each kit individually. Want to override the armor when claiming? It's all up to you!
@@ -44,14 +45,13 @@ Your code has to be readable, tested and bug-free.
 
 ### Flags
 - **Locked:** The player requires permission (*easykits.kit.**kitname***) to claim the kit
-- **doOverride:** The kit will take up the exact inventory slots assigned to the items.
-- **doOverrideArmor:** The kit will take up the exact armor slots assigned to the armor pieces.
-- **alwaysClaim:** Claim the kit even if he player lacks inventory space.
-- **emptyOnClaim:** Empty the player's inventory before claiming the kit.
-- **chestKit:** Make it so the kit is a chestkit.
+- **doOverride:** The kit will take up the exact inventory slots assigned to the items
+- **doOverrideArmor:** The kit will take up the exact armor slots assigned to the armor pieces
+- **alwaysClaim:** Claim the kit even if he player lacks inventory space
+- **emptyOnClaim:** Empty the player's inventory before claiming the kit
+- **chestKit:** Make it so the kit is a chestkit
 
 ## Todo
-- [ ] **Ingame kit editor:** Make kits editable ingame.
-- [ ] **One-per-life:** Support the option of only being able to claim 1 kit per life.
-- [ ] **Potion effects:** Support the option to add potion effects to kits. (todo: potion effects editable in game)
-- [ ] **Claim effects:** Add (optional)cosmetic effects when claiming kits.
+- [ ] **One-per-life:** Support the option of only being able to claim 1 kit per life
+- [ ] **Claim effects:** Add (optional)cosmetic effects when claiming kits
+- [ ] **Custom enchants:** Add support for PiggyCustomEnchants

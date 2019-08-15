@@ -31,6 +31,9 @@ permissions:
      easykits.command.ekimport:
       default: op
       description: "permission for the /ekimport command"
+     easykits.command.editkit:
+      default: op
+      description: "permission for the /editkit command"
    easykits.kit:
     default: op
     description: "permission for specific kits"

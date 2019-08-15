@@ -43,7 +43,7 @@ class CreatekitCommand extends EKExecutor {
                 return;
             }
 
-            $name = $data["name"];
+            $name = (string)$data["name"];
 
             if(KitManager::exists($name)){
                 $player->sendMessage(LangUtils::getMessage("createkit-duplicate"));

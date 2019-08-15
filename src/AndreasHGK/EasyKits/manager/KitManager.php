@@ -7,6 +7,7 @@ namespace AndreasHGK\EasyKits\manager;
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\event\KitCreateEvent;
 use AndreasHGK\EasyKits\event\KitDeleteEvent;
+use AndreasHGK\EasyKits\event\KitEditEvent;
 use AndreasHGK\EasyKits\Kit;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
@@ -70,6 +71,18 @@ class KitManager {
         return $kits;
     }
 
+    public static function update(Kit $old, Kit $new, bool $silent = false) : bool {
+        $event = new KitEditEvent($old, $new);
+
+        if(!$silent) $event->call();
+
+        if($event->isCancelled()) return false;
+
+        unset(self::getInstance()->kits[$old->getName()]);
+        self::getInstance()->kits[$new->getName()] = $event->getKit();
+        return true;
+    }
+
     public static function add(Kit $kit, bool $silent = false) : bool {
         $event = new KitCreateEvent($kit);
         if(!$silent) $event->call();
@@ -107,7 +120,7 @@ class KitManager {
     public static function loadAll() : void {
         $file = self::getKitFile()->getAll();
         foreach ($file as $name => $kit){
-            self::load($name);
+            self::load((string)$name);
         }
     }
 
@@ -131,7 +144,7 @@ class KitManager {
 
     public static function saveAll() : void {
         foreach(self::getAll() as $name => $kit){
-            self::save($name);
+            self::save((string)$name);
         }
         DataManager::save(DataManager::KITS);
     }
@@ -191,11 +204,11 @@ class KitManager {
                 $armor[$slot] = $itemObj;
             }
             $effects = [];
-            foreach($kitdata["effects"] as $id => $effect){
-                $effects[$id] = new EffectInstance(Effect::getEffect($id), $effect["duration"]*20 ?? null, $effect["amplifier"] ?? 0);
+            foreach($kitdata["effects"] ?? [] as $id => $effect){
+                $effects[$id] = new EffectInstance(Effect::getEffect($id), $effect["duration"] ?? null, $effect["amplifier"] ?? 0);
             }
             $commands = [];
-            foreach($kitdata["commands"] as $command){
+            foreach($kitdata["commands"] ?? [] as $command){
                 $commands[] = $command;
             }
             $kit = new Kit($name, $kitdata["price"], $kitdata["cooldown"], $items, $armor);
@@ -208,7 +221,7 @@ class KitManager {
 
             $kit->setEffects($effects);
             $kit->setCommands($commands);
-            
+
             self::getInstance()->kits[$name] = $kit;
 
         }catch (\Throwable $e){
