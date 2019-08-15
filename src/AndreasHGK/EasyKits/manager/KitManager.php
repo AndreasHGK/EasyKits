@@ -13,7 +13,6 @@ use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
-use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
 use pocketmine\permission\Permissible;
 use pocketmine\utils\Config;

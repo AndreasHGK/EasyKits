@@ -17,6 +17,7 @@ use AndreasHGK\EasyKits\manager\EconomyManager;
 use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\KitException;
 use Closure;
+use JackMD\UpdateNotifier\UpdateNotifier;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\command\PluginCommand;
 use pocketmine\entity\Effect;
@@ -39,6 +40,7 @@ class EasyKits extends PluginBase{
 
     public function onLoad() : void
     {
+        UpdateNotifier::checkUpdate($this, $this->getName(), $this->getDescription()->getVersion());
         self::$instance = $this;
         DataManager::loadDefault();
         KitManager::loadAll();
