@@ -55,7 +55,7 @@ class KitManager {
     /**
      * @var Kit[]
      */
-    public $kits = [];
+    public static $kits = [];
 
     /**
      * @param Permissible $permissible
@@ -78,8 +78,8 @@ class KitManager {
 
         if($event->isCancelled()) return false;
 
-        unset(self::getInstance()->kits[$old->getName()]);
-        self::getInstance()->kits[$new->getName()] = $event->getKit();
+        unset(self::$kits[$old->getName()]);
+        self::$kits[$new->getName()] = $event->getKit();
         return true;
     }
 
@@ -89,7 +89,7 @@ class KitManager {
 
         if($event->isCancelled()) return false;
 
-        self::getInstance()->kits[$kit->getName()] = $event->getKit();
+        self::$kits[$kit->getName()] = $event->getKit();
         return true;
     }
 
@@ -110,11 +110,11 @@ class KitManager {
      * @return Kit[]
      */
     public static function getAll() : array {
-        return self::getInstance()->kits;
+        return self::$kits;
     }
 
     public static function get(string $name) : ?Kit {
-        return self::getInstance()->kits[$name] ?? null;
+        return self::$kits[$name] ?? null;
     }
 
     public static function loadAll() : void {
@@ -135,11 +135,11 @@ class KitManager {
     }
 
     public static function unload(string $kit) : void {
-        unset(self::getInstance()->kits[$kit]);
+        unset(self::$kits[$kit]);
     }
 
     public static function exists(string $file) : bool{
-        return isset(self::getInstance()->kits[$file]);
+        return isset(self::$kits[$file]);
     }
 
     public static function saveAll() : void {
@@ -222,7 +222,7 @@ class KitManager {
             $kit->setEffects($effects);
             $kit->setCommands($commands);
 
-            self::getInstance()->kits[$name] = $kit;
+            self::$kits[$name] = $kit;
 
         }catch (\Throwable $e){
             EasyKits::get()->getLogger()->error("failed to load kit '".$name."'");

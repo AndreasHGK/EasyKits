@@ -17,7 +17,7 @@ class EconomyManager{
     /**
      * @var null|EconomyAPI|MultiEconomy
      */
-    public $economy = null;
+    public static $economy = null;
 
     public static function getMoney(Player $player) {
         switch (true){
@@ -68,13 +68,13 @@ class EconomyManager{
         $plugins = Server::getInstance()->getPluginManager();
         $economyAPI = $plugins->getPlugin("EconomyAPI");
         if($economyAPI instanceof EconomyAPI) {
-            self::getInstance()->economy = $economyAPI;
+            self::$economy = $economyAPI;
             EasyKits::get()->getLogger()->info("loaded EconomyAPI");
             return;
         }
         $multiEconomy = $plugins->getPlugin("MultiEconomy");
         if($multiEconomy instanceof MultiEconomy) {
-            self::getInstance()->economy = $multiEconomy;
+            self::$economy = $multiEconomy;
             EasyKits::get()->getLogger()->info("loaded MultiEconomy");
             return;
         }
@@ -85,12 +85,7 @@ class EconomyManager{
     }
 
     public static function getEconomy() {
-        return self::getInstance()->economy;
-    }
-
-    public static function getInstance() : self {
-        if(!isset(self::$instance)) self::$instance = new self();
-        return self::$instance;
+        return self::$economy;
     }
 
     private function __construct()
