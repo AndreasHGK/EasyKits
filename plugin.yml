@@ -1,6 +1,6 @@
 name: EasyKits
 main: AndreasHGK\EasyKits\EasyKits
-version: 1.0.0-beta2
+version: 1.0.0-beta3
 api: 3.9.0
 load: POSTWORLD
 author: AndreasHGK
@@ -8,6 +8,7 @@ description: A kit plugin for everyone
 website: http://hgk.me/
 softdepend:
  - EconomyAPI
+ - MultiEconomy
 
 permissions:
  easykits:

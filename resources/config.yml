@@ -1,5 +1,5 @@
 #don't touch this
-version: 2
+version: 3
 
 # the default values for the kit flags when creating a kit
 default-flags:
@@ -27,3 +27,8 @@ op-has-all-kits: true
 op-has-free-kits: false
 # give all EasyKits.instant.* permissions to operators
 op-has-instant-kits: false
+
+# economy stuff
+
+# for if you're using multieconomy
+multieconomy-currency: "dollars"

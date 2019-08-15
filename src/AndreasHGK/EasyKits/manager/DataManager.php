@@ -10,7 +10,7 @@ use pocketmine\utils\Config;
 class DataManager {
 
     public const VERSIONS = [
-        "config" => 2,
+        "config" => 3,
         "commands" => 0,
         "lang" => 2,
     ];
