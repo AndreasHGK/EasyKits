@@ -12,6 +12,8 @@ use AndreasHGK\EasyKits\manager\EconomyManager;
 use AndreasHGK\EasyKits\utils\KitException;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use onebone\economyapi\EconomyAPI;
+use pocketmine\entity\Effect;
+use pocketmine\entity\EffectInstance;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
 use pocketmine\level\sound\EndermanTeleportSound;
@@ -50,6 +52,11 @@ class Kit
      * @var int
      */
     protected $cooldown = 60;
+
+    /**
+     * @var EffectInstance[]|array
+     */
+    protected $effects = [];
 
     /**
      * @var Item
@@ -206,6 +213,9 @@ class Kit
             elseif($playerArmorInv->getItem($key)->getId() !== Item::AIR) $playerInv->addItem($armorSlot);
             else $playerArmorInv->addItem($armorSlot);
         }
+        foreach($kit->getEffects() as $effect){
+            $player->addEffect($effect);
+        }
         return true;
     }
 
@@ -288,6 +298,20 @@ class Kit
     {
         if ($cooldown < 0) throw new KitException("cooldown can't be below 0");
         $this->cooldown = $cooldown;
+    }
+
+    /**
+     * @return EffectInstance[]|array
+     */
+    public function getEffects() : array {
+        return $this->effects;
+    }
+
+    /**
+     * @param array|EffectInstance[] $effects
+     */
+    public function setEffects(array $effects) : void {
+        $this->effects = $effects;
     }
 
     /**

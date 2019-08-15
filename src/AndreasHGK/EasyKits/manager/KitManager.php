@@ -8,6 +8,8 @@ use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\event\KitCreateEvent;
 use AndreasHGK\EasyKits\event\KitDeleteEvent;
 use AndreasHGK\EasyKits\Kit;
+use pocketmine\entity\Effect;
+use pocketmine\entity\EffectInstance;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
@@ -188,6 +190,10 @@ class KitManager {
 
                 $armor[$slot] = $itemObj;
             }
+            $effects = [];
+            foreach($kitdata["effects"] as $id => $effect){
+                $effects[$id] = new EffectInstance(Effect::getEffect($id), $effect["duration"]*20 ?? null, $effect["amplifier"] ?? 0);
+            }
             $kit = new Kit($name, $kitdata["price"], $kitdata["cooldown"], $items, $armor);
             $kit->setLocked($kitdata["flags"]["locked"]);
             $kit->setDoOverride($kitdata["flags"]["doOverride"]);
@@ -265,6 +271,12 @@ class KitManager {
                 unset($itemData["enchants"]);
             }
             $kitData["armor"][$slot] = $itemData;
+        }
+        foreach($kit->getEffects() as $effect){
+            $kitData["effect"][$effect->getId()] = [
+                "amplifier" => $effect->getAmplifier(),
+                "duration" => $effect->getDuration(),
+            ];
         }
         $file->set($kit->getName(), $kitData);
     }
