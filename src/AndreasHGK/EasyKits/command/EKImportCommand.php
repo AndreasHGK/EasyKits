@@ -9,6 +9,7 @@ use AndreasHGK\EasyKits\importer\AdvancedKitsImporter;
 use AndreasHGK\EasyKits\importer\KitUIImporter;
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\DataManager;
+use AndreasHGK\EasyKits\ui\KitImportForm;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use jojoe77777\FormAPI\CustomForm;
 use pocketmine\command\CommandExecutor;
@@ -18,7 +19,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
 use pocketmine\utils\TextFormat;
 
-class EKImport extends EKExecutor {
+class EKImportCommand extends EKExecutor {
 
     public function __construct()
     {
@@ -57,6 +58,7 @@ class EKImport extends EKExecutor {
                     break;
                 default:
                     $sender->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
+                    return true;
                     break;
             }
             $success = 0;
@@ -66,47 +68,10 @@ class EKImport extends EKExecutor {
                 else $failed++;
             }
             $sender->sendMessage(LangUtils::getMessage("ekimport-success", true, ["{PLUGIN}" => $name, "{SUCCESS}" => $success, "{FAILED}" => $failed]));
+            return true;
         }
 
-        $ui = new CustomForm(function(Player $player, $data){
-            if($data === null){
-                $player->sendMessage(LangUtils::getMessage("ekimport-cancelled"));
-                return;
-            }
-            switch ($data["dropdown"]){
-                case 0:
-                    $name = "AdvancedKits";
-                    if(!AdvancedKitsImporter::isPluginLoaded()){
-                        $player->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
-                        return;
-                    }
-                    $return = AdvancedKitsImporter::ImportAll();
-                    break;
-                case 1:
-                    $name = "KitUI";
-                    if(!KitUIImporter::isPluginLoaded()){
-                        $player->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
-                        return;
-                    }
-                    $return = KitUIImporter::ImportAll();
-                    break;
-                default:
-                    $player->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
-                    break;
-            }
-            $success = 0;
-            $failed = 0;
-            foreach($return as $bool){
-                if($bool) $success++;
-                else $failed++;
-            }
-            $player->sendMessage(LangUtils::getMessage("ekimport-success", true, ["{PLUGIN}" => $name, "{SUCCESS}" => $success, "{FAILED}" => $failed]));
-            return;
-        });
-        $ui->setTitle(LangUtils::getMessage("ekimport-title"));
-        $ui->addLabel(LangUtils::getMessage("ekimport-text"));
-        $ui->addDropdown(LangUtils::getMessage("ekimport-select"), ["AdvancedKits", "KitUI",], null, "dropdown");
-        $sender->sendForm($ui);
+        KitImportForm::sendTo($sender);
         return true;
     }
 

@@ -9,6 +9,7 @@ use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\CooldownManager;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
+use AndreasHGK\EasyKits\ui\KitSelectForm;
 use AndreasHGK\EasyKits\utils\KitException;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use jojoe77777\FormAPI\SimpleForm;
@@ -37,38 +38,17 @@ class KitCommand extends EKExecutor {
         }
 
         if(!isset($args[0])){
+            if(empty(KitManager::getPermittedKitsFor($sender)) && (empty(KitManager::getAll()) && !DataManager::getKey(DataManager::CONFIG, "show-locked"))){
+                $sender->sendMessage(LangUtils::getMessage("kit-none-available"));
+                return true;
+            }
             if(!DataManager::getKey(DataManager::CONFIG, "use-forms")){
                 $list = implode("§7, §f", KitManager::getPermittedKitsFor($sender));
                 $sender->sendMessage(LangUtils::getMessage("kit-list", true, ["{KITS}" => $list]));
                 return true;
             }
 
-            $ui = new SimpleForm(function (Player $player, $data){
-                if($data === null){
-                    return;
-                }
-                if(!KitManager::exists($data)){
-                    $player->sendMessage(LangUtils::getMessage("kit-not-found"));
-                    return;
-                }
-                $this->tryClaim(KitManager::get($data), $player);
-            });
-            $ui->setTitle(LangUtils::getMessage("kit-title"));
-            $ui->setContent(LangUtils::getMessage("kit-text"));
-
-            foreach(KitManager::getPermittedKitsFor($sender) as $kit) {
-                if ($kit->getPrice() > 0) {
-                    $ui->addButton(LangUtils::getMessage("kit-available-priced-format", true, ["{NAME}" => $kit->getName(), "{PRICE}" => $kit->getPrice()]), -1, "", $kit->getName());
-                } else {
-                    $ui->addButton(LangUtils::getMessage("kit-available-free-format", true, ["{NAME}" => $kit->getName()]), -1, "", $kit->getName());
-                }
-            }
-            if(DataManager::getKey(DataManager::CONFIG, "show-locked")){
-                foreach(KitManager::getAll() - KitManager::getPermittedKitsFor($sender) as $kit) {
-                    $ui->addButton(LangUtils::getMessage("kit-locked-format", true, ["{NAME}" => $kit->getName(), "{PRICE}" => $kit->getPrice()]), -1, "", $kit->getName());
-                }
-            }
-            $sender->sendForm($ui);
+            KitSelectForm::sendTo($sender);
             return true;
         }
 
@@ -76,11 +56,11 @@ class KitCommand extends EKExecutor {
             $sender->sendMessage(LangUtils::getMessage("kit-not-found"));
             return true;
         }
-        $this->tryClaim(KitManager::get($args[0]), $sender);
+        self::tryClaim(KitManager::get($args[0]), $sender);
         return true;
     }
 
-    public function tryClaim(Kit $kit, Player $player) : void {
+    public static function tryClaim(Kit $kit, Player $player) : void {
 
         try{
             if($kit->claim($player)) $player->sendMessage(LangUtils::getMessage("kit-claim-success", true, ["{NAME}" => $kit->getName()]));

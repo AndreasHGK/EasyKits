@@ -1,5 +1,5 @@
 #don't touch this
-version: 0
+version: 1
 
 # the command name. Don't change this or the command won't work.
 createkit:
@@ -34,3 +34,9 @@ ekimport:
     - "importkit"
   description: "import kits from other plugins"
   usage: "/ekimport [plugin]"
+
+editkit:
+  labels:
+    - "editkit"
+  description: "edit a kit"
+  usage: "/editkit [plugin]"

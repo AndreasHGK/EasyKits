@@ -1,6 +1,7 @@
 #don't touch this
-version: 1
+version: 3
 
+## put false instead of a message to disable
 # messages
 
 sender-not-player: "§l§4> §r§7sender needs to be a player"
@@ -10,6 +11,8 @@ no-economy: "§c§l> §r§7There is no economy installed."
 
 unknown-exception: "§c§l> §r§7There was an unknown exception."
 
+coming-soon: "§c§l> §r§7This feature is coming soon."
+
 # chestkit item
 chestkit-name: "§r§a{NAME}§r§7 kit"
 chestkit-lore:
@@ -17,8 +20,8 @@ chestkit-lore:
 
 # /createkit UI + messages
 createkit-title: "§0Kit creation menu"
-createkit-text: "§7When making a kit, all the items in your inventory will be added to the kit. Make sure you have the correct items before you submit the kit."
-createkit-kitname: "§e§l> §rkit name"
+createkit-text: "§7When making a kit, all the items in your inventory will be added to the kit. Make sure you have the correct items before you submit the kit. After you created the kit, you can edit additional settings with /editkit"
+createkit-kitname: "§e§l> §rKit name"
 createkit-price: "§e§l> §rPrice §7(0 for no price)"
 createkit-cooldown: "§e§l> §rCooldown §7(in seconds)"
 createkit-flags: "§e§l> §rFlags"
@@ -46,12 +49,13 @@ deletekit-select: "§e§l> §rSelect kit"
 deletekit-cancelled: "§c§l> §r§7Kit deletion cancelled."
 deletekit-empty: "§c§l> §r§7Please select a kit to delete."
 deletekit-not-found: "§c§l> §r§7Selected kit not found."
+deletekit-none-available: "§c§l> §r§7There are no available kits."
 
 deletekit-success: "§a§l> §r§7Successfully deleted kit §a{NAME}§r§7."
 
 # /kit UI + messages
-kit-title: "§OKit selection"
-kit-text: "" #this is optional
+kit-title: "§OKit selection menu"
+kit-text: false #this is optional
 kit-available-free-format: "{NAME}\n§aUnlocked"
 kit-available-priced-format: "{NAME}\n§6${PRICE}"
 kit-locked-format: "{NAME}\n§cLocked" # only shows when enabled in config
@@ -71,7 +75,7 @@ kit-claim-success: "§a§l> §r§7Claimed kit §a{NAME}§r§7."
 chestclaim-success: "§a§l> §r§7Equipped kit §a{NAME}§r§7."
 
 # /ekimport UI + messages
-ekimport-title: "§oKit importing"
+ekimport-title: "§oKit importing menu"
 ekimport-text: "§7Please select a plugin to import kits from"
 ekimport-select: "§e§l> §rSelect plugin"
 
@@ -79,3 +83,57 @@ ekimport-cancelled: "§c§l> §r§7Kit importing cancelled."
 ekimport-not-loaded: "§c§l> §r§7Selected plugin not loaded."
 
 ekimport-success: "§a§l> §r§7Import from §a{PLUGIN} §7succeeded. §a{SUCCESS} §7success, §a{FAILED} §7failed."
+
+# /editkit UI + messages
+editkit-title: "§r§oKit edit menu"
+editkit-select-text: "§7Please select a kit you want to edit."
+editkit-select: "§e§l> §rSelect kit"
+
+editkit-cancelled: "§c§l> §r§7Kit edit menu closed."
+editkit-empty: "§c§l> §r§7Please select a kit to edit."
+editkit-not-found: "§c§l> §r§7Selected kit not found."
+editkit-none-available: "§c§l> §r§7There are no available kits."
+
+editkit-success: "§a§l> §r§7Successfully edited kit §a{NAME}§r§7."
+
+editkit-main-text: "§7You are editing kit §f{NAME}§7. Please select an option to edit."
+editkit-edit-general: "§e§l> §rGeneral settings §e§l<"
+editkit-edit-potions: "§e§l> §rPotion effects §e§l<"
+editkit-edit-commands: "§e§l> §rCommands §e§l<"
+editkit-edit-effects: "§e§l> §rClaim effects §e§l<"
+
+editkit-general-text: "§7You are editing general kit settings."
+editkit-general-kitname: "§e§l> §rkit name"
+editkit-general-price: "§e§l> §rPrice §7(0 for no price)"
+editkit-general-cooldown: "§e§l> §rCooldown §7(in seconds)"
+editkit-general-flags: "§e§l> §rFlags"
+editkit-general-lockedToggle: "locked §7(= permission required)"
+editkit-general-emptyOnClaimToggle: "emptyOnClaim"
+editkit-general-doOverrideToggle: "doOverrideItems"
+editkit-general-doOverrideArmorToggle: "doOverrideArmor"
+editkit-general-alwaysClaimToggle: "alwaysClaim"
+editkit-general-chestKitToggle: "chestKit"
+
+editkit-general-no-name: "§c§l> §r§7Please enter a name for your kit."
+editkit-general-invalid-price: "§c§l> §r§7Please enter a valid price."
+editkit-general-invalid-cooldown: "§c§l> §r§7Please enter a valid cooldown time."
+editkit-general-duplicate: "§c§l> §r§7A kit with that name already exists."
+
+editkit-potionselect-text: "§7Please select a potion to edit."
+editkit-potionselect-button: "§e§l> §r{POTION} §e§l<"
+
+editkit-potion-text: "§7Editing potion §f{POTION} §7for kit §f{NAME}§7."
+editkit-potion-toggle: "enabled"
+editkit-potion-duration: "§e§l> §rDuration §7(in seconds)"
+editkit-potion-amplifier: "§e§l> §rAmplifier"
+
+editkit-potion-invalid-duration: "§c§l> §r§7Please enter a valid duration."
+editkit-potion-invalid-amplifier: "§c§l> §r§7Please enter a valid amplifier."
+
+editkit-potion-success-removed: "§a§l> §r§7Successfully removed §a{POTION}§7 from kit §a{NAME}§r§7."
+editkit-potion-success-added: "§a§l> §r§7Successfully added §a{POTION}§7 to kit §a{NAME}§r§7."
+
+editkit-commands-text: "§7Editing commands for kit §f{NAME}§7. Use variable {PLAYER} for the player's real name and {NICK} for the player's display name."
+editkit-commands-input: "§e§l> §rCommand #{NUMBER}"
+
+editkit-commands-success: "§a§l> §r§7Successfully set §a{COUNT} §7commands in kit §a{NAME}§r§7."

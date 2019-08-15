@@ -8,6 +8,7 @@ use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
+use AndreasHGK\EasyKits\ui\DeletekitForm;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use jojoe77777\FormAPI\CustomForm;
 use pocketmine\command\CommandExecutor;
@@ -49,27 +50,12 @@ class DeletekitCommand extends EKExecutor {
             $kits[] = $kit->getName();
         }
 
-        $ui = new CustomForm(function(Player $player, $data) use($kits){
-            if($data === null){
-                $player->sendMessage(LangUtils::getMessage("deletekit-cancelled"));
-                return;
-            }
-            if(!isset($data["kit"])){
-                $player->sendMessage(LangUtils::getMessage("deletekit-empty"));
-                return;
-            }
-            if(!KitManager::exists($kits[$data["kit"]])){
-                $player->sendMessage(LangUtils::getMessage("deletekit-not-found"));
-                return;
-            }
-            KitManager::remove($kits[$data["kit"]]);
-            $player->sendMessage(LangUtils::getMessage("deletekit-success", true, ["{NAME}" => $kits[$data["kit"]]]));
-            return;
-        });
-        $ui->setTitle(LangUtils::getMessage("deletekit-title"));
-        $ui->addLabel(LangUtils::getMessage("deletekit-text"));
-        $ui->addDropdown(LangUtils::getMessage("deletekit-select"), $kits, null, "kit");
-        $sender->sendForm($ui);
+        if(empty($kits)){
+            $sender->sendMessage(LangUtils::getMessage("deletekit-none-available"));
+            return true;
+        }
+
+        DeletekitForm::sendTo($sender);
         return true;
     }
 

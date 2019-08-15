@@ -7,10 +7,12 @@ namespace AndreasHGK\EasyKits\manager;
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\event\KitCreateEvent;
 use AndreasHGK\EasyKits\event\KitDeleteEvent;
+use AndreasHGK\EasyKits\event\KitEditEvent;
 use AndreasHGK\EasyKits\Kit;
+use pocketmine\entity\Effect;
+use pocketmine\entity\EffectInstance;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
-use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
 use pocketmine\permission\Permissible;
 use pocketmine\utils\Config;
@@ -52,7 +54,7 @@ class KitManager {
     /**
      * @var Kit[]
      */
-    public $kits = [];
+    public static $kits = [];
 
     /**
      * @param Permissible $permissible
@@ -68,13 +70,25 @@ class KitManager {
         return $kits;
     }
 
+    public static function update(Kit $old, Kit $new, bool $silent = false) : bool {
+        $event = new KitEditEvent($old, $new);
+
+        if(!$silent) $event->call();
+
+        if($event->isCancelled()) return false;
+
+        unset(self::$kits[$old->getName()]);
+        self::$kits[$new->getName()] = $event->getKit();
+        return true;
+    }
+
     public static function add(Kit $kit, bool $silent = false) : bool {
         $event = new KitCreateEvent($kit);
         if(!$silent) $event->call();
 
         if($event->isCancelled()) return false;
 
-        self::getInstance()->kits[$kit->getName()] = $event->getKit();
+        self::$kits[$kit->getName()] = $event->getKit();
         return true;
     }
 
@@ -95,17 +109,17 @@ class KitManager {
      * @return Kit[]
      */
     public static function getAll() : array {
-        return self::getInstance()->kits;
+        return self::$kits;
     }
 
     public static function get(string $name) : ?Kit {
-        return self::getInstance()->kits[$name] ?? null;
+        return self::$kits[$name] ?? null;
     }
 
     public static function loadAll() : void {
         $file = self::getKitFile()->getAll();
         foreach ($file as $name => $kit){
-            self::load($name);
+            self::load((string)$name);
         }
     }
 
@@ -120,16 +134,16 @@ class KitManager {
     }
 
     public static function unload(string $kit) : void {
-        unset(self::getInstance()->kits[$kit]);
+        unset(self::$kits[$kit]);
     }
 
     public static function exists(string $file) : bool{
-        return isset(self::getInstance()->kits[$file]);
+        return isset(self::$kits[$file]);
     }
 
     public static function saveAll() : void {
         foreach(self::getAll() as $name => $kit){
-            self::save($name);
+            self::save((string)$name);
         }
         DataManager::save(DataManager::KITS);
     }
@@ -188,6 +202,14 @@ class KitManager {
 
                 $armor[$slot] = $itemObj;
             }
+            $effects = [];
+            foreach($kitdata["effects"] ?? [] as $id => $effect){
+                $effects[$id] = new EffectInstance(Effect::getEffect($id), $effect["duration"] ?? null, $effect["amplifier"] ?? 0);
+            }
+            $commands = [];
+            foreach($kitdata["commands"] ?? [] as $command){
+                $commands[] = $command;
+            }
             $kit = new Kit($name, $kitdata["price"], $kitdata["cooldown"], $items, $armor);
             $kit->setLocked($kitdata["flags"]["locked"]);
             $kit->setDoOverride($kitdata["flags"]["doOverride"]);
@@ -195,7 +217,11 @@ class KitManager {
             $kit->setAlwaysClaim($kitdata["flags"]["alwaysClaim"]);
             $kit->setEmptyOnClaim($kitdata["flags"]["emptyOnClaim"]);
             $kit->setChestKit($kitdata["flags"]["chestKit"] ?? DataManager::getKey(DataManager::CONFIG, "default-flags")["chestKit"]);
-            self::getInstance()->kits[$name] = $kit;
+
+            $kit->setEffects($effects);
+            $kit->setCommands($commands);
+
+            self::$kits[$name] = $kit;
 
         }catch (\Throwable $e){
             EasyKits::get()->getLogger()->error("failed to load kit '".$name."'");
@@ -265,6 +291,15 @@ class KitManager {
                 unset($itemData["enchants"]);
             }
             $kitData["armor"][$slot] = $itemData;
+        }
+        foreach($kit->getEffects() as $effect){
+            $kitData["effects"][$effect->getId()] = [
+                "amplifier" => $effect->getAmplifier(),
+                "duration" => $effect->getDuration(),
+            ];
+        }
+        foreach ($kit->getCommands() as $command){
+            $kitData["commands"][] = $command;
         }
         $file->set($kit->getName(), $kitData);
     }

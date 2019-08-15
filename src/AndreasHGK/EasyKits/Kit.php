@@ -8,15 +8,21 @@ use AndreasHGK\EasyKits\event\InteractItemClaimEvent;
 use AndreasHGK\EasyKits\event\KitClaimEvent;
 use AndreasHGK\EasyKits\manager\CooldownManager;
 use AndreasHGK\EasyKits\manager\DataManager;
+use AndreasHGK\EasyKits\manager\EconomyManager;
 use AndreasHGK\EasyKits\utils\KitException;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use onebone\economyapi\EconomyAPI;
+use pocketmine\command\ConsoleCommandSender;
+use pocketmine\entity\Effect;
+use pocketmine\entity\EffectInstance;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
 use pocketmine\level\sound\EndermanTeleportSound;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\permission\Permissible;
+use pocketmine\permission\Permission;
+use pocketmine\permission\PermissionManager;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
@@ -47,6 +53,16 @@ class Kit
      * @var int
      */
     protected $cooldown = 60;
+
+    /**
+     * @var EffectInstance[]|array
+     */
+    protected $effects = [];
+
+    /**
+     * @var array|string[]
+     */
+    protected $commands = [];
 
     /**
      * @var Item
@@ -92,9 +108,8 @@ class Kit
             }
         }
         if($this->getPrice() > 0){
-            $economy = Server::getInstance()->getPluginManager()->getPlugin("EconomyAPI");
-            if($economy instanceof EconomyAPI){
-                if($economy->myMoney($player) < $this->getPrice()){
+            if(EconomyManager::isEconomyLoaded()){
+                if(EconomyManager::getMoney($player) < $this->getPrice()){
                     throw new KitException("Player has insufficient funds", 1);
                 }
             }else{
@@ -106,7 +121,11 @@ class Kit
             throw new KitException("Player has insufficient space", 3);
         }
 
-        $event = new InteractItemClaimEvent($this, $player);
+        $kit = clone $this;
+        if($player->hasPermission(EasyKits::PERM_ROOT."free.".$kit->name)) $kit->price = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT."instant.".$kit->name)) $kit->cooldown = 0;
+
+        $event = new InteractItemClaimEvent($kit, $player);
         $event->call();
 
         if($event->isCancelled()) return false;
@@ -119,7 +138,7 @@ class Kit
             CooldownManager::setKitCooldown($kit, $player);
         }
         if($kit->getPrice() > 0){
-            $economy->reduceMoney($player, $kit->getPrice(), true);
+            EconomyManager::reduceMoney($player, $kit->getPrice(), true);
         }
         $player->getInventory()->addItem($kit->getInteractItem());
         return true;
@@ -139,9 +158,8 @@ class Kit
             }
         }
         if($this->getPrice() > 0){
-            $economy = Server::getInstance()->getPluginManager()->getPlugin("EconomyAPI");
-            if($economy instanceof EconomyAPI){
-                if($economy->myMoney($player) < $this->getPrice()){
+            if(EconomyManager::isEconomyLoaded()){
+                if(EconomyManager::getMoney($player) < $this->getPrice()){
                     throw new KitException("Player has insufficient funds", 1);
                 }
             }else{
@@ -171,8 +189,10 @@ class Kit
                 throw new KitException("Player has insufficient space", 3);
             }
         }
-
-        $event = new KitClaimEvent($this, $player);
+        $kit = clone $this;
+        if($player->hasPermission(EasyKits::PERM_ROOT."free.".$kit->name)) $kit->price = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT."instant.".$kit->name)) $kit->cooldown = 0;
+        $event = new KitClaimEvent($kit, $player);
         $event->call();
 
         if($event->isCancelled()) return false;
@@ -184,7 +204,7 @@ class Kit
             CooldownManager::setKitCooldown($kit, $player);
         }
         if($kit->getPrice() > 0){
-            $economy->reduceMoney($player, $kit->getPrice(), true);
+            EconomyManager::reduceMoney($player, $kit->getPrice(), true);
         }
         if($kit->emptyOnClaim()){
             $playerInv->clearAll();
@@ -198,6 +218,12 @@ class Kit
             if($kit->doOverrideArmor()) $playerArmorInv->setItem($key, $armorSlot);
             elseif($playerArmorInv->getItem($key)->getId() !== Item::AIR) $playerInv->addItem($armorSlot);
             else $playerArmorInv->addItem($armorSlot);
+        }
+        foreach($kit->getEffects() as $effect){
+            $player->addEffect($effect);
+        }
+        foreach($kit->getCommands() as $command){
+            Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), LangUtils::replaceVariables($command, ["{PLAYER}" => $player->getName(), "{NICK}" => $player->getDisplayName()]));
         }
         return true;
     }
@@ -234,6 +260,13 @@ class Kit
     }
 
     /**
+     * @param string $name
+     */
+    public function setName(string $name) : void {
+        $this->name = $name;
+    }
+
+    /**
      * @return Item[]
      */
     public function getItems(): array
@@ -242,11 +275,25 @@ class Kit
     }
 
     /**
+     * @param array|Item[] $items
+     */
+    public function setItems(array $items) : void {
+        $this->items = $items;
+    }
+
+    /**
      * @return Item[]
      */
     public function getArmor(): array
     {
         return $this->armor;
+    }
+
+    /**
+     * @param array|Item[] $armor
+     */
+    public function setArmor(array $armor) : void {
+        $this->armor = $armor;
     }
 
     /**
@@ -281,6 +328,34 @@ class Kit
     {
         if ($cooldown < 0) throw new KitException("cooldown can't be below 0");
         $this->cooldown = $cooldown;
+    }
+
+    /**
+     * @return EffectInstance[]|array
+     */
+    public function getEffects() : array {
+        return $this->effects;
+    }
+
+    /**
+     * @param array|EffectInstance[] $effects
+     */
+    public function setEffects(array $effects) : void {
+        $this->effects = $effects;
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getCommands() : array {
+        return $this->commands;
+    }
+
+    /**
+     * @param array|string[] $commands
+     */
+    public function setCommands(array $commands) : void {
+        $this->commands = $commands;
     }
 
     /**
@@ -405,6 +480,10 @@ class Kit
         $this->cooldown = $cooldown;
         $this->items = $items;
         $this->armor = $armor;
+
+        PermissionManager::getInstance()->addPermission(new Permission(EasyKits::PERM_ROOT."kit.".$name, "permission to claim kit ".$name, DataManager::getKey(DataManager::CONFIG, "op-has-all-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
+        PermissionManager::getInstance()->addPermission(new Permission(EasyKits::PERM_ROOT."free.".$name, "permission to claim kit ".$name." for free", DataManager::getKey(DataManager::CONFIG, "op-has-free-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
+        PermissionManager::getInstance()->addPermission(new Permission(EasyKits::PERM_ROOT."instant.".$name, "permission to claim kit ".$name." without cooldown", DataManager::getKey(DataManager::CONFIG, "op-has-instant-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
     }
 
 }

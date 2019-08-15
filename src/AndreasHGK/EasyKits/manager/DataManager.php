@@ -10,9 +10,9 @@ use pocketmine\utils\Config;
 class DataManager {
 
     public const VERSIONS = [
-        "config" => 1,
-        "commands" => 0,
-        "lang" => 1,
+        "config" => 3,
+        "commands" => 1,
+        "lang" => 3,
     ];
 
     public const CONFIG = "config.yml";
@@ -28,7 +28,7 @@ class DataManager {
     /**
      * @var Config[]
      */
-    public $memory = [];
+    public static $memory = [];
 
     /**
      * @param string $file
@@ -41,14 +41,14 @@ class DataManager {
     }
 
     public static function get(string $file, bool $keepLoaded = true) : Config {
-        if(self::isLoaded($file)) return self::getInstance()->memory[$file];
+        if(self::isLoaded($file)) return self::$memory[$file];
         return self::load($file, $keepLoaded);
     }
 
     public static function load(string $file, bool $keepLoaded = true) : Config {
         $data = self::getFile($file);
         if($keepLoaded){
-            self::getInstance()->memory[$file] = $data;
+            self::$memory[$file] = $data;
         }
         return $data;
     }
@@ -63,17 +63,17 @@ class DataManager {
     public static function unload(string $file) : bool {
         if(!self::isLoaded($file)) return false;
         self::save($file);
-        unset(self::getInstance()->memory[$file]);
+        unset(self::$memory[$file]);
         return true;
     }
 
     public static function isLoaded(string $file) : bool{
-        return isset(self::getInstance()->memory[$file]);
+        return isset(self::$memory[$file]);
     }
 
     public static function save(string $file) : bool{
         if(!self::isLoaded($file)) return false;
-        self::getInstance()->memory[$file]->save();
+        self::$memory[$file]->save();
         return true;
     }
 
@@ -111,10 +111,5 @@ class DataManager {
     }
 
     private function __construct(){}
-
-    public static function getInstance() : self {
-        if(self::$instance === null) self::$instance = new self();
-        return self::$instance;
-    }
 
 }
