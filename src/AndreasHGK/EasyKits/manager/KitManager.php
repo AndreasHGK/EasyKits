@@ -194,6 +194,10 @@ class KitManager {
             foreach($kitdata["effects"] as $id => $effect){
                 $effects[$id] = new EffectInstance(Effect::getEffect($id), $effect["duration"]*20 ?? null, $effect["amplifier"] ?? 0);
             }
+            $commands = [];
+            foreach($kitdata["commands"] as $command){
+                $commands[] = $command;
+            }
             $kit = new Kit($name, $kitdata["price"], $kitdata["cooldown"], $items, $armor);
             $kit->setLocked($kitdata["flags"]["locked"]);
             $kit->setDoOverride($kitdata["flags"]["doOverride"]);
@@ -201,6 +205,10 @@ class KitManager {
             $kit->setAlwaysClaim($kitdata["flags"]["alwaysClaim"]);
             $kit->setEmptyOnClaim($kitdata["flags"]["emptyOnClaim"]);
             $kit->setChestKit($kitdata["flags"]["chestKit"] ?? DataManager::getKey(DataManager::CONFIG, "default-flags")["chestKit"]);
+
+            $kit->setEffects($effects);
+            $kit->setCommands($commands);
+            
             self::getInstance()->kits[$name] = $kit;
 
         }catch (\Throwable $e){
@@ -273,10 +281,13 @@ class KitManager {
             $kitData["armor"][$slot] = $itemData;
         }
         foreach($kit->getEffects() as $effect){
-            $kitData["effect"][$effect->getId()] = [
+            $kitData["effects"][$effect->getId()] = [
                 "amplifier" => $effect->getAmplifier(),
                 "duration" => $effect->getDuration(),
             ];
+        }
+        foreach ($kit->getCommands() as $command){
+            $kitData["commands"][] = $command;
         }
         $file->set($kit->getName(), $kitData);
     }

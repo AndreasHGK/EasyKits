@@ -12,6 +12,7 @@ use AndreasHGK\EasyKits\manager\EconomyManager;
 use AndreasHGK\EasyKits\utils\KitException;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use onebone\economyapi\EconomyAPI;
+use pocketmine\command\ConsoleCommandSender;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\item\Item;
@@ -57,6 +58,11 @@ class Kit
      * @var EffectInstance[]|array
      */
     protected $effects = [];
+
+    /**
+     * @var array|string[]
+     */
+    protected $commands = [];
 
     /**
      * @var Item
@@ -216,6 +222,9 @@ class Kit
         foreach($kit->getEffects() as $effect){
             $player->addEffect($effect);
         }
+        foreach($kit->getCommands() as $command){
+            Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), $command);
+        }
         return true;
     }
 
@@ -312,6 +321,20 @@ class Kit
      */
     public function setEffects(array $effects) : void {
         $this->effects = $effects;
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getCommands() : array {
+        return $this->commands;
+    }
+
+    /**
+     * @param array|string[] $commands
+     */
+    public function setCommands(array $commands) : void {
+        $this->commands = $commands;
     }
 
     /**

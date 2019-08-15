@@ -43,7 +43,7 @@ If you open a pull request, make sure you contribute to the **development** bran
 Your code has to be readable, tested and bug-free.
 
 ### Flags
-- **Locked:** The player requires permission (*easykits.kit.<kitname>*) to claim the kit
+- **Locked:** The player requires permission (*easykits.kit.**kitname***) to claim the kit
 - **doOverride:** The kit will take up the exact inventory slots assigned to the items.
 - **doOverrideArmor:** The kit will take up the exact armor slots assigned to the armor pieces.
 - **alwaysClaim:** Claim the kit even if he player lacks inventory space.
