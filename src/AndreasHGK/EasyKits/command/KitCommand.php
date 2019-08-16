@@ -12,6 +12,7 @@ use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\ui\KitSelectForm;
 use AndreasHGK\EasyKits\utils\KitException;
 use AndreasHGK\EasyKits\utils\LangUtils;
+use AndreasHGK\EasyKits\utils\TryClaim;
 use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\Player;
 use pocketmine\command\CommandSender;
@@ -56,67 +57,7 @@ class KitCommand extends EKExecutor {
             $sender->sendMessage(LangUtils::getMessage("kit-not-found"));
             return true;
         }
-        self::tryClaim(KitManager::get($args[0]), $sender);
+        TryClaim::tryClaim(KitManager::get($args[0]), $sender);
         return true;
     }
-
-    public static function tryClaim(Kit $kit, Player $player) : void {
-
-        try{
-            if($kit->claim($player)) $player->sendMessage(LangUtils::getMessage("kit-claim-success", true, ["{NAME}" => $kit->getName()]));
-
-        }catch(KitException $e){
-            switch ($e->getCode()){
-                case 0:
-                    $time = CooldownManager::getKitCooldown($kit, $player);
-                    $timeString = "";
-                    $timeArray = [];
-                    if($time >= 86400){
-                        $unit = floor($time/86400);
-                        $time -= $unit*86400;
-                        $timeArray[] = $unit." days";
-                    }
-                    if($time >= 3600){
-                        $unit = floor($time/3600);
-                        $time -= $unit*3600;
-                        $timeArray[] = $unit." hours";
-                    }
-                    if($time >= 60){
-                        $unit = floor($time/60);
-                        $time -= $unit*60;
-                        $timeArray[] = $unit." minutes";
-                    }
-                    if($time >= 1){
-                        $timeArray[] = $time." seconds";
-                    }
-                    foreach($timeArray as $key => $value){
-                        if($key === 0){
-                            $timeString .= $value;
-                        }elseif ($key === count($timeArray) - 1){
-                            $timeString .= " and ".$value;
-                        }else{
-                            $timeString .= ", ".$value;
-                        }
-                    }
-                    $player->sendMessage(LangUtils::getMessage("kit-cooldown-active", true, ["{TIME}" => $timeString]));
-                    break;
-                case 1:
-                    $player->sendMessage(LangUtils::getMessage("kit-insufficient-funds"));
-                    break;
-                case 2:
-                    $player->sendMessage(LangUtils::getMessage("no-economy"));
-                    break;
-                case 3:
-                    $player->sendMessage(LangUtils::getMessage("kit-insufficient-space"));
-                    break;
-                case 4:
-                    $player->sendMessage(LangUtils::getMessage("kit-no-permission"));
-                    break;
-                default:
-                    $player->sendMessage(LangUtils::getMessage("unknown-exception"));
-                    break;
-            }
-        }
-    }
-
 }

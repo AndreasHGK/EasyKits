@@ -18,6 +18,7 @@ use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\KitException;
 use Closure;
 use JackMD\UpdateNotifier\UpdateNotifier;
+use muqsit\invmenu\InvMenuHandler;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\command\PluginCommand;
 use pocketmine\entity\Effect;
@@ -43,6 +44,9 @@ class EasyKits extends PluginBase{
         UpdateNotifier::checkUpdate($this, $this->getName(), $this->getDescription()->getVersion());
         self::$instance = $this;
         DataManager::loadDefault();
+        if(DataManager::getKey(DataManager::CONFIG, "auto-update-config")){
+            DataManager::updateAllConfigs();
+        }
         KitManager::loadAll();
         CooldownManager::loadCooldowns();
         EconomyManager::loadEconomy();
@@ -72,6 +76,9 @@ class EasyKits extends PluginBase{
         ];
         foreach ($listeners as $listener){
             $this->getServer()->getPluginManager()->registerEvents($listener, $this);
+        }
+        if(!InvMenuHandler::isRegistered()){
+            InvMenuHandler::register($this);
         }
 	}
 

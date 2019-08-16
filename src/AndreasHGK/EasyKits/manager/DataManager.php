@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace AndreasHGK\EasyKits\manager;
 
 use AndreasHGK\EasyKits\EasyKits;
+use Closure;
+use pocketmine\entity\Effect;
+use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
 class DataManager {
 
     public const VERSIONS = [
-        "config" => 3,
+        "config" => 4,
         "commands" => 1,
         "lang" => 3,
     ];
@@ -108,6 +111,43 @@ class DataManager {
         if(EasyKits::get()->saveResource(self::KITS)) EasyKits::get()->getLogger()->debug("creating ".self::KITS);
         self::get(self::KITS);
         self::get(self::COOLDOWN);
+    }
+
+    public static function updateAllConfigs() : void {
+        $cfgs = [
+            self::CONFIG,
+            self::COMMANDS,
+            self::LANG,
+        ];
+        foreach($cfgs as $cfg){
+            self::updateConfig($cfg);
+        }
+    }
+
+    public static function updateConfig(string $file) : void {
+        $cfg = self::get($file)->getAll();
+
+        $reflect = new \ReflectionProperty(PluginBase::class, "file");
+        $reflect->setAccessible(true);
+        $Pfile = $reflect->getValue(EasyKits::get());
+
+        $filename = rtrim(str_replace("\\", "/", $file), "/");
+        if(file_exists($Pfile . "resources/" . $filename)){
+            $resource = new Config($Pfile . "resources/" . $filename);
+            $cfgResource = $resource->getAll();
+        }
+        $count = 0;
+        foreach($cfgResource as $key => $value){
+            if(!isset($cfg[$key])){
+                $count++;
+                $cfg[$key] = $value;
+            }
+        }
+        if($count > 0){
+            DataManager::get($file)->setAll($cfg);
+            DataManager::save($file);
+            EasyKits::get()->getLogger()->notice("Auto updated ".$count." keys in ".$file);
+        }
     }
 
     private function __construct(){}

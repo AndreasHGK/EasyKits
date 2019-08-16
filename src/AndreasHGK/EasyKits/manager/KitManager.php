@@ -77,7 +77,7 @@ class KitManager {
 
         if($event->isCancelled()) return false;
 
-        unset(self::$kits[$old->getName()]);
+        self::remove($old, true);
         self::$kits[$new->getName()] = $event->getKit();
         return true;
     }
@@ -113,7 +113,7 @@ class KitManager {
     }
 
     public static function get(string $name) : ?Kit {
-        return self::$kits[$name] ?? null;
+        return clone self::$kits[$name] ?? null;
     }
 
     public static function loadAll() : void {
