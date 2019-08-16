@@ -1,5 +1,9 @@
 #don't touch this
-version: 3
+version: 4
+
+# When you installed a new update, (if true) the plugin will try to add all the missing config values. This applies to Commands.yml, Lang.yml and Config.yml
+# This WILL remove all comments made and the file might be harder to read.
+auto-update-config: false
 
 # the default values for the kit flags when creating a kit
 default-flags:

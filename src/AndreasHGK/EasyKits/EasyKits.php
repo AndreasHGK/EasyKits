@@ -43,6 +43,9 @@ class EasyKits extends PluginBase{
         UpdateNotifier::checkUpdate($this, $this->getName(), $this->getDescription()->getVersion());
         self::$instance = $this;
         DataManager::loadDefault();
+        if(DataManager::getKey(DataManager::CONFIG, "auto-update-config")){
+            DataManager::updateAllConfigs();
+        }
         KitManager::loadAll();
         CooldownManager::loadCooldowns();
         EconomyManager::loadEconomy();

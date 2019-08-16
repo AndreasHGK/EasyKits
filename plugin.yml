@@ -1,6 +1,6 @@
 name: EasyKits
 main: AndreasHGK\EasyKits\EasyKits
-version: 1.0.0-beta3
+version: 1.0.0-beta4
 api: 3.9.0
 load: POSTWORLD
 author: AndreasHGK
