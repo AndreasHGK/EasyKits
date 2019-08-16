@@ -60,5 +60,4 @@ class KitCommand extends EKExecutor {
         TryClaim::tryClaim(KitManager::get($args[0]), $sender);
         return true;
     }
-
 }
