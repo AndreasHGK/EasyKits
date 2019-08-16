@@ -23,12 +23,8 @@ class EKImportCommand extends EKExecutor {
 
     public function __construct()
     {
-        $commandData = DataManager::getKey(DataManager::COMMANDS, "ekimport");
-        $this->name = array_shift($commandData["labels"]);
-        if(isset($commandData["labels"])) $this->aliases = $commandData["labels"];
-        $this->desc = $commandData["description"];
-        $this->usage = $commandData["usage"];
-        $this->permission = EasyKits::PERM_ROOT."command.ekimport";
+        $this->setDataFromConfig("ekimport");
+
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool

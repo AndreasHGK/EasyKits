@@ -8,6 +8,7 @@ use AndreasHGK\EasyKits\command\KitCommand;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\LangUtils;
+use AndreasHGK\EasyKits\utils\TryClaim;
 use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\Player;
 
@@ -23,7 +24,7 @@ class KitSelectForm {
                 $player->sendMessage(LangUtils::getMessage("kit-not-found"));
                 return;
             }
-            KitCommand::tryClaim(KitManager::get($data), $player);
+            TryClaim::tryClaim(KitManager::get($data), $player);
         });
         $ui->setTitle(LangUtils::getMessage("kit-title"));
         $ui->setContent(LangUtils::getMessage("kit-text"));

@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits\command;
 
-use AndreasHGK\EasyKits\DataManager;
+use AndreasHGK\EasyKits\manager\DataManager;
+use AndreasHGK\EasyKits\EasyKits;
 use pocketmine\command\CommandExecutor;
-use pocketmine\Player;
-use pocketmine\plugin\PluginBase;
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
-use pocketmine\utils\TextFormat;
-use redstone\Main;
 
 abstract class EKExecutor implements CommandExecutor {
 
@@ -20,6 +17,15 @@ abstract class EKExecutor implements CommandExecutor {
     protected $aliases = [];
     protected $permission;
     protected $usage;
+
+    protected function setDataFromConfig(string $commandName) : void {
+        $commandData = DataManager::getKey(DataManager::COMMANDS, $commandName);
+        $this->name = array_shift($commandData["labels"]);
+        if(isset($commandData["labels"])) $this->aliases = $commandData["labels"];
+        $this->desc = $commandData["description"];
+        $this->usage = $commandData["usage"];
+        $this->permission = EasyKits::PERM_ROOT."command.".$commandName;
+    }
 
     public function getName() : string {
         return $this->name;

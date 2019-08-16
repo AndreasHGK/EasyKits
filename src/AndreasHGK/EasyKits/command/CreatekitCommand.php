@@ -19,12 +19,8 @@ class CreatekitCommand extends EKExecutor {
 
     public function __construct()
     {
-        $commandData = DataManager::getKey(DataManager::COMMANDS, "createkit");
-        $this->name = array_shift($commandData["labels"]);
-        if(isset($commandData["labels"])) $this->aliases = $commandData["labels"];
-        $this->desc = $commandData["description"];
-        $this->usage = $commandData["usage"];
-        $this->permission = EasyKits::PERM_ROOT."command.createkit";
+        $this->setDataFromConfig("createkit");
+
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
