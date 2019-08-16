@@ -98,6 +98,7 @@ editkit-success: "§a§l> §r§7Successfully edited kit §a{NAME}§r§7."
 
 editkit-main-text: "§7You are editing kit §f{NAME}§7. Please select an option to edit."
 editkit-edit-general: "§e§l> §rGeneral settings §e§l<"
+editkit-edit-items: "§e§l> §rKit items §e§l<"
 editkit-edit-potions: "§e§l> §rPotion effects §e§l<"
 editkit-edit-commands: "§e§l> §rCommands §e§l<"
 editkit-edit-effects: "§e§l> §rClaim effects §e§l<"
@@ -137,3 +138,13 @@ editkit-commands-text: "§7Editing commands for kit §f{NAME}§7. Use variable {
 editkit-commands-input: "§e§l> §rCommand #{NUMBER}"
 
 editkit-commands-success: "§a§l> §r§7Successfully set §a{COUNT} §7commands in kit §a{NAME}§r§7."
+
+editkit-items-title: "§6§l> §rEditing §6{NAME}§r kit items"
+editkit-items-lockedname: "§4§lx" # name of the items in locked slots
+
+editkit-items-boots: "§4Boots"
+editkit-items-leggings: "§4Leggings"
+editkit-items-chestplate: "§4Chestplate"
+editkit-items-helmet: "§4Helmet"
+
+editkit-items-succes: "§a§l> §r§7Successfully set §a{COUNT} §7items in kit §a{NAME}§r§7."

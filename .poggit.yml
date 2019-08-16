@@ -11,4 +11,7 @@ projects:
       - src: JackMD/UpdateNotifier/UpdateNotifier
         version: ^1.0.0
         branch: master
+      - src: muqsit/invmenu/InvMenu
+        version: ^2.1.0
+        branch: master
 ...

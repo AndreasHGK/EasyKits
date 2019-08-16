@@ -25,6 +25,9 @@ class EditkitMainForm {
                 case "general":
                     EditkitGeneralForm::sendTo($player, $kit);
                     break;
+                case "items":
+                    EditKitItemInventory::sendTo($player, $kit);
+                    break;
                 case "potions":
                     EditkitPotionSelectForm::sendTo($player, $kit);
                     break;
@@ -41,6 +44,7 @@ class EditkitMainForm {
         $ui->setTitle(LangUtils::getMessage("editkit-title"));
         $ui->setContent(LangUtils::getMessage("editkit-main-text", true, ["{NAME}" => $kit->getName()]));
         $ui->addButton(LangUtils::getMessage("editkit-edit-general"), -1, "", "general");
+        $ui->addButton(LangUtils::getMessage("editkit-edit-items"), -1, "", "items");
         $ui->addButton(LangUtils::getMessage("editkit-edit-potions"), -1, "", "potions");
         $ui->addButton(LangUtils::getMessage("editkit-edit-commands"), -1, "", "commands");
         $ui->addButton(LangUtils::getMessage("editkit-edit-effects"), -1, "", "effects");
