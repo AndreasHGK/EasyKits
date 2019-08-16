@@ -113,7 +113,7 @@ class KitManager {
     }
 
     public static function get(string $name) : ?Kit {
-        return self::$kits[$name] ?? null;
+        return clone self::$kits[$name] ?? null;
     }
 
     public static function loadAll() : void {
