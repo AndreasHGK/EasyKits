@@ -9,6 +9,7 @@ use AndreasHGK\EasyKits\command\DeletekitCommand;
 use AndreasHGK\EasyKits\command\EditkitCommand;
 use AndreasHGK\EasyKits\command\EKImportCommand;
 use AndreasHGK\EasyKits\command\KitCommand;
+use AndreasHGK\EasyKits\customenchants\PiggyCustomEnchantsLoader;
 use AndreasHGK\EasyKits\importer\AdvancedKitsImporter;
 use AndreasHGK\EasyKits\listener\InteractClaimListener;
 use AndreasHGK\EasyKits\manager\CooldownManager;
@@ -41,13 +42,17 @@ class EasyKits extends PluginBase{
 
     public function onLoad() : void
     {
-        UpdateNotifier::checkUpdate($this, $this->getName(), $this->getDescription()->getVersion());
         self::$instance = $this;
+
+        UpdateNotifier::checkUpdate($this, $this->getName(), $this->getDescription()->getVersion());
         DataManager::loadDefault();
         if(DataManager::getKey(DataManager::CONFIG, "auto-update-config")){
             DataManager::updateAllConfigs();
         }
-        KitManager::loadAll();
+        PiggyCustomEnchantsLoader::load();
+        if(!PiggyCustomEnchantsLoader::isPluginLoaded()){
+            KitManager::loadAll();
+        }
         CooldownManager::loadCooldowns();
         EconomyManager::loadEconomy();
         if(!EconomyManager::isEconomyLoaded()) $this->getLogger()->notice("no compatible economy loaded");
@@ -55,6 +60,9 @@ class EasyKits extends PluginBase{
 
     public function onEnable() : void
     {
+        if(PiggyCustomEnchantsLoader::isPluginLoaded()){
+            KitManager::loadAll(); //because of PiggyCustomEnchants adding enchants in onEnable
+        }
         $commands = [
             new CreatekitCommand(),
             new DeletekitCommand(),
@@ -80,7 +88,7 @@ class EasyKits extends PluginBase{
         if(!InvMenuHandler::isRegistered()){
             InvMenuHandler::register($this);
         }
-	}
+    }
 
 	public function onDisable()
     {

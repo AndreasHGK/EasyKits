@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits\manager;
 
+use AndreasHGK\EasyKits\customenchants\PiggyCustomEnchantsLoader;
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\event\KitCreateEvent;
 use AndreasHGK\EasyKits\event\KitDeleteEvent;
 use AndreasHGK\EasyKits\event\KitEditEvent;
 use AndreasHGK\EasyKits\Kit;
+use DaPigGuy\PiggyCustomEnchants\CustomEnchants\CustomEnchants;
+use pocketmine\command\ConsoleCommandSender;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\item\enchantment\Enchantment;
@@ -171,8 +174,15 @@ class KitManager {
                 if(isset($item["enchants"])){
                     foreach($item["enchants"] as $ename => $level){
                         $ench = Enchantment::getEnchantment((int)$ename);
+                        if(PiggyCustomEnchantsLoader::isPluginLoaded() && $ench === null){
+                            $ench = CustomEnchants::getEnchantment((int)$ename);
+                        }
                         if($ench === null) continue;
-                        $itemObj->addEnchantment(new EnchantmentInstance($ench, $level));
+                        if($ench instanceof CustomEnchants){
+                            PiggyCustomEnchantsLoader::getPlugin()->addEnchantment($itemObj, $ench->getName(), $level);
+                        }else{
+                            $itemObj->addEnchantment(new EnchantmentInstance($ench, $level));
+                        }
                     }
                 }
 
@@ -194,8 +204,15 @@ class KitManager {
                 if(isset($item["enchants"])){
                     foreach($item["enchants"] as $ename => $level){
                         $ench = Enchantment::getEnchantment((int)$ename);
+                        if(PiggyCustomEnchantsLoader::isPluginLoaded() && $ench === null){
+                            $ench = CustomEnchants::getEnchantment((int)$ename);
+                        }
                         if($ench === null) continue;
-                        $itemObj->addEnchantment(new EnchantmentInstance($ench, $level));
+                        if($ench instanceof CustomEnchants){
+                            PiggyCustomEnchantsLoader::getPlugin()->addEnchantment($itemObj, $ench, $level);
+                        }else{
+                            $itemObj->addEnchantment(new EnchantmentInstance($ench, $level));
+                        }
                     }
                 }
 
