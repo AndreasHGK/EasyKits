@@ -9,6 +9,7 @@ use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
 use Infernus101\KitUI\Main;
+use pocketmine\entity\EffectInstance;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
@@ -50,19 +51,36 @@ class KitUIImporter{
 
         if(isset($data["helmet"])) {
             $expl = explode(":", $data["helmet"]);
-            $armor[3] = self::loadItem((int)array_shift($expl), (int)array_shift($expl), (int)array_shift($expl), array_shift($expl) ?? "default", ...$expl);
+            $armor[0] = self::loadItem((int)array_shift($expl), (int)array_shift($expl), (int)array_shift($expl), array_shift($expl) ?? "default", ...$expl);
         }
         if(isset($data["chestplate"])) {
             $expl = explode(":", $data["chestplate"]);
-            $armor[2] = self::loadItem((int)array_shift($expl), (int)array_shift($expl), (int)array_shift($expl), array_shift($expl) ?? "default", ...$expl);
+            $armor[1] = self::loadItem((int)array_shift($expl), (int)array_shift($expl), (int)array_shift($expl), array_shift($expl) ?? "default", ...$expl);
         }
         if(isset($data["leggings"])) {
             $expl = explode(":", $data["leggings"]);
-            $armor[1] = self::loadItem((int)array_shift($expl), (int)array_shift($expl), (int)array_shift($expl), array_shift($expl) ?? "default", ...$expl);
+            $armor[2] = self::loadItem((int)array_shift($expl), (int)array_shift($expl), (int)array_shift($expl), array_shift($expl) ?? "default", ...$expl);
         }
         if(isset($data["boots"])) {
             $expl = explode(":", $data["boots"]);
-            $armor[0] = self::loadItem((int)array_shift($expl), (int)array_shift($expl), (int)array_shift($expl), array_shift($expl) ?? "default", ...$expl);
+            $armor[3] = self::loadItem((int)array_shift($expl), (int)array_shift($expl), (int)array_shift($expl), array_shift($expl) ?? "default", ...$expl);
+        }
+
+        $effects = [];
+        if(isset($data["effects"])){
+            foreach($data["effects"] as $effectString){
+                $e = \Closure::bind(function () use($effectString) {
+                    return $this->loadEffect(...explode(":", $effectString));
+                }, $akit, \Infernus101\KitUI\Kit::class);
+                if($e instanceof EffectInstance){
+                    $effects[$e->getId()] = $e;
+                }
+            }
+        }
+
+        if(isset($data["commands"]) and is_array($data["commands"])) $commands = $data["commands"];
+        foreach($commands ?? [] as $key => $command){
+            $commands[$key] = str_replace("{player}", "{PLAYER}", $command);
         }
 
         $kit = new Kit($name, $price, $cooldown, $items, $armor);
@@ -73,6 +91,9 @@ class KitUIImporter{
         $kit->setDoOverride($default["doOverride"]);
         $kit->setDoOverrideArmor($default["doOverrideArmor"]);
         $kit->setAlwaysClaim($default["alwaysClaim"]);
+
+        $kit->setEffects($effects);
+        $kit->setCommands($commands ?? []);
 
         KitManager::add($kit, true);
         return true;
