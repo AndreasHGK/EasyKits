@@ -10,12 +10,14 @@ use AndreasHGK\EasyKits\event\KitCreateEvent;
 use AndreasHGK\EasyKits\event\KitDeleteEvent;
 use AndreasHGK\EasyKits\event\KitEditEvent;
 use AndreasHGK\EasyKits\Kit;
+use AndreasHGK\EasyKits\utils\ItemUtils;
 use DaPigGuy\PiggyCustomEnchants\CustomEnchants\CustomEnchants;
 use pocketmine\command\ConsoleCommandSender;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
+use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
 use pocketmine\permission\Permissible;
 use pocketmine\utils\Config;
@@ -34,19 +36,6 @@ class KitManager {
             "doOverrideArmor" => false,
             "alwaysClaim" => false,
             "emptyOnClaim" => false,
-        ],
-    ];
-
-    public const ITEM_FORMAT = [
-        "id" => 1,
-        "damage" => 0,
-        "count" => 1,
-        "display_name" => "",
-        "lore" => [
-
-        ],
-        "enchants" => [
-
         ],
     ];
 
@@ -161,63 +150,13 @@ class KitManager {
         try{
 
             $items = [];
-            foreach ($kitdata["items"] as $slot => $item){
-                $itemObj = ItemFactory::get($item["id"], $item["damage"] ?? 0, $item["count"] ?? 1);
-                if(isset($item["display_name"])) $itemObj->setCustomName(TextFormat::colorize($item["display_name"]));
-                if(isset($item["lore"])) {
-                    $lore = [];
-                    foreach($item["lore"] as $key=> $ilore){
-                        $lore[$key] = TextFormat::colorize($ilore);
-                    }
-                    $itemObj->setLore($lore);
-                }
-                if(isset($item["enchants"])){
-                    foreach($item["enchants"] as $ename => $level){
-                        $ench = Enchantment::getEnchantment((int)$ename);
-                        if(PiggyCustomEnchantsLoader::isPluginLoaded() && $ench === null){
-                            $ench = CustomEnchants::getEnchantment((int)$ename);
-                        }
-                        if($ench === null) continue;
-                        if($ench instanceof CustomEnchants){
-                            PiggyCustomEnchantsLoader::getPlugin()->addEnchantment($itemObj, $ench->getName(), $level);
-                        }else{
-                            $itemObj->addEnchantment(new EnchantmentInstance($ench, $level));
-                        }
-                    }
-                }
-
-
-                $items[$slot] = $itemObj;
+            foreach ($kitdata["items"] as $slot => $itemData){
+                $items[$slot] = ItemUtils::dataToItem($itemData);
             }
 
             $armor = [];
-            foreach ($kitdata["armor"] as $slot => $item){
-                $itemObj = ItemFactory::get($item["id"], $item["damage"] ?? 0, $item["count"] ?? 1);
-                if(isset($item["display_name"])) $itemObj->setCustomName(TextFormat::colorize($item["display_name"]));
-                if(isset($item["lore"])) {
-                    $lore = [];
-                    foreach($item["lore"] as $key=> $ilore){
-                        $lore[$key] = TextFormat::colorize($ilore);
-                    }
-                    $itemObj->setLore($lore);
-                }
-                if(isset($item["enchants"])){
-                    foreach($item["enchants"] as $ename => $level){
-                        $ench = Enchantment::getEnchantment((int)$ename);
-                        if(PiggyCustomEnchantsLoader::isPluginLoaded() && $ench === null){
-                            $ench = CustomEnchants::getEnchantment((int)$ename);
-                        }
-                        if($ench === null) continue;
-                        if($ench instanceof CustomEnchants){
-                            PiggyCustomEnchantsLoader::getPlugin()->addEnchantment($itemObj, $ench, $level);
-                        }else{
-                            $itemObj->addEnchantment(new EnchantmentInstance($ench, $level));
-                        }
-                    }
-                }
-
-
-                $armor[$slot] = $itemObj;
+            foreach ($kitdata["armor"] as $slot => $itemData){
+                $armor[$slot] = ItemUtils::dataToItem($itemData);;
             }
             $effects = [];
             foreach($kitdata["effects"] ?? [] as $id => $effect){
@@ -262,52 +201,10 @@ class KitManager {
         $kitData["flags"]["emptyOnClaim"] = $kit->emptyOnClaim();
         $kitData["flags"]["chestKit"] = $kit->isChestKit();
         foreach($kit->getItems() as $slot => $item){
-            $itemData = self::ITEM_FORMAT;
-            $itemData["id"] = $item->getId();
-            $itemData["damage"] = $item->getDamage();
-            $itemData["count"] = $item->getCount();
-            if($item->hasCustomName()){
-                $itemData["display_name"] = $item->getCustomName();
-            }else{
-                unset($itemData["display_name"]);
-            }
-            if($item->getLore() !== []){
-                $itemData["lore"] = $item->getLore();
-            }else{
-                unset($itemData["lore"]);
-            }
-            if($item->hasEnchantments()){
-                foreach($item->getEnchantments() as $enchantment){
-                    $itemData["enchants"][(string)$enchantment->getId()] = $enchantment->getLevel();
-                }
-            }else{
-                unset($itemData["enchants"]);
-            }
-            $kitData["items"][$slot] = $itemData;
+            $kitData["items"][$slot] = ItemUtils::itemToData($item);
         }
         foreach($kit->getArmor() as $slot => $item){
-            $itemData = self::ITEM_FORMAT;
-            $itemData["id"] = $item->getId();
-            $itemData["damage"] = $item->getDamage();
-            $itemData["count"] = $item->getCount();
-            if($item->hasCustomName()){
-                $itemData["display_name"] = $item->getCustomName();
-            }else{
-                unset($itemData["display_name"]);
-            }
-            if($item->getLore() !== []){
-                $itemData["lore"] = $item->getLore();
-            }else{
-                unset($itemData["lore"]);
-            }
-            if($item->hasEnchantments()){
-                foreach($item->getEnchantments() as $enchantment){
-                    $itemData["enchants"][(string)$enchantment->getId()] = $enchantment->getLevel();
-                }
-            }else{
-                unset($itemData["enchants"]);
-            }
-            $kitData["armor"][$slot] = $itemData;
+            $kitData["armor"][$slot] = ItemUtils::itemToData($item);
         }
         foreach($kit->getEffects() as $effect){
             $kitData["effects"][$effect->getId()] = [
