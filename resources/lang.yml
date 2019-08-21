@@ -1,5 +1,5 @@
 #don't touch this
-version: 3
+version: 4
 
 ## put false instead of a message to disable
 # messages
@@ -148,3 +148,15 @@ editkit-items-chestplate: "§4Chestplate"
 editkit-items-helmet: "§4Helmet"
 
 editkit-items-succes: "§a§l> §r§7Successfully set §a{COUNT} §7items in kit §a{NAME}§r§7."
+
+# category stuff
+category-select-title: "§OCategory selection menu"
+category-select-text: false #this is optional
+category-unlocked-format: "{NAME}\n§aUnlocked"
+category-locked-format: "{NAME}\n§cLocked"
+
+category-no-permission: "§c§l> §r§7You don't have permission to view this category."
+category-not-found: "§c§l> §r§7A category with that name does not exist."
+
+category-title: "§6{NAME} §r§0category"
+category-text: false

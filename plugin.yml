@@ -44,3 +44,6 @@ permissions:
    easykits.instant:
     default: false
     description: "claim without a cooldown"
+   easykits.category:
+    default: op
+    description:  "permission for specific categories"

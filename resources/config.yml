@@ -1,9 +1,12 @@
 #don't touch this
-version: 4
+version: 5
 
 # When you installed a new update, (if true) the plugin will try to add all the missing config values. This applies to Commands.yml, Lang.yml and Config.yml
 # This WILL remove all comments made and the file might be harder to read.
 auto-update-config: false
+
+# only works when forms are enabled
+enable-categories: true
 
 # the default values for the kit flags when creating a kit
 default-flags:
@@ -19,6 +22,8 @@ use-forms: true
 
 # show players kits they don't have permission to claim
 show-locked: false
+# show players categories they don't have permission to see
+show-locked-categories: false
 
 # if true, the player also needs the easykits.kit.<kitname> permission to equip the chestkit.
 chestKit-locked: false
@@ -31,6 +36,8 @@ op-has-all-kits: true
 op-has-free-kits: false
 # give all EasyKits.instant.* permissions to operators
 op-has-instant-kits: false
+# give all EasyKits.category.* permissions to operators
+op-has-all-categories: true
 
 # economy stuff
 

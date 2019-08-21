@@ -9,25 +9,11 @@ use pocketmine\Player;
 
 class InteractItemClaimEvent extends KitEvent {
 
-    protected $player;
+    use PlayerEventTrait;
 
     public function __construct(Kit $kit, Player $player)
     {
         parent::__construct($kit);
-        $this->player = $player;
-    }
-
-    /**
-     * @return Player
-     */
-    public function getPlayer() : Player {
-        return $this->player;
-    }
-
-    /**
-     * @param Player $player
-     */
-    public function setPlayer(Player $player) : void {
         $this->player = $player;
     }
 

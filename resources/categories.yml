@@ -1,0 +1,8 @@
+"example category 1":
+  kits: # a list of kits in the category
+    - "examplekit"
+  locked: false # wether or not the user needs permission to view the category
+"example category 2":
+  kits:
+    - "examplekit"
+  locked: true

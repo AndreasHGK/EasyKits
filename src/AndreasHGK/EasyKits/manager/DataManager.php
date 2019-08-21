@@ -5,17 +5,15 @@ declare(strict_types=1);
 namespace AndreasHGK\EasyKits\manager;
 
 use AndreasHGK\EasyKits\EasyKits;
-use Closure;
-use pocketmine\entity\Effect;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 
 class DataManager {
 
     public const VERSIONS = [
-        "config" => 4,
+        "config" => 5,
         "commands" => 1,
-        "lang" => 3,
+        "lang" => 4,
     ];
 
     public const CONFIG = "config.yml";
@@ -23,6 +21,7 @@ class DataManager {
     public const KITS = "kits.yml";
     public const COMMANDS = "commands.yml";
     public const COOLDOWN = "cooldown.json";
+    public const CATEGORIES = "categories.yml";
 
     /**
      * @var DataManager */
@@ -109,7 +108,9 @@ class DataManager {
             EasyKits::get()->getLogger()->warning(self::COMMANDS." version incorrect. Please regenerate your config to avoid errors.");
         }
         if(EasyKits::get()->saveResource(self::KITS)) EasyKits::get()->getLogger()->debug("creating ".self::KITS);
+        if(EasyKits::get()->saveResource(self::CATEGORIES)) EasyKits::get()->getLogger()->debug("creating ".self::CATEGORIES);
         self::get(self::KITS);
+        self::get(self::CATEGORIES);
         self::get(self::COOLDOWN);
     }
 

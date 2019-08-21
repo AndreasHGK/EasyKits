@@ -10,25 +10,16 @@ use AndreasHGK\EasyKits\command\EditkitCommand;
 use AndreasHGK\EasyKits\command\EKImportCommand;
 use AndreasHGK\EasyKits\command\KitCommand;
 use AndreasHGK\EasyKits\customenchants\PiggyCustomEnchantsLoader;
-use AndreasHGK\EasyKits\importer\AdvancedKitsImporter;
 use AndreasHGK\EasyKits\listener\InteractClaimListener;
+use AndreasHGK\EasyKits\manager\CategoryManager;
 use AndreasHGK\EasyKits\manager\CooldownManager;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\EconomyManager;
 use AndreasHGK\EasyKits\manager\KitManager;
-use AndreasHGK\EasyKits\utils\KitException;
-use Closure;
 use JackMD\UpdateNotifier\UpdateNotifier;
 use muqsit\invmenu\InvMenuHandler;
-use onebone\economyapi\EconomyAPI;
 use pocketmine\command\PluginCommand;
-use pocketmine\entity\Effect;
-use pocketmine\permission\Permissible;
-use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
-use pocketmine\plugin\PluginDescription;
-use pocketmine\plugin\PluginLoader;
-use pocketmine\Server;
 
 class EasyKits extends PluginBase{
 
@@ -52,6 +43,9 @@ class EasyKits extends PluginBase{
         PiggyCustomEnchantsLoader::load();
         if(!PiggyCustomEnchantsLoader::isPluginLoaded()){
             KitManager::loadAll();
+            if(DataManager::getKey(DataManager::CONFIG, "enable-categories")){
+                CategoryManager::loadAll();
+            }
         }
         CooldownManager::loadCooldowns();
         EconomyManager::loadEconomy();
@@ -62,6 +56,9 @@ class EasyKits extends PluginBase{
     {
         if(PiggyCustomEnchantsLoader::isPluginLoaded()){
             KitManager::loadAll(); //because of PiggyCustomEnchants adding enchants in onEnable
+            if(DataManager::getKey(DataManager::CONFIG, "enable-categories")){
+                CategoryManager::loadAll();
+            }
         }
         $commands = [
             new CreatekitCommand(),

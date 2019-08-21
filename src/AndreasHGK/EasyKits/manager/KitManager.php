@@ -4,24 +4,16 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits\manager;
 
-use AndreasHGK\EasyKits\customenchants\PiggyCustomEnchantsLoader;
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\event\KitCreateEvent;
 use AndreasHGK\EasyKits\event\KitDeleteEvent;
 use AndreasHGK\EasyKits\event\KitEditEvent;
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\utils\ItemUtils;
-use DaPigGuy\PiggyCustomEnchants\CustomEnchants\CustomEnchants;
-use pocketmine\command\ConsoleCommandSender;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
-use pocketmine\item\enchantment\Enchantment;
-use pocketmine\item\enchantment\EnchantmentInstance;
-use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
 use pocketmine\permission\Permissible;
 use pocketmine\utils\Config;
-use pocketmine\utils\TextFormat;
 
 class KitManager {
 
@@ -38,10 +30,6 @@ class KitManager {
             "emptyOnClaim" => false,
         ],
     ];
-
-    /**
-     * @var DataManager */
-    public static $instance = null;
 
     /**
      * @var Kit[]
@@ -70,7 +58,7 @@ class KitManager {
         if($event->isCancelled()) return false;
 
         self::remove($old, true);
-        self::$kits[$new->getName()] = $event->getKit();
+        self::$kits[$event->getKit()->getName()] = $event->getKit();
         return true;
     }
 
@@ -80,7 +68,7 @@ class KitManager {
 
         if($event->isCancelled()) return false;
 
-        self::$kits[$kit->getName()] = $event->getKit();
+        self::$kits[$event->getKit()->getName()] = $event->getKit();
         return true;
     }
 
@@ -122,7 +110,7 @@ class KitManager {
     }
 
     public static function unloadAll() : void {
-        self::getInstance()->kits = [];
+        self::$kits = [];
     }
 
     public static function unload(string $kit) : void {
@@ -224,13 +212,5 @@ class KitManager {
 
     private function __construct(){}
 
-    /**
-     * @return KitManager
-     * @internal
-     */
-    public static function getInstance() : self {
-        if(self::$instance === null) self::$instance = new self();
-        return self::$instance;
-    }
 
 }

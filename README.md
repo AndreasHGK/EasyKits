@@ -54,3 +54,4 @@ Your code has to be readable, tested and bug-free.
 ## Todo
 - [ ] **One-per-life:** Support the option of only being able to claim 1 kit per life
 - [ ] **Claim effects:** Add (optional)cosmetic effects when claiming kits
+- [ ] **Kit & category icons:** Support icons in the kit select form.

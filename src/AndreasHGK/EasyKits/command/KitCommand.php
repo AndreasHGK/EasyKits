@@ -6,9 +6,11 @@ namespace AndreasHGK\EasyKits\command;
 
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\Kit;
+use AndreasHGK\EasyKits\manager\CategoryManager;
 use AndreasHGK\EasyKits\manager\CooldownManager;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
+use AndreasHGK\EasyKits\ui\CategorySelectForm;
 use AndreasHGK\EasyKits\ui\KitSelectForm;
 use AndreasHGK\EasyKits\utils\KitException;
 use AndreasHGK\EasyKits\utils\LangUtils;
@@ -45,7 +47,11 @@ class KitCommand extends EKExecutor {
                 return true;
             }
 
-            KitSelectForm::sendTo($sender);
+            if(!empty(CategoryManager::getAll())){
+                CategorySelectForm::sendTo($sender);
+            }else{
+                KitSelectForm::sendTo($sender);
+            }
             return true;
         }
 
