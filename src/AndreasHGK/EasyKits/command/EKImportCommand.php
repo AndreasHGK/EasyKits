@@ -6,6 +6,7 @@ namespace AndreasHGK\EasyKits\command;
 
 use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\importer\AdvancedKitsImporter;
+use AndreasHGK\EasyKits\importer\KitsPlusImporter;
 use AndreasHGK\EasyKits\importer\KitUIImporter;
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\DataManager;
@@ -51,6 +52,14 @@ class EKImportCommand extends EKExecutor {
                         return true;
                     }
                     $return = KitUIImporter::ImportAll();
+                    break;
+                case "kitsplus":
+                    $name = "KitsPlus";
+                    if(!KitsPlusImporter::isPluginLoaded()){
+                        $sender->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
+                        return true;
+                    }
+                    $return = KitsPlusImporter::ImportAll();
                     break;
                 default:
                     $sender->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));

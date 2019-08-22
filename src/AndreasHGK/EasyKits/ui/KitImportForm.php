@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AndreasHGK\EasyKits\ui;
 
 use AndreasHGK\EasyKits\importer\AdvancedKitsImporter;
+use AndreasHGK\EasyKits\importer\KitsPlusImporter;
 use AndreasHGK\EasyKits\importer\KitUIImporter;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use jojoe77777\FormAPI\CustomForm;
@@ -36,6 +37,14 @@ class KitImportForm {
                     }
                     $return = KitUIImporter::ImportAll();
                     break;
+                case 2:
+                    $name = "KitsPlus";
+                    if(!KitsPlusImporter::isPluginLoaded()){
+                        $player->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
+                        return;
+                    }
+                    $return = KitsPlusImporter::ImportAll();
+                    break;
                 default:
                     $player->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
                     return;
@@ -52,7 +61,7 @@ class KitImportForm {
         });
         $ui->setTitle(LangUtils::getMessage("ekimport-title"));
         $ui->addLabel(LangUtils::getMessage("ekimport-text"));
-        $ui->addDropdown(LangUtils::getMessage("ekimport-select"), ["AdvancedKits", "KitUI",], null, "dropdown");
+        $ui->addDropdown(LangUtils::getMessage("ekimport-select"), ["AdvancedKits", "KitUI", "KitsPlus",], null, "dropdown");
         $player->sendForm($ui);
     }
 
