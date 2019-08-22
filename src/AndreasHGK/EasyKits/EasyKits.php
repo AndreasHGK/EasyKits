@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits;
 
+use AndreasHGK\EasyKits\command\CreatecategoryCommand;
 use AndreasHGK\EasyKits\command\CreatekitCommand;
+use AndreasHGK\EasyKits\command\DeletecategoryCommand;
 use AndreasHGK\EasyKits\command\DeletekitCommand;
 use AndreasHGK\EasyKits\command\EditkitCommand;
 use AndreasHGK\EasyKits\command\EKImportCommand;
@@ -67,6 +69,12 @@ class EasyKits extends PluginBase{
             new EKImportCommand(),
             new KitCommand(),
         ];
+        if(DataManager::getKey(DataManager::CONFIG, "enable-categories")){
+            array_push($commands,
+                new CreatecategoryCommand(),
+                new DeletecategoryCommand()
+            );
+        }
         foreach($commands as $command){
             $cmd = new PluginCommand($command->getName(), $this);
             $cmd->setExecutor($command);
@@ -91,5 +99,6 @@ class EasyKits extends PluginBase{
     {
         KitManager::saveAll();
         CooldownManager::saveCooldowns();
+        CategoryManager::saveAll();
     }
 }

@@ -1,5 +1,5 @@
 #don't touch this
-version: 1
+version: 2
 
 # the command name. Don't change this or the command won't work.
 createkit:
@@ -40,3 +40,15 @@ editkit:
     - "editkit"
   description: "edit a kit"
   usage: "/editkit [plugin]"
+
+createcategory:
+  labels:
+    - "createcategory"
+  description: "make a kit category"
+  usage: "/createcategory"
+
+deletecategory:
+  labels:
+    - "deletecategory"
+  description: "delete a kit category"
+  usage: "/deletecategory"

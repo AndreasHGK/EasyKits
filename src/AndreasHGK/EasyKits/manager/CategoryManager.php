@@ -20,6 +20,11 @@ class CategoryManager {
 
     public static $categories = [];
 
+
+    public static function exists(string $file) : bool{
+        return isset(self::$categories[$file]);
+    }
+
     /**
      * @return Category[]
      */
@@ -41,7 +46,9 @@ class CategoryManager {
 
         if($event->isCancelled()) return false;
 
-        self::remove($old, true);
+        if($event->getOriginalCategory()->getName() !== $event->getCategory()->getName()){
+            self::remove($old, true);
+        }
         self::$categories[$event->getCategory()->getName()] = $event->getCategory();
         return true;
     }

@@ -12,8 +12,8 @@ class DataManager {
 
     public const VERSIONS = [
         "config" => 5,
-        "commands" => 1,
-        "lang" => 4,
+        "commands" => 2,
+        "lang" => 5,
     ];
 
     public const CONFIG = "config.yml";

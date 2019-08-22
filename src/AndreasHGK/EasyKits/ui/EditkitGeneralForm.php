@@ -55,8 +55,6 @@ class EditkitGeneralForm {
             $new->setAlwaysClaim($data["alwaysClaim"]);
             $new->setChestKit($data["chestKit"]);
 
-
-
             if(KitManager::update($kit, $new, true)){
                 KitManager::saveAll();
                 $player->sendMessage(LangUtils::getMessage("editkit-success", true, ["{NAME}" => $kit->getName()]));

@@ -37,6 +37,11 @@ class CategorySelectForm {
 
             if($event->isCancelled()) return;
 
+            if(empty($event->getCategory()->getKits())){
+                $player->sendMessage(LangUtils::getMessage("category-empty"));
+                return;
+            }
+
             KitSelectForm::sendTo($event->getPlayer(), $event->getCategory());
         });
         $ui->setTitle(LangUtils::getMessage("category-select-title"));

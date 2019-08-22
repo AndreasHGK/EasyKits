@@ -57,7 +57,9 @@ class KitManager {
 
         if($event->isCancelled()) return false;
 
-        self::remove($old, true);
+        if($event->getOriginalKit()->getName() !== $event->getKit()->getName()){
+            self::remove($old, true);
+        }
         self::$kits[$event->getKit()->getName()] = $event->getKit();
         return true;
     }

@@ -34,6 +34,18 @@ class Category{
         return !$this->isLocked() || $permissible->hasPermission(EasyKits::PERM_ROOT."category.".$this->getName());
     }
 
+    public function hasKit(Kit $kit) : bool {
+        return isset($this->kits[$kit->getName()]);
+    }
+
+    public function addKit(Kit $kit){
+        $this->kits[$kit->getName()] = $kit;
+    }
+
+    public function removeKit(Kit $kit){
+        unset($this->kits[$kit->getName()]);
+    }
+
     public function getName() : string {
         return $this->name;
     }

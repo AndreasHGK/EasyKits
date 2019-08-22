@@ -5,17 +5,26 @@ declare(strict_types=1);
 namespace AndreasHGK\EasyKits\ui;
 
 use AndreasHGK\EasyKits\Kit;
+use AndreasHGK\EasyKits\manager\CategoryManager;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use jojoe77777\FormAPI\CustomForm;
 use pocketmine\Player;
+use pocketmine\utils\TextFormat;
 
 class CreatekitForm {
 
     public static function sendTo(Player $player): void
     {
-        $ui = new CustomForm(function(Player $player, $data){
+        $categories = [
+            TextFormat::colorize("/"),
+        ];
+        foreach(CategoryManager::getAll() as $category){
+            $categories[] = TextFormat::colorize($category->getName());
+        }
+
+        $ui = new CustomForm(function(Player $player, $data) use ($categories){
             if($data === null){
                 $player->sendMessage(LangUtils::getMessage("createkit-cancelled"));
                 return;
@@ -72,8 +81,24 @@ class CreatekitForm {
             $kit->setDoOverrideArmor($doOverrideArmor);
             $kit->setAlwaysClaim($alwaysClaim);
             $kit->setChestKit($chestKit);
-            if(KitManager::add($kit)) $player->sendMessage(LangUtils::getMessage("createkit-success", true, ["{NAME}" => $name]));
-            KitManager::saveAll();
+
+            if(isset($data["category"]) && $data["category"] !== 0){
+                $categoryName = $categories[$data["category"]];
+                if(!CategoryManager::exists($categoryName)){
+                    $player->sendMessage(LangUtils::getMessage("createkit-invalid-category"));
+                    return;
+                }
+                $old = CategoryManager::get($categoryName);
+                $category = clone $old;
+                $category->addKit($kit);
+                CategoryManager::update($old, $category);
+                CategoryManager::saveAll();
+            }
+
+            if(KitManager::add($kit)) {
+                $player->sendMessage(LangUtils::getMessage("createkit-success", true, ["{NAME}" => $name]));
+                KitManager::saveAll();
+            }
             return;
         });
         $ui->setTitle(LangUtils::getMessage("createkit-title"));
@@ -81,6 +106,9 @@ class CreatekitForm {
         $ui->addInput(LangUtils::getMessage("createkit-kitname"), "", null, "name");
         $ui->addInput(LangUtils::getMessage("createkit-price"), "", "0", "price");
         $ui->addInput(LangUtils::getMessage("createkit-cooldown"), "", "60", "cooldown");
+        if(!empty(CategoryManager::getAll())){
+            $ui->addDropdown(LangUtils::getMessage("createkit-category"), $categories, 0, "category");
+        }
         $ui->addLabel(LangUtils::getMessage("createkit-flags"));
         $ui->addToggle(LangUtils::getMessage("createkit-lockedToggle"), DataManager::getKey(DataManager::CONFIG, "default-flags")["locked"], "locked");
         $ui->addToggle(LangUtils::getMessage("createkit-emptyOnClaimToggle"), DataManager::getKey(DataManager::CONFIG, "default-flags")["emptyOnClaim"], "emptyOnClaim");

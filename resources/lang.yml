@@ -1,5 +1,5 @@
 #don't touch this
-version: 4
+version: 5
 
 ## put false instead of a message to disable
 # messages
@@ -24,6 +24,7 @@ createkit-text: "§7When making a kit, all the items in your inventory will be a
 createkit-kitname: "§e§l> §rKit name"
 createkit-price: "§e§l> §rPrice §7(0 for no price)"
 createkit-cooldown: "§e§l> §rCooldown §7(in seconds)"
+createkit-category: "§e§l> §rCategory" # only shows when categories are enabled
 createkit-flags: "§e§l> §rFlags"
 createkit-lockedToggle: "locked §7(= permission required)"
 createkit-emptyOnClaimToggle: "emptyOnClaim"
@@ -38,6 +39,7 @@ createkit-duplicate: "§c§l> §r§7A kit with that name already exists."
 createkit-empty-inventory: "§c§l> §r§7You need to hold items in your inventory to create a kit with."
 createkit-invalid-price: "§c§l> §r§7Please enter a valid price."
 createkit-invalid-cooldown: "§c§l> §r§7Please enter a valid cooldown time."
+createkit-invalid-category: "§c§l> §r§7The selected category does not exist."
 
 createkit-success: "§a§l> §r§7A kit with name§a {NAME} §r§7has been created!"
 
@@ -98,6 +100,7 @@ editkit-success: "§a§l> §r§7Successfully edited kit §a{NAME}§r§7."
 
 editkit-main-text: "§7You are editing kit §f{NAME}§7. Please select an option to edit."
 editkit-edit-general: "§e§l> §rGeneral settings §e§l<"
+editkit-edit-categories: "§e§l> §rKit categories §e§l<"
 editkit-edit-items: "§e§l> §rKit items §e§l<"
 editkit-edit-potions: "§e§l> §rPotion effects §e§l<"
 editkit-edit-commands: "§e§l> §rCommands §e§l<"
@@ -149,6 +152,12 @@ editkit-items-helmet: "§4Helmet"
 
 editkit-items-succes: "§a§l> §r§7Successfully set §a{COUNT} §7items in kit §a{NAME}§r§7."
 
+editkit-category-text: "§7You are editing kit category settings settings."
+editkit-category-categories: "§e§l> §rCategories"
+editkit-category-format: "§6{NAME}§r category"
+
+editkit-category-success: "§a§l> §r§7Successfully added kit §a{NAME}§r§7 to §a{ADDED}§r§7 categories and removed it from §a{REMOVED}§r§7 categories."
+
 # category stuff
 category-select-title: "§OCategory selection menu"
 category-select-text: false #this is optional
@@ -157,6 +166,32 @@ category-locked-format: "{NAME}\n§cLocked"
 
 category-no-permission: "§c§l> §r§7You don't have permission to view this category."
 category-not-found: "§c§l> §r§7A category with that name does not exist."
+category-empty: "§c§l> §r§7This category is empty."
 
 category-title: "§6{NAME} §r§0category"
 category-text: false
+
+# /createcategory UI + messages
+createcategory-title: "§0Category creation menu"
+createcategory-text: "§7Please enter the settings for your category. Afterwards you can add kits in the kit edit menu."
+createcategory-name: "§e§l> §rCategory name"
+createcategory-flags: "§e§l> §rFlags"
+createcategory-lockedToggle: "locked §7(= permission required)"
+
+createcategory-cancelled: "§c§l> §r§7Category creation cancelled."
+createcategory-no-name: "§c§l> §r§7Please enter a name for your category."
+createcategory-duplicate: "§c§l> §r§7A category with that name already exists."
+
+createcategory-success: "§a§l> §r§7A category with name§a {NAME} §r§7has been created!"
+
+# /deletecategory UI + messages
+deletecategory-title: "§0Category deletion menu"
+deletecategory-text: "§7Please select the category you want to delete and comfirm it by submitting."
+deletecategory-select: "§e§l> §rSelect category"
+
+deletecategory-cancelled: "§c§l> §r§7Category deletion cancelled."
+deletecategory-empty: "§c§l> §r§7Please select a category to delete."
+deletecategory-not-found: "§c§l> §r§7Selected category not found."
+deletecategory-none-available: "§c§l> §r§7There are no available categories."
+
+deletecategory-success: "§a§l> §r§7Successfully deleted category §a{NAME}§r§7."
