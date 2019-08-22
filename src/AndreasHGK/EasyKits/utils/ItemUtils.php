@@ -37,7 +37,6 @@ abstract class ItemUtils {
      */
     public static function dataToItem(array $itemData) : Item {
         $item = ItemFactory::get($itemData["id"], $itemData["damage"] ?? 0, $itemData["count"] ?? 1);
-        if(isset($itemData["display_name"])) $item->setCustomName(TextFormat::colorize($itemData["display_name"]));
         if(isset($itemData["enchants"])){
             foreach($itemData["enchants"] as $ename => $level){
                 $ench = Enchantment::getEnchantment((int)$ename);
@@ -52,6 +51,7 @@ abstract class ItemUtils {
                 }
             }
         }
+        if(isset($itemData["display_name"])) $item->setCustomName(TextFormat::colorize($itemData["display_name"]));
         if(isset($itemData["lore"])) {
             $lore = [];
             foreach($itemData["lore"] as $key=> $ilore){

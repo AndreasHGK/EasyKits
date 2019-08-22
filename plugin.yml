@@ -35,6 +35,12 @@ permissions:
      easykits.command.editkit:
       default: op
       description: "permission for the /editkit command"
+     easykits.command.createcategory:
+      default: op
+      description: "permission for the /createcategory command"
+     easykits.command.deletecategory:
+      default: op
+      description: "permission for the /deletecategory command"
    easykits.kit:
     default: op
     description: "permission for specific kits"

@@ -25,6 +25,22 @@ These kits will be a chest when claimed, and when you tap with them you will equ
 
 ## Info
 
+### Permissions
+**Commands:**
+- easykits.command.kit *(permission for /kit)*
+- easykits.command.createkit *(permission for /createkit)*
+- easykits.command.deletekit *(permission for /deletekit)*
+- easykits.command.editkit *(permission for /editkit)*
+- easykits.command.ekimport *(permission for /ekimport)*
+- easykits.command.createcategory *(permission for /createcategory)*
+- easykits.command.deletecategory *(permission for /deletecategory)*
+
+**Kit perms:**
+- easykits.kit.[kitname] *(gives permission to claim a kit)*
+- easykits.free.[kitname] *(gives permission to claim a kit for free)*
+- easykits.instant.[kitname] *(gives permission to claim a kit without cooldown)*
+- easykits.category.[kitname] *(gives permission to view a category)*
+
 ### Economy
 The plugin currently supports 2 economy plugins: EconomyAPI and MultiEconomy.
 It will automaticly detect which plugin is loaded.
