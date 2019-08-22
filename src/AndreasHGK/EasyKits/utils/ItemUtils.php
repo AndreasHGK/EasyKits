@@ -38,13 +38,6 @@ abstract class ItemUtils {
     public static function dataToItem(array $itemData) : Item {
         $item = ItemFactory::get($itemData["id"], $itemData["damage"] ?? 0, $itemData["count"] ?? 1);
         if(isset($itemData["display_name"])) $item->setCustomName(TextFormat::colorize($itemData["display_name"]));
-        if(isset($itemData["lore"])) {
-            $lore = [];
-            foreach($itemData["lore"] as $key=> $ilore){
-                $lore[$key] = TextFormat::colorize($ilore);
-            }
-            $item->setLore($lore);
-        }
         if(isset($itemData["enchants"])){
             foreach($itemData["enchants"] as $ename => $level){
                 $ench = Enchantment::getEnchantment((int)$ename);
@@ -58,6 +51,13 @@ abstract class ItemUtils {
                     $item->addEnchantment(new EnchantmentInstance($ench, $level));
                 }
             }
+        }
+        if(isset($itemData["lore"])) {
+            $lore = [];
+            foreach($itemData["lore"] as $key=> $ilore){
+                $lore[$key] = TextFormat::colorize($ilore);
+            }
+            $item->setLore($lore);
         }
 
         return $item;
