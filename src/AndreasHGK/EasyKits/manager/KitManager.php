@@ -95,7 +95,7 @@ class KitManager {
     }
 
     public static function get(string $name) : ?Kit {
-        return clone self::$kits[$name] ?? null;
+        return isset(self::$kits[$name]) ? clone self::$kits[$name] : null;
     }
 
     public static function loadAll() : void {

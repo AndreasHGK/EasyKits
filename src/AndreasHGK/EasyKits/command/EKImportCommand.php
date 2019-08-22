@@ -4,21 +4,14 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits\command;
 
-use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\importer\AdvancedKitsImporter;
 use AndreasHGK\EasyKits\importer\KitsPlusImporter;
 use AndreasHGK\EasyKits\importer\KitUIImporter;
-use AndreasHGK\EasyKits\Kit;
-use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\ui\KitImportForm;
 use AndreasHGK\EasyKits\utils\LangUtils;
-use jojoe77777\FormAPI\CustomForm;
-use pocketmine\command\CommandExecutor;
-use pocketmine\Player;
-use pocketmine\plugin\PluginBase;
-use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
-use pocketmine\utils\TextFormat;
+use pocketmine\command\CommandSender;
+use pocketmine\Player;
 
 class EKImportCommand extends EKExecutor {
 

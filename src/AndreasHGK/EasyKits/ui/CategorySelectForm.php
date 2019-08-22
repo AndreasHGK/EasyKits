@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits\ui;
 
-use AndreasHGK\EasyKits\command\KitCommand;
 use AndreasHGK\EasyKits\event\CategorySelectEvent;
 use AndreasHGK\EasyKits\manager\CategoryManager;
 use AndreasHGK\EasyKits\manager\DataManager;
-use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\LangUtils;
-use AndreasHGK\EasyKits\utils\TryClaim;
 use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\Player;
 

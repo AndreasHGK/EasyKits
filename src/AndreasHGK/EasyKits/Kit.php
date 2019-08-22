@@ -11,21 +11,16 @@ use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\EconomyManager;
 use AndreasHGK\EasyKits\utils\KitException;
 use AndreasHGK\EasyKits\utils\LangUtils;
-use onebone\economyapi\EconomyAPI;
 use pocketmine\command\ConsoleCommandSender;
-use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
-use pocketmine\level\sound\EndermanTeleportSound;
-use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\permission\Permissible;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 use pocketmine\Player;
 use pocketmine\Server;
-use pocketmine\utils\TextFormat;
 
 class Kit
 {

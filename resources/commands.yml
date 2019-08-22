@@ -1,5 +1,5 @@
 #don't touch this
-version: 2
+version: 3
 
 # the command name. Don't change this or the command won't work.
 createkit:
@@ -52,3 +52,9 @@ deletecategory:
     - "deletecategory"
   description: "delete a kit category"
   usage: "/deletecategory"
+
+givekit:
+  labels:
+    - "givekit"
+  description: "give a kit to someone"
+  usage: "/givekit [player] [kit]"

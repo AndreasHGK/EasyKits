@@ -8,12 +8,10 @@ use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use jojoe77777\FormAPI\CustomForm;
-use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\lang\TranslationContainer;
 use pocketmine\Player;
-use \Closure;
 
 class EditkitPotionForm {
 

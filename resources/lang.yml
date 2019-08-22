@@ -1,5 +1,5 @@
 #don't touch this
-version: 5
+version: 6
 
 ## put false instead of a message to disable
 # messages
@@ -195,3 +195,21 @@ deletecategory-not-found: "§c§l> §r§7Selected category not found."
 deletecategory-none-available: "§c§l> §r§7There are no available categories."
 
 deletecategory-success: "§a§l> §r§7Successfully deleted category §a{NAME}§r§7."
+
+# /givekit UI + messages
+givekit-title: "§oKit give menu"
+givekit-playerselect-text: "§7Please select a player to give a kit to."
+givekit-playerselect-format: "{PLAYER}"
+givekit-kitselect-text: "§7Please select a kit to give to the selected player."
+givekit-kitselect-format: "{NAME}"
+
+## Messages for /givekit that show when the sender isn't a player (=console)
+givekit-missing-argument-0: "§c§l> §r§7Please enter a player to give a kit to."
+givekit-missing-argument-1: "§c§l> §r§7Please enter a kit to give to the target player."
+
+givekit-insufficient-space: "§c§l> §r§7The target player has insufficient space."
+givekit-player-not-found: "§c§l> §r§7The selected player was not found."
+givekit-kit-not-found: "§c§l> §r§7The selected kit was not found."
+givekit-cancelled: "§c§l> §r§7Kit giving cancelled."
+
+givekit-success: "§a§l> §r§7Successfully gave kit §a{KIT}§r§7 to §a{PLAYER}§r§7."

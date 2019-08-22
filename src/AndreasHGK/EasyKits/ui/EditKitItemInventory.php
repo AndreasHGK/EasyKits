@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AndreasHGK\EasyKits\ui;
 
 use AndreasHGK\EasyKits\Kit;
-use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use muqsit\invmenu\inventories\BaseFakeInventory;

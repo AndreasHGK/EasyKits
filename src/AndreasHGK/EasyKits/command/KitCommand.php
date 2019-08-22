@@ -4,22 +4,16 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits\command;
 
-use AndreasHGK\EasyKits\EasyKits;
-use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\CategoryManager;
-use AndreasHGK\EasyKits\manager\CooldownManager;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\ui\CategorySelectForm;
 use AndreasHGK\EasyKits\ui\KitSelectForm;
-use AndreasHGK\EasyKits\utils\KitException;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use AndreasHGK\EasyKits\utils\TryClaim;
-use jojoe77777\FormAPI\SimpleForm;
-use pocketmine\Player;
-use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
-use pocketmine\utils\TextFormat;
+use pocketmine\command\CommandSender;
+use pocketmine\Player;
 
 class KitCommand extends EKExecutor {
 

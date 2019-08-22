@@ -37,7 +37,7 @@ class CategoryManager {
      * @return Category|null
      */
     public static function get(string $name) : ?Category {
-        return clone self::$categories[$name] ?? null;
+        return isset(self::$categories[$name]) ? clone self::$categories[$name] : null;
     }
 
     public static function update(Category $old, Category $new, bool $silent = false) : bool {

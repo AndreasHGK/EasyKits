@@ -10,6 +10,7 @@ use AndreasHGK\EasyKits\command\DeletecategoryCommand;
 use AndreasHGK\EasyKits\command\DeletekitCommand;
 use AndreasHGK\EasyKits\command\EditkitCommand;
 use AndreasHGK\EasyKits\command\EKImportCommand;
+use AndreasHGK\EasyKits\command\GivekitCommand;
 use AndreasHGK\EasyKits\command\KitCommand;
 use AndreasHGK\EasyKits\customenchants\PiggyCustomEnchantsLoader;
 use AndreasHGK\EasyKits\listener\InteractClaimListener;
@@ -68,6 +69,7 @@ class EasyKits extends PluginBase{
             new EditkitCommand(),
             new EKImportCommand(),
             new KitCommand(),
+            new GivekitCommand(),
         ];
         if(DataManager::getKey(DataManager::CONFIG, "enable-categories")){
             array_push($commands,

@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace AndreasHGK\EasyKits\utils;
 
 use AndreasHGK\EasyKits\customenchants\PiggyCustomEnchantsLoader;
-use AndreasHGK\EasyKits\Kit;
-use AndreasHGK\EasyKits\manager\CooldownManager;
-use AndreasHGK\EasyKits\manager\DataManager;
 use DaPigGuy\PiggyCustomEnchants\CustomEnchants\CustomEnchants;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
-use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
 abstract class ItemUtils {

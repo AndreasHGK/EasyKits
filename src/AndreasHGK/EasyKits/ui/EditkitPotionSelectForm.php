@@ -6,11 +6,11 @@ namespace AndreasHGK\EasyKits\ui;
 
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\utils\LangUtils;
+use Closure;
 use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\entity\Effect;
 use pocketmine\lang\TranslationContainer;
 use pocketmine\Player;
-use \Closure;
 
 class EditkitPotionSelectForm {
 

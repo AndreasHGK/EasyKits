@@ -41,6 +41,9 @@ permissions:
      easykits.command.deletecategory:
       default: op
       description: "permission for the /deletecategory command"
+     easykits.command.givekit:
+      default: op
+      description: "permission for the /givekit command"
    easykits.kit:
     default: op
     description: "permission for specific kits"

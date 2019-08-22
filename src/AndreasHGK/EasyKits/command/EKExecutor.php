@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits\command;
 
-use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\EasyKits;
+use AndreasHGK\EasyKits\manager\DataManager;
+use pocketmine\command\Command;
 use pocketmine\command\CommandExecutor;
 use pocketmine\command\CommandSender;
-use pocketmine\command\Command;
 
 abstract class EKExecutor implements CommandExecutor {
 

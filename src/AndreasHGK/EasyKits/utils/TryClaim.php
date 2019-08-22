@@ -134,4 +134,12 @@ abstract class TryClaim {
         }
     }
 
+    public static function ForceClaim(Player $player, Kit $kit) : void {
+        $kit = clone $kit;
+        $kit->setPrice(0);
+        $kit->setCooldown(0);
+        $kit->setLocked(false);
+        $kit->claim($player);
+    }
+
 }

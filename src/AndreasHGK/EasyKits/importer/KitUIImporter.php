@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AndreasHGK\EasyKits\importer;
 
-use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
