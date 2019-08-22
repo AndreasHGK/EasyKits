@@ -8,6 +8,7 @@ use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
+use AndreasHGK\EasyKits\ui\CreatecategoryForm;
 use AndreasHGK\EasyKits\ui\CreatekitForm;
 use AndreasHGK\EasyKits\utils\LangUtils;
 use jojoe77777\FormAPI\CustomForm;
@@ -29,7 +30,7 @@ class CreatecategoryCommand extends EKExecutor {
             $sender->sendMessage(LangUtils::getMessage("sender-not-player"));
             return true;
         }
-        CreatekitForm::sendTo($sender);
+        CreatecategoryForm::sendTo($sender);
         return true;
     }
 

@@ -33,7 +33,7 @@ class DeletecategoryForm {
                 return;
             }
             if(CategoryManager::remove(CategoryManager::get($categories[$data["category"]]))){
-                $player->sendMessage(LangUtils::getMessage("deletecategory-success", true, ["{NAME}" => $categories[$data["kit"]]]));
+                $player->sendMessage(LangUtils::getMessage("deletecategory-success", true, ["{NAME}" => $categories[$data["category"]]]));
                 CategoryManager::saveAll();
             }
             return;
