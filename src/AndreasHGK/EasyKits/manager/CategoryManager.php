@@ -118,6 +118,7 @@ class CategoryManager {
             self::$categories[$name] = $category;
         }catch (\Throwable $e) {
             EasyKits::get()->getLogger()->error("failed to load category '" . $name . "'");
+            EasyKits::get()->getLogger()->debug($e->getMessage());
         }
     }
 
@@ -132,7 +133,7 @@ class CategoryManager {
         $file->set($category->getName(), $categoryData);
     }
 
-    public static function getCategoryFile() : Config{
+    private static function getCategoryFile() : Config{
         return DataManager::get(DataManager::CATEGORIES);
     }
 

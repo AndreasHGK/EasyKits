@@ -171,6 +171,7 @@ class KitManager {
 
         }catch (\Throwable $e){
             EasyKits::get()->getLogger()->error("failed to load kit '".$name."'");
+            EasyKits::get()->getLogger()->debug($e->getMessage());
         }
     }
 
@@ -208,7 +209,7 @@ class KitManager {
         $file->set($kit->getName(), $kitData);
     }
 
-    public static function getKitFile() : Config{
+    private static function getKitFile() : Config{
         return DataManager::get(DataManager::KITS);
     }
 
