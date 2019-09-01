@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace AndreasHGK\EasyKits\ui;
 
 use AndreasHGK\EasyKits\Category;
+use AndreasHGK\EasyKits\manager\CooldownManager;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\LangUtils;
+use AndreasHGK\EasyKits\utils\TimeUtils;
 use AndreasHGK\EasyKits\utils\TryClaim;
 use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\Player;
@@ -34,7 +36,9 @@ class KitSelectForm {
             $ui->setContent(LangUtils::getMessage("category-text"));
 
             foreach($category->getPermittedKitsFor($player) as $kit) {
-                if ($kit->getPrice() > 0) {
+                if(CooldownManager::hasKitCooldown($kit, $player)){
+                    $ui->addButton(LangUtils::getMessage("kit-cooldown-format", true, ["{NAME}" => $kit->getName(), "{PRICE}" => $kit->getPrice(), "{COOLDOWN}" => $timeString = TimeUtils::intToTimeString(CooldownManager::getKitCooldown($kit, $player))]), -1, "", $kit->getName());
+                }elseif ($kit->getPrice() > 0) {
                     $ui->addButton(LangUtils::getMessage("kit-available-priced-format", true, ["{NAME}" => $kit->getName(), "{PRICE}" => $kit->getPrice()]), -1, "", $kit->getName());
                 } else {
                     $ui->addButton(LangUtils::getMessage("kit-available-free-format", true, ["{NAME}" => $kit->getName()]), -1, "", $kit->getName());
@@ -51,7 +55,9 @@ class KitSelectForm {
             $ui->setContent(LangUtils::getMessage("kit-text"));
 
             foreach(KitManager::getPermittedKitsFor($player) as $kit) {
-                if ($kit->getPrice() > 0) {
+                if(CooldownManager::hasKitCooldown($kit, $player)){
+                    $ui->addButton(LangUtils::getMessage("kit-cooldown-format", true, ["{NAME}" => $kit->getName(), "{PRICE}" => $kit->getPrice(), "{COOLDOWN}" => $timeString = TimeUtils::intToTimeString(CooldownManager::getKitCooldown($kit, $player))]), -1, "", $kit->getName());
+                }elseif ($kit->getPrice() > 0) {
                     $ui->addButton(LangUtils::getMessage("kit-available-priced-format", true, ["{NAME}" => $kit->getName(), "{PRICE}" => $kit->getPrice()]), -1, "", $kit->getName());
                 } else {
                     $ui->addButton(LangUtils::getMessage("kit-available-free-format", true, ["{NAME}" => $kit->getName()]), -1, "", $kit->getName());

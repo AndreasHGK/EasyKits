@@ -21,35 +21,7 @@ abstract class TryClaim {
             switch ($e->getCode()){
                 case 0:
                     $time = CooldownManager::getKitCooldown($kit, $player);
-                    $timeString = "";
-                    $timeArray = [];
-                    if($time >= 86400){
-                        $unit = floor($time/86400);
-                        $time -= $unit*86400;
-                        $timeArray[] = $unit." days";
-                    }
-                    if($time >= 3600){
-                        $unit = floor($time/3600);
-                        $time -= $unit*3600;
-                        $timeArray[] = $unit." hours";
-                    }
-                    if($time >= 60){
-                        $unit = floor($time/60);
-                        $time -= $unit*60;
-                        $timeArray[] = $unit." minutes";
-                    }
-                    if($time >= 1){
-                        $timeArray[] = $time." seconds";
-                    }
-                    foreach($timeArray as $key => $value){
-                        if($key === 0){
-                            $timeString .= $value;
-                        }elseif ($key === count($timeArray) - 1){
-                            $timeString .= " and ".$value;
-                        }else{
-                            $timeString .= ", ".$value;
-                        }
-                    }
+                    $timeString = TimeUtils::intToTimeString($time);
                     $player->sendMessage(LangUtils::getMessage("kit-cooldown-active", true, ["{TIME}" => $timeString]));
                     break;
                 case 1:
@@ -84,35 +56,7 @@ abstract class TryClaim {
             switch ($e->getCode()){
                 case 0:
                     $time = CooldownManager::getKitCooldown($kit, $player);
-                    $timeString = "";
-                    $timeArray = [];
-                    if($time >= 86400){
-                        $unit = floor($time/86400);
-                        $time -= $unit*86400;
-                        $timeArray[] = $unit." days";
-                    }
-                    if($time >= 3600){
-                        $unit = floor($time/3600);
-                        $time -= $unit*3600;
-                        $timeArray[] = $unit." hours";
-                    }
-                    if($time >= 60){
-                        $unit = floor($time/60);
-                        $time -= $unit*60;
-                        $timeArray[] = $unit." minutes";
-                    }
-                    if($time >= 1){
-                        $timeArray[] = $time." seconds";
-                    }
-                    foreach($timeArray as $key => $value){
-                        if($key === 0){
-                            $timeString .= $value;
-                        }elseif ($key === count($timeArray) - 1){
-                            $timeString .= " and ".$value;
-                        }else{
-                            $timeString .= ", ".$value;
-                        }
-                    }
+                    $timeString = TimeUtils::intToTimeString($time);
                     $player->sendMessage(LangUtils::getMessage("kit-cooldown-active", true, ["{TIME}" => $timeString]));
                     break;
                 case 1:

@@ -1,5 +1,5 @@
 #don't touch this
-version: 6
+version: 7
 
 ## put false instead of a message to disable
 # messages
@@ -60,6 +60,7 @@ kit-title: "§OKit selection menu"
 kit-text: false #this is optional
 kit-available-free-format: "{NAME}\n§aUnlocked"
 kit-available-priced-format: "{NAME}\n§6${PRICE}"
+kit-cooldown-format: "{NAME}\n§c{COOLDOWN}"
 kit-locked-format: "{NAME}\n§cLocked" # only shows when enabled in config
 
 kit-list: "§e§l> §r§7Available kits: §f{KITS}" # when UI is turned off
