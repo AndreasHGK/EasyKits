@@ -9,6 +9,7 @@ use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\event\CategoryCreateEvent;
 use AndreasHGK\EasyKits\event\CategoryDeleteEvent;
 use AndreasHGK\EasyKits\event\CategoryEditEvent;
+use pocketmine\Server;
 use pocketmine\utils\Config;
 
 class CategoryManager {
@@ -126,6 +127,7 @@ class CategoryManager {
         $file = self::getCategoryFile();
         $category = self::get($name);
         $categoryData = self::CATEGORY_FORMAT;
+        EasyKits::get()->getLogger()->debug($category->getKits());
         foreach($category->getKits() as $kit){
             $categoryData["kits"][] = $kit->getName();
         }

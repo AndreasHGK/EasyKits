@@ -34,7 +34,7 @@ class CategorySelectForm {
 
             if($event->isCancelled()) return;
 
-            if(empty($event->getCategory()->getKits())){
+            if(empty($event->getCategory()->getPermittedKitsFor($player))){
                 $player->sendMessage(LangUtils::getMessage("category-empty"));
                 return;
             }
