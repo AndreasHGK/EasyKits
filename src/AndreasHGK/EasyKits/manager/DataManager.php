@@ -11,9 +11,9 @@ use pocketmine\utils\Config;
 class DataManager {
 
     public const VERSIONS = [
-        "config" => 5,
+        "config" => 6,
         "commands" => 3,
-        "lang" => 6,
+        "lang" => 8,
     ];
 
     public const CONFIG = "config.yml";

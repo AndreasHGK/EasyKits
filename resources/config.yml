@@ -1,5 +1,5 @@
 #don't touch this
-version: 5
+version: 6
 
 # When you installed a new update, (if true) the plugin will try to add all the missing config values. This applies to Commands.yml, Lang.yml and Config.yml
 # This WILL remove all comments made and the file might be harder to read.
@@ -38,6 +38,13 @@ op-has-free-kits: false
 op-has-instant-kits: false
 # give all EasyKits.category.* permissions to operators
 op-has-all-categories: true
+
+# item format
+#
+# enter nbt for a format that saves items exactly, with all their NBT tags. This comes with the disadvantage of not being able to easily edit this from the config files.
+# enter simple for a format that only saves certain info. This format will be incompatible with some plugins like customenchants (
+#
+item-format: "nbt"
 
 # economy stuff
 

@@ -32,31 +32,40 @@ abstract class ItemUtils {
      * @return Item
      */
     public static function dataToItem(array $itemData) : Item {
-        $item = ItemFactory::get($itemData["id"], $itemData["damage"] ?? 0, $itemData["count"] ?? 1);
-        if(isset($itemData["enchants"])){
-            foreach($itemData["enchants"] as $ename => $level){
-                $ench = Enchantment::getEnchantment((int)$ename);
-                if(PiggyCustomEnchantsLoader::isPluginLoaded() && $ench === null){
-                    $ench = CustomEnchants::getEnchantment((int)$ename);
-                }
-                if($ench === null) continue;
-                if($ench instanceof CustomEnchants){
-                    PiggyCustomEnchantsLoader::getPlugin()->addEnchantment($item, $ench->getName(), $level);
-                }else{
-                    $item->addEnchantment(new EnchantmentInstance($ench, $level));
-                }
-            }
-        }
-        if(isset($itemData["display_name"])) $item->setCustomName(TextFormat::colorize($itemData["display_name"]));
-        if(isset($itemData["lore"])) {
-            $lore = [];
-            foreach($itemData["lore"] as $key=> $ilore){
-                $lore[$key] = TextFormat::colorize($ilore);
-            }
-            $item->setLore($lore);
-        }
+        switch ($itemData["format"] ?? null){
+            case "NBT":
 
-        return $item;
+                $item = Item::jsonDeserialize($itemData);
+                return $item;
+
+            default:
+
+                $item = ItemFactory::get($itemData["id"], $itemData["damage"] ?? 0, $itemData["count"] ?? 1);
+                if(isset($itemData["enchants"])){
+                    foreach($itemData["enchants"] as $ename => $level){
+                        $ench = Enchantment::getEnchantment((int)$ename);
+                        if(PiggyCustomEnchantsLoader::isPluginLoaded() && $ench === null){
+                            $ench = CustomEnchants::getEnchantment((int)$ename);
+                        }
+                        if($ench === null) continue;
+                        if($ench instanceof CustomEnchants){
+                            PiggyCustomEnchantsLoader::getPlugin()->addEnchantment($item, $ench->getName(), $level);
+                        }else{
+                            $item->addEnchantment(new EnchantmentInstance($ench, $level));
+                        }
+                    }
+                }
+                if(isset($itemData["display_name"])) $item->setCustomName(TextFormat::colorize($itemData["display_name"]));
+                if(isset($itemData["lore"])) {
+                    $lore = [];
+                    foreach($itemData["lore"] as $key=> $ilore){
+                        $lore[$key] = TextFormat::colorize($ilore);
+                    }
+                    $item->setLore($lore);
+                }
+                return $item;
+
+        }
     }
 
     /**

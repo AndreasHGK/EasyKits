@@ -15,6 +15,11 @@ class CategorySelectForm {
 
     public static function sendTo(Player $player): void
     {
+        if(empty(CategoryManager::getPermittedCategoriesFor($player))){
+            $player->sendMessage(LangUtils::getMessage("no-categories"));
+            return;
+        }
+
         $ui = new SimpleForm(function (Player $player, $data){
             if($data === null){
                 return;

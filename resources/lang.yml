@@ -1,5 +1,5 @@
 #don't touch this
-version: 7
+version: 8
 
 ## put false instead of a message to disable
 # messages
@@ -168,6 +168,7 @@ category-locked-format: "{NAME}\n§cLocked"
 category-no-permission: "§c§l> §r§7You don't have permission to view this category."
 category-not-found: "§c§l> §r§7A category with that name does not exist."
 category-empty: "§c§l> §r§7This category is empty."
+no-categories: "§c§l> §r§7You don't have permission to view any categories."
 
 category-title: "§6{NAME} §r§0category"
 category-text: false

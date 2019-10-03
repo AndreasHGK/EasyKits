@@ -9,6 +9,8 @@ use AndreasHGK\EasyKits\EasyKits;
 use AndreasHGK\EasyKits\event\CategoryCreateEvent;
 use AndreasHGK\EasyKits\event\CategoryDeleteEvent;
 use AndreasHGK\EasyKits\event\CategoryEditEvent;
+use AndreasHGK\EasyKits\Kit;
+use pocketmine\permission\Permissible;
 use pocketmine\Server;
 use pocketmine\utils\Config;
 
@@ -24,6 +26,20 @@ class CategoryManager {
 
     public static function exists(string $file) : bool{
         return isset(self::$categories[$file]);
+    }
+
+    /**
+     * @param Permissible $permissible
+     * @return Kit[]
+     */
+    public static function getPermittedCategoriesFor(Permissible $permissible) : array {
+        $categories = [];
+        foreach(self::getAll() as $category){
+            if($category->hasPermission($permissible)){
+                $categories[] = $category;
+            }
+        }
+        return $categories;
     }
 
     /**
