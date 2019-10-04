@@ -41,8 +41,8 @@ op-has-all-categories: true
 
 # item format
 #
-# enter nbt for a format that saves items exactly, with all their NBT tags. This comes with the disadvantage of not being able to easily edit this from the config files.
-# enter simple for a format that only saves certain info. This format will be incompatible with some plugins like customenchants (
+# enter nbt for a format that saves items exactly, with all their NBT tags. This comes with the disadvantage of not being able to easily edit this from the config files. It should work with all custom enchant plugins, banknotes, storing chestkits in kits ...
+# enter simple for a format that only saves certain info. This format will be incompatible with some plugins like customenchants (excluding PiggyCustomEnchants).
 #
 item-format: "nbt"
 

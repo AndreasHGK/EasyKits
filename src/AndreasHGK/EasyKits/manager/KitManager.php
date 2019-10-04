@@ -119,8 +119,8 @@ class KitManager {
         unset(self::$kits[$kit]);
     }
 
-    public static function exists(string $file) : bool{
-        return isset(self::$kits[$file]);
+    public static function exists(string $kit) : bool{
+        return isset(self::$kits[$kit]);
     }
 
     public static function saveAll() : void {

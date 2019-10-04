@@ -128,6 +128,7 @@ class CategoryManager {
             $category = new Category($name);
             $kits = [];
             foreach($categorydata["kits"] as $kitname){
+                if(!KitManager::exists($kitname)) continue;
                 $kits[$kitname] = KitManager::get($kitname);
             }
             $category->setLocked($categorydata["locked"]);
@@ -143,7 +144,6 @@ class CategoryManager {
         $file = self::getCategoryFile();
         $category = self::get($name);
         $categoryData = self::CATEGORY_FORMAT;
-        EasyKits::get()->getLogger()->debug($category->getKits());
         foreach($category->getKits() as $kit){
             $categoryData["kits"][] = $kit->getName();
         }

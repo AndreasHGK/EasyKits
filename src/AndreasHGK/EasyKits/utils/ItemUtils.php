@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AndreasHGK\EasyKits\utils;
 
 use AndreasHGK\EasyKits\customenchants\PiggyCustomEnchantsLoader;
+use AndreasHGK\EasyKits\manager\DataManager;
 use DaPigGuy\PiggyCustomEnchants\CustomEnchants\CustomEnchants;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
@@ -32,8 +33,8 @@ abstract class ItemUtils {
      * @return Item
      */
     public static function dataToItem(array $itemData) : Item {
-        switch ($itemData["format"] ?? null){
-            case "NBT":
+        switch (strtolower($itemData["format"] ?? "")){
+            case "nbt":
 
                 $item = Item::jsonDeserialize($itemData);
                 return $item;
@@ -73,29 +74,41 @@ abstract class ItemUtils {
      * @return array
      */
     public static function itemToData(Item $item) : array {
-        $itemData = self::ITEM_FORMAT;
-        $itemData["id"] = $item->getId();
-        $itemData["damage"] = $item->getDamage();
-        $itemData["count"] = $item->getCount();
-        if($item->hasCustomName()){
-            $itemData["display_name"] = $item->getCustomName();
-        }else{
-            unset($itemData["display_name"]);
-        }
-        if($item->getLore() !== []){
-            $itemData["lore"] = $item->getLore();
-        }else{
-            unset($itemData["lore"]);
-        }
-        if($item->hasEnchantments()){
-            foreach($item->getEnchantments() as $enchantment){
-                $itemData["enchants"][(string)$enchantment->getId()] = $enchantment->getLevel();
-            }
-        }else{
-            unset($itemData["enchants"]);
-        }
+        $format = DataManager::getKey(DataManager::CONFIG, "item-format");
+        switch (strtolower($format)){
+            case "nbt":
 
-        return $itemData;
+                $itemData = $item->jsonSerialize();
+                if(isset($itemData["nbt_b64"]) || isset($itemData["nbt_hex"]) || isset($itemData["nbt"])){
+                    $itemData["format"] = "nbt";
+                }
+                return $itemData;
+
+            default:
+                $itemData = self::ITEM_FORMAT;
+                $itemData["id"] = $item->getId();
+                $itemData["damage"] = $item->getDamage();
+                $itemData["count"] = $item->getCount();
+                if($item->hasCustomName()){
+                    $itemData["display_name"] = $item->getCustomName();
+                }else{
+                    unset($itemData["display_name"]);
+                }
+                if($item->getLore() !== []){
+                    $itemData["lore"] = $item->getLore();
+                }else{
+                    unset($itemData["lore"]);
+                }
+                if($item->hasEnchantments()){
+                    foreach($item->getEnchantments() as $enchantment){
+                        $itemData["enchants"][(string)$enchantment->getId()] = $enchantment->getLevel();
+                    }
+                }else{
+                    unset($itemData["enchants"]);
+                }
+
+                return $itemData;
+        }
     }
 
 }
