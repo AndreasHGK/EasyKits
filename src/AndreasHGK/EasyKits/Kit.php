@@ -243,7 +243,7 @@ class Kit
      * @return bool
      */
     public function hasPermission(Permissible $permissible) : bool {
-        return $permissible->hasPermission(EasyKits::PERM_ROOT."kit.".$this->getName()) || !$this->isLocked();
+        return $permissible->hasPermission(EasyKits::PERM_ROOT."kit.".$this->getName()) || !$this->isLocked() || $permissible->hasPermission(EasyKits::PERM_ROOT."kit");
     }
 
     /**

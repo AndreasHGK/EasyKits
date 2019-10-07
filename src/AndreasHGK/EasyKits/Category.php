@@ -31,7 +31,7 @@ class Category{
     }
 
     public function hasPermission(Permissible $permissible) : bool {
-        return !$this->isLocked() || $permissible->hasPermission(EasyKits::PERM_ROOT."category.".$this->getName());
+        return !$this->isLocked() || $permissible->hasPermission(EasyKits::PERM_ROOT."category.".$this->getName()) || $permissible->hasPermission(EasyKits::PERM_ROOT."category");
     }
 
     public function hasKit(Kit $kit) : bool {
