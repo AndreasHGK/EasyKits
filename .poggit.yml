@@ -1,6 +1,7 @@
 --- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/AndreasHGK/EasyKits
 branches:
 - master
+- next-major
 projects:
   EasyKits:
     path: ""
