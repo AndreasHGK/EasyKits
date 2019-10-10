@@ -30,8 +30,8 @@ class GivekitPlayerSelectForm {
         $ui->setTitle(LangUtils::getMessage("givekit-title"));
         $ui->setContent(LangUtils::getMessage("givekit-playerselect-text"));
 
-        foreach(Server::getInstance()->getOnlinePlayers() as $player) {
-            $ui->addButton(LangUtils::getMessage("givekit-playerselect-format", true, ["{PLAYER}" => $player->getName()]), -1, "", $player->getName());
+        foreach(Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
+            $ui->addButton(LangUtils::getMessage("givekit-playerselect-format", true, ["{PLAYER}" => $onlinePlayer->getName()]), -1, "", $onlinePlayer->getName());
         }
 
 
