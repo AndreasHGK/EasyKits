@@ -18,7 +18,7 @@ All messages in the plugin can be changed within the lang.yml file. You can also
 With all this customizability you can use it for tons of gamemodes from kitpvp to factions.
 
 - [x] **Easy conversion:** Already have another kit plugin fully set up? 
-Don't worry! You can use the /ekimport command to import kits from KitUI and AdvancedKits
+Don't worry! You can use the /ekimport command to import kits from KitUI, KitsPlus and AdvancedKits
 
 - [x] **Chestkits:** Each kit has the option to be a chestkit.
 These kits will be a chest when claimed, and when you tap with them you will equip them.
