@@ -212,7 +212,7 @@ class Kit
         foreach($armorSlots as $key => $armorSlot){
             if($kit->doOverrideArmor()) $playerArmorInv->setItem($key, $armorSlot);
             elseif($playerArmorInv->getItem($key)->getId() !== Item::AIR) $playerInv->addItem($armorSlot);
-            else $playerArmorInv->addItem($armorSlot);
+            else $playerArmorInv->setItem($key, $armorSlot);
         }
         foreach($kit->getEffects() as $effect){
             $player->addEffect($effect);
