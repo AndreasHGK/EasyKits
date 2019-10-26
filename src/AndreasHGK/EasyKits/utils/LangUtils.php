@@ -16,7 +16,8 @@ abstract class LangUtils {
      * @return string[]|string
      */
     public static function getMessage(string $key, bool $colorize = true, array $replace = []) {
-        $msg = DataManager::getKey(DataManager::LANG, $key);
+        $msg = DataManager::getKey(DataManager::LANG, $key, null);
+        if($msg === null) return $key;
         if(is_array($msg)){
             $return = [];
             foreach($msg as $key => $msgE){
