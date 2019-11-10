@@ -6,6 +6,7 @@ namespace AndreasHGK\EasyKits\utils;
 
 use AndreasHGK\EasyKits\customenchants\PiggyCustomEnchantsLoader;
 use AndreasHGK\EasyKits\manager\DataManager;
+use DaPigGuy\PiggyCustomEnchants\CustomEnchantManager;
 use DaPigGuy\PiggyCustomEnchants\CustomEnchants\CustomEnchants;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
@@ -46,10 +47,13 @@ abstract class ItemUtils {
                     foreach($itemData["enchants"] as $ename => $level){
                         $ench = Enchantment::getEnchantment((int)$ename);
                         if(PiggyCustomEnchantsLoader::isPluginLoaded() && $ench === null){
-                            $ench = CustomEnchants::getEnchantment((int)$ename);
+
+                            if(PiggyCustomEnchantsLoader::isNewVersion()) $ench = CustomEnchants::getEnchantment((int)$ename);
+                            else $ench = CustomEnchantManager::getEnchantment((int)$ename);
+
                         }
                         if($ench === null) continue;
-                        if($ench instanceof CustomEnchants){
+                        if(!PiggyCustomEnchantsLoader::isNewVersion() && $ench instanceof CustomEnchants){
                             PiggyCustomEnchantsLoader::getPlugin()->addEnchantment($item, $ench->getName(), $level);
                         }else{
                             $item->addEnchantment(new EnchantmentInstance($ench, $level));
