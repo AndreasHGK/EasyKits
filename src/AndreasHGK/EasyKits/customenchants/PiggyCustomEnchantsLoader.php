@@ -39,7 +39,7 @@ final class PiggyCustomEnchantsLoader {
     }
 
     public static function isNewVersion() : bool {
-        return self::isNewVersion();
+        return self::$isNewVersion ?? true;
     }
 
     public static function isPluginLoaded() : bool {

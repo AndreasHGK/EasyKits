@@ -48,7 +48,7 @@ abstract class ItemUtils {
                         $ench = Enchantment::getEnchantment((int)$ename);
                         if(PiggyCustomEnchantsLoader::isPluginLoaded() && $ench === null){
 
-                            if(PiggyCustomEnchantsLoader::isNewVersion()) $ench = CustomEnchants::getEnchantment((int)$ename);
+                            if(!PiggyCustomEnchantsLoader::isNewVersion()) $ench = CustomEnchants::getEnchantment((int)$ename);
                             else $ench = CustomEnchantManager::getEnchantment((int)$ename);
 
                         }
