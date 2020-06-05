@@ -96,7 +96,7 @@ class EasyKits extends PluginBase{
             InvMenuHandler::register($this);
         }
     }
-    
+
 	public function onDisable()
     {
         KitManager::saveAll();

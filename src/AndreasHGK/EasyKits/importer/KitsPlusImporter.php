@@ -38,6 +38,8 @@ class KitsPlusImporter{
         $name = $kitData["KitFormName"];
         if(KitManager::exists($name)) return false;
 
+        $permission = $kitData["Permission"];
+
         $price = $kitData["Cost"];
         $cooldown = $kitData["CooldownTime"];
 
@@ -73,7 +75,7 @@ class KitsPlusImporter{
             $items[] = $in;
         }
 
-        $kit = new Kit($name, (float)$price, (int)$cooldown, $items, $armor);
+        $kit = new Kit($name, $permission, (float)$price, (int)$cooldown, $items, $armor);
 
         $default = DataManager::getKey(DataManager::CONFIG, "default-flags");
         $kit->setLocked($default["locked"]);

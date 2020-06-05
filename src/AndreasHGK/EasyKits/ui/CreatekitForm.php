@@ -69,12 +69,15 @@ class CreatekitForm {
 
             $items = $player->getInventory()->getContents();
             $armor = $player->getArmorInventory()->getContents();
+
+            $permission = $data["permission"] ?? $name;
+
             if(empty($items) && empty($armor)){
                 $player->sendMessage(LangUtils::getMessage("createkit-empty-inventory"));
                 return;
             }
 
-            $kit = new Kit($name, $price, $cooldown, $items, $armor);
+            $kit = new Kit($name, $permission, $price, $cooldown, $items, $armor);
             $kit->setLocked($locked);
             $kit->setEmptyOnClaim($emptyOnClaim);
             $kit->setDoOverride($doOverride);
@@ -104,6 +107,7 @@ class CreatekitForm {
         $ui->setTitle(LangUtils::getMessage("createkit-title"));
         $ui->addLabel(LangUtils::getMessage("createkit-text"));
         $ui->addInput(LangUtils::getMessage("createkit-kitname"), "", null, "name");
+        $ui->addInput(LangUtils::getMessage("createkit-permission"), LangUtils::getMessage("createkit-permission-tip"), null, "permission");
         $ui->addInput(LangUtils::getMessage("createkit-price"), "", "0", "price");
         $ui->addInput(LangUtils::getMessage("createkit-cooldown"), "", "60", "cooldown");
         if(!empty(CategoryManager::getAll())){

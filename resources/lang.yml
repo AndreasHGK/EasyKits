@@ -22,6 +22,8 @@ chestkit-lore:
 createkit-title: "§0Kit creation menu"
 createkit-text: "§7When making a kit, all the items in your inventory will be added to the kit. Make sure you have the correct items before you submit the kit. After you created the kit, you can edit additional settings with /editkit"
 createkit-kitname: "§e§l> §rKit name"
+createkit-permission: "§e§l> §rKit permission §7(easykits.kit.<perm>)"
+createkit-permission-tip: "leave blank to use name as permission"
 createkit-price: "§e§l> §rPrice §7(0 for no price)"
 createkit-cooldown: "§e§l> §rCooldown §7(in seconds)"
 createkit-category: "§e§l> §rCategory" # only shows when categories are enabled
@@ -109,6 +111,7 @@ editkit-edit-effects: "§e§l> §rClaim effects §e§l<"
 
 editkit-general-text: "§7You are editing general kit settings."
 editkit-general-kitname: "§e§l> §rkit name"
+editkit-general-permission: "§e§l> §rKit permission §7(easykits.kit.<perm>)"
 editkit-general-price: "§e§l> §rPrice §7(0 for no price)"
 editkit-general-cooldown: "§e§l> §rCooldown §7(in seconds)"
 editkit-general-flags: "§e§l> §rFlags"

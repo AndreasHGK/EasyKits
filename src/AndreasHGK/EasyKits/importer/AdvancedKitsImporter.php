@@ -86,7 +86,7 @@ class AdvancedKitsImporter{
             return $cmds;
         }, $akit, \AdvancedKits\Kit::class)();
 
-        $kit = new Kit($name, $price, $cooldown, $items, $armor);
+        $kit = new Kit($name, $name, $price, $cooldown, $items, $armor);
 
         $default = DataManager::getKey(DataManager::CONFIG, "default-flags");
         $kit->setLocked($default["locked"]);

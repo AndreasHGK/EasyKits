@@ -36,32 +36,19 @@ class Kit
     protected $armor = [];
 
     //settings
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name;
-    /**
-     * @var float
-     */
+    /** @var string */
+    protected $permission;
+    /** @var float */
     protected $price = 0;
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $cooldown = 60;
-
-    /**
-     * @var EffectInstance[]|array
-     */
+    /** @var EffectInstance[] */
     protected $effects = [];
-
-    /**
-     * @var array|string[]
-     */
+    /** @var string[] */
     protected $commands = [];
-
-    /**
-     * @var Item
-     */
+    /** @var Item|null */
     protected $interactItem = null;
 
     //flags
@@ -117,8 +104,8 @@ class Kit
         }
 
         $kit = clone $this;
-        if($player->hasPermission(EasyKits::PERM_ROOT."free.".$kit->name)) $kit->price = 0;
-        if($player->hasPermission(EasyKits::PERM_ROOT."instant.".$kit->name)) $kit->cooldown = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT."free.".$kit->getPermission())) $kit->price = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT."instant.".$kit->getPermission())) $kit->cooldown = 0;
 
         $event = new InteractItemClaimEvent($kit, $player);
         $event->call();
@@ -185,8 +172,8 @@ class Kit
             }
         }
         $kit = clone $this;
-        if($player->hasPermission(EasyKits::PERM_ROOT."free.".$kit->name)) $kit->price = 0;
-        if($player->hasPermission(EasyKits::PERM_ROOT."instant.".$kit->name)) $kit->cooldown = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT."free.".$kit->getPermission())) $kit->price = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT."instant.".$kit->getPermission())) $kit->cooldown = 0;
         $event = new KitClaimEvent($kit, $player);
         $event->call();
 
@@ -243,7 +230,37 @@ class Kit
      * @return bool
      */
     public function hasPermission(Permissible $permissible) : bool {
-        return $permissible->hasPermission(EasyKits::PERM_ROOT."kit.".$this->getName()) || !$this->isLocked() || $permissible->hasPermission(EasyKits::PERM_ROOT."kit");
+        return $permissible->hasPermission(EasyKits::PERM_ROOT."kit.".$this->getPermission()) || !$this->isLocked() || $permissible->hasPermission(EasyKits::PERM_ROOT."kit");
+    }
+
+    /**
+     * Get the permission needed to claim the kit
+     *
+     * @return string
+     */
+    public function getPermission() : string {
+        return $this->permission;
+    }
+
+    /**
+     * Set the permission needed to claim the kit
+     *
+     * @internal use the changePermission() function
+     * @param string $permission
+     */
+    public function setPermission(string $permission) : void {
+        $this->permission = $permission;
+    }
+
+    /**
+     * Change the permission of the kit
+     *
+     * @param string $permission
+     */
+    public function changePermission(string $permission) : void {
+        $this->unregisterPermissions();
+        $this->setPermission($permission);
+        $this->registerPermissions();
     }
 
     /**
@@ -455,30 +472,61 @@ class Kit
         }
     }
 
-    public function __toString()
-    {
+    /**
+     * Internal function to register the required permissions when the kit instance is loaded
+     *
+     * @internal
+     */
+    private function registerPermissions() : void {
+        $permissionManager = PermissionManager::getInstance();
+
+        $permissionManager->addPermission(new Permission(EasyKits::PERM_ROOT."kit.".$this->getPermission(),
+            "permission to claim kit ".$this->getName(),
+            DataManager::getKey(DataManager::CONFIG, "op-has-all-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
+
+        $permissionManager->addPermission(new Permission(EasyKits::PERM_ROOT."free.".$this->getPermission(),
+            "permission to claim kit ".$this->getName()." for free",
+            DataManager::getKey(DataManager::CONFIG, "op-has-free-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
+
+        $permissionManager->addPermission(new Permission(EasyKits::PERM_ROOT."instant.".$this->getPermission(),
+            "permission to claim kit ".$this->getName()." without cooldown",
+            DataManager::getKey(DataManager::CONFIG, "op-has-instant-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
+    }
+
+    /**
+     * Unregister the permissions for the kit
+     *
+     * @internal
+     */
+    public function unregisterPermissions() : void {
+        $permissionManager = PermissionManager::getInstance();
+
+        $permissionManager->removePermission(EasyKits::PERM_ROOT."kit.".$this->getPermission());
+        $permissionManager->removePermission(EasyKits::PERM_ROOT."free.".$this->getPermission());
+        $permissionManager->removePermission(EasyKits::PERM_ROOT."instant.".$this->getPermission());
+    }
+
+    public function __toString() {
         return $this->name;
     }
 
     /**
      * Kit constructor.
      * @param string $name
+     * @param string $permission
      * @param float $price
      * @param int $cooldown
      * @param Item[] $items
      * @param Item[] $armor
      */
-    public function __construct(string $name, float $price, int $cooldown, array $items, array $armor)
-    {
+    public function __construct(string $name, string $permission, float $price, int $cooldown, array $items, array $armor) {
         $this->name = $name;
+        $this->permission = $permission;
         $this->price = $price;
         $this->cooldown = $cooldown;
         $this->items = $items;
         $this->armor = $armor;
-
-        PermissionManager::getInstance()->addPermission(new Permission(EasyKits::PERM_ROOT."kit.".$name, "permission to claim kit ".$name, DataManager::getKey(DataManager::CONFIG, "op-has-all-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
-        PermissionManager::getInstance()->addPermission(new Permission(EasyKits::PERM_ROOT."free.".$name, "permission to claim kit ".$name." for free", DataManager::getKey(DataManager::CONFIG, "op-has-free-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
-        PermissionManager::getInstance()->addPermission(new Permission(EasyKits::PERM_ROOT."instant.".$name, "permission to claim kit ".$name." without cooldown", DataManager::getKey(DataManager::CONFIG, "op-has-instant-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
+        $this->registerPermissions();
     }
 
 }

@@ -61,6 +61,12 @@ class KitManager {
             self::remove($old, true);
         }
         self::$kits[$event->getKit()->getName()] = $event->getKit();
+        $kit = $event->getKit();
+        if($kit->getPermission() !== $event->getOriginalKit()->getPermission()) {
+            $perm = $kit->getPermission();
+            $kit->setPermission($event->getOriginalKit()->getPermission());
+            $kit->changePermission($perm);
+        }
         return true;
     }
 
@@ -79,6 +85,8 @@ class KitManager {
         if(!$silent) $event->call();
 
         if($event->isCancelled()) return false;
+
+        $event->getKit()->unregisterPermissions();
 
         $kits = self::getKitFile();
         $kits->remove($event->getKit()->getName());
@@ -156,7 +164,10 @@ class KitManager {
             foreach($kitdata["commands"] ?? [] as $command){
                 $commands[] = $command;
             }
-            $kit = new Kit($name, $kitdata["price"], $kitdata["cooldown"], $items, $armor);
+
+            $permission = $kitdata["permission"] ?? $name;
+
+            $kit = new Kit($name, $permission, $kitdata["price"], $kitdata["cooldown"], $items, $armor);
             $kit->setLocked($kitdata["flags"]["locked"]);
             $kit->setDoOverride($kitdata["flags"]["doOverride"]);
             $kit->setDoOverrideArmor($kitdata["flags"]["doOverrideArmor"]);
@@ -183,6 +194,7 @@ class KitManager {
         $file = self::getKitFile();
         $kit = self::get($name);
         $kitData = self::KIT_FORMAT;
+        $kitData["permission"] = $kit->getPermission();
         $kitData["price"] = $kit->getPrice();
         $kitData["cooldown"] = $kit->getCooldown();
         $kitData["flags"]["locked"] = $kit->isLocked();

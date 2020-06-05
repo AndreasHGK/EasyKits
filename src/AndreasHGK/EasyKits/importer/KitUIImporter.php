@@ -13,6 +13,7 @@ use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 class KitUIImporter{
 
@@ -82,7 +83,7 @@ class KitUIImporter{
             $commands[$key] = str_replace("{player}", "{PLAYER}", $command);
         }
 
-        $kit = new Kit($name, $price, $cooldown, $items, $armor);
+        $kit = new Kit($name, $name, $price, $cooldown, $items, $armor);
 
         $default = DataManager::getKey(DataManager::CONFIG, "default-flags");
         $kit->setLocked($default["locked"]);

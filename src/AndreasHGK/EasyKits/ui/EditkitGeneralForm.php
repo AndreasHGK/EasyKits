@@ -52,6 +52,7 @@ class EditkitGeneralForm {
             $new->setDoOverrideArmor($data["doOverrideArmor"]);
             $new->setAlwaysClaim($data["alwaysClaim"]);
             $new->setChestKit($data["chestKit"]);
+            $new->setPermission($data["permission"] ?? (string)$data["name"]);
 
             if(KitManager::update($kit, $new, true)){
                 KitManager::saveAll();
@@ -63,6 +64,7 @@ class EditkitGeneralForm {
         $ui->addLabel(LangUtils::getMessage("editkit-general-text"));
 
         $ui->addInput(LangUtils::getMessage("editkit-general-kitname"), "", $kit->getName(), "name");
+        $ui->addInput(LangUtils::getMessage("editkit-general-permission"), "", $kit->getPermission(), "permission");
         $ui->addInput(LangUtils::getMessage("editkit-general-price"), "", (string)$kit->getPrice(), "price");
         $ui->addInput(LangUtils::getMessage("editkit-general-cooldown"), "", (string)$kit->getCooldown(), "cooldown");
         $ui->addLabel(LangUtils::getMessage("editkit-general-flags"));
