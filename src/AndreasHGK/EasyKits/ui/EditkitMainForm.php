@@ -12,15 +12,14 @@ use pocketmine\Player;
 
 class EditkitMainForm {
 
-    public static function sendTo(Player $player, Kit $kit): void
-    {
+    public static function sendTo(Player $player, Kit $kit) : void {
 
-        $ui = new SimpleForm(function(Player $player, $data) use($kit){
-            if($data === null){
+        $ui = new SimpleForm(function (Player $player, $data) use ($kit) {
+            if($data === null) {
                 $player->sendMessage(LangUtils::getMessage("editkit-cancelled"));
                 return;
             }
-            switch ($data){
+            switch($data) {
                 case "general":
                     EditkitGeneralForm::sendTo($player, $kit);
                     break;

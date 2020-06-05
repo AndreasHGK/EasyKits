@@ -24,7 +24,7 @@ abstract class EKExecutor implements CommandExecutor {
         if(isset($commandData["labels"])) $this->aliases = $commandData["labels"];
         $this->desc = $commandData["description"];
         $this->usage = $commandData["usage"];
-        $this->permission = EasyKits::PERM_ROOT."command.".$commandName;
+        $this->permission = EasyKits::PERM_ROOT . "command." . $commandName;
     }
 
     public function getName() : string {
@@ -47,6 +47,6 @@ abstract class EKExecutor implements CommandExecutor {
         return $this->usage;
     }
 
-    abstract public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool;
+    abstract public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool;
 
 }

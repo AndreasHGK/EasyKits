@@ -13,8 +13,7 @@ class CategoryEditEvent extends CategoryEvent {
      */
     protected $originalCategory;
 
-    public function __construct(Category $old, Category $new)
-    {
+    public function __construct(Category $old, Category $new) {
         parent::__construct($new);
         $this->originalCategory = $old;
     }

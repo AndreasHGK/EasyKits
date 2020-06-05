@@ -18,15 +18,15 @@ abstract class LangUtils {
     public static function getMessage(string $key, bool $colorize = true, array $replace = []) {
         $msg = DataManager::getKey(DataManager::LANG, $key, null);
         if($msg === null) return $key;
-        if(is_array($msg)){
+        if(is_array($msg)) {
             $return = [];
-            foreach($msg as $key => $msgE){
+            foreach($msg as $key => $msgE) {
                 if($msgE === false) return "";
                 $msgE = self::replaceVariables($msgE, $replace);
                 if($colorize) TextFormat::colorize($msgE);
                 $return[$key] = $msgE;
             }
-        }else{
+        } else {
             if($msg === false) return "";
             $msg = self::replaceVariables($msg, $replace);
             if($colorize) TextFormat::colorize($msg);
@@ -36,7 +36,7 @@ abstract class LangUtils {
     }
 
     public static function replaceVariables(string $text, array $variables) : string {
-        foreach($variables as $variable => $replace){
+        foreach($variables as $variable => $replace) {
             $text = str_replace($variable, $replace, $text);
         }
         return $text;

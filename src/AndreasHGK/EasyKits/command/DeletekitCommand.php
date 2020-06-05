@@ -13,21 +13,19 @@ use pocketmine\Player;
 
 class DeletekitCommand extends EKExecutor {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->setDataFromConfig("deletekit");
 
     }
 
-    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
-    {
-        if(!$sender instanceof Player){
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
+        if(!$sender instanceof Player) {
             $sender->sendMessage(LangUtils::getMessage("sender-not-player"));
             return true;
         }
 
-        if(isset($args[0])){
-            if(!KitManager::exists((string)$args[0])){
+        if(isset($args[0])) {
+            if(!KitManager::exists((string)$args[0])) {
                 $sender->sendMessage(LangUtils::getMessage("deletekit-not-found"));
                 return true;
             }
@@ -36,11 +34,11 @@ class DeletekitCommand extends EKExecutor {
         }
 
         $kits = [];
-        foreach(KitManager::getAll() as $kit){
+        foreach(KitManager::getAll() as $kit) {
             $kits[] = $kit->getName();
         }
 
-        if(empty($kits)){
+        if(empty($kits)) {
             $sender->sendMessage(LangUtils::getMessage("deletekit-none-available"));
             return true;
         }

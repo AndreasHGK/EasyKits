@@ -7,52 +7,52 @@ author: AndreasHGK
 description: A kit plugin for everyone
 website: http://hgk.me/
 softdepend:
- - EconomyAPI
- - MultiEconomy
- - PiggyCustomEnchants
+  - EconomyAPI
+  - MultiEconomy
+  - PiggyCustomEnchants
 
 permissions:
- easykits:
-  default: op
-  description: "easykits root permission"
-  children:
-   easykits.command:
+  easykits:
     default: op
-    description: "easykits root command permission"
+    description: "easykits root permission"
     children:
-     easykits.command.kit:
-      default: true
-      description: "permission for the /kit command"
-     easykits.command.createkit:
-      default: op
-      description: "permission for the /createkit command"
-     easykits.command.deletekit:
-      default: op
-      description: "permission for the /deletekit command"
-     easykits.command.ekimport:
-      default: op
-      description: "permission for the /ekimport command"
-     easykits.command.editkit:
-      default: op
-      description: "permission for the /editkit command"
-     easykits.command.createcategory:
-      default: op
-      description: "permission for the /createcategory command"
-     easykits.command.deletecategory:
-      default: op
-      description: "permission for the /deletecategory command"
-     easykits.command.givekit:
-      default: op
-      description: "permission for the /givekit command"
-   easykits.kit:
-    default: op
-    description: "permission for specific kits"
-   easykits.free:
-    default: false
-    description: "claim kits for free"
-   easykits.instant:
-    default: false
-    description: "claim without a cooldown"
-   easykits.category:
-    default: op
-    description:  "permission for specific categories"
+      easykits.command:
+        default: op
+        description: "easykits root command permission"
+        children:
+          easykits.command.kit:
+            default: true
+            description: "permission for the /kit command"
+          easykits.command.createkit:
+            default: op
+            description: "permission for the /createkit command"
+          easykits.command.deletekit:
+            default: op
+            description: "permission for the /deletekit command"
+          easykits.command.ekimport:
+            default: op
+            description: "permission for the /ekimport command"
+          easykits.command.editkit:
+            default: op
+            description: "permission for the /editkit command"
+          easykits.command.createcategory:
+            default: op
+            description: "permission for the /createcategory command"
+          easykits.command.deletecategory:
+            default: op
+            description: "permission for the /deletecategory command"
+          easykits.command.givekit:
+            default: op
+            description: "permission for the /givekit command"
+      easykits.kit:
+        default: op
+        description: "permission for specific kits"
+      easykits.free:
+        default: false
+        description: "claim kits for free"
+      easykits.instant:
+        default: false
+        description: "claim without a cooldown"
+      easykits.category:
+        default: op
+        description:  "permission for specific categories"

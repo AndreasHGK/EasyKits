@@ -12,21 +12,20 @@ use pocketmine\Player;
 
 class CreatecategoryForm {
 
-    public static function sendTo(Player $player): void
-    {
-        $ui = new CustomForm(function(Player $player, $data){
-            if($data === null){
+    public static function sendTo(Player $player) : void {
+        $ui = new CustomForm(function (Player $player, $data) {
+            if($data === null) {
                 $player->sendMessage(LangUtils::getMessage("createcategory-cancelled"));
                 return;
             }
-            if(!isset($data["name"])){
+            if(!isset($data["name"])) {
                 $player->sendMessage(LangUtils::getMessage("createcategory-no-name"));
                 return;
             }
 
             $name = (string)$data["name"];
 
-            if(CategoryManager::exists($name)){
+            if(CategoryManager::exists($name)) {
                 $player->sendMessage(LangUtils::getMessage("createcategory-duplicate"));
                 return;
             }
@@ -34,7 +33,7 @@ class CreatecategoryForm {
             $locked = $data["locked"];
             $category = new Category($name);
             $category->setLocked($locked);
-            if(CategoryManager::add($category)){
+            if(CategoryManager::add($category)) {
                 $player->sendMessage(LangUtils::getMessage("createcategory-success", true, ["{NAME}" => $name]));
                 CategoryManager::saveAll();
             }

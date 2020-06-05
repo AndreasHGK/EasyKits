@@ -28,7 +28,7 @@ final class PiggyCustomEnchantsLoader {
 
     public static function load() : void {
         $ce = Server::getInstance()->getPluginManager()->getPlugin("PiggyCustomEnchants");
-        if($ce instanceof Main || $ce instanceof PiggyCustomEnchants){
+        if($ce instanceof Main || $ce instanceof PiggyCustomEnchants) {
             self::$customEnchants = $ce;
 
             if($ce instanceof PiggyCustomEnchants) self::$isNewVersion = true;
@@ -46,8 +46,7 @@ final class PiggyCustomEnchantsLoader {
         return isset(self::$customEnchants);
     }
 
-    private function __construct()
-    {
+    private function __construct() {
     }
 
 }

@@ -24,7 +24,7 @@ use muqsit\invmenu\InvMenuHandler;
 use pocketmine\command\PluginCommand;
 use pocketmine\plugin\PluginBase;
 
-class EasyKits extends PluginBase{
+class EasyKits extends PluginBase {
 
     public const PERM_ROOT = "easykits.";
 
@@ -34,19 +34,18 @@ class EasyKits extends PluginBase{
         return self::$instance;
     }
 
-    public function onLoad() : void
-    {
+    public function onLoad() : void {
         self::$instance = $this;
 
         UpdateNotifier::checkUpdate($this, $this->getName(), $this->getDescription()->getVersion());
         DataManager::loadDefault();
-        if(DataManager::getKey(DataManager::CONFIG, "auto-update-config")){
+        if(DataManager::getKey(DataManager::CONFIG, "auto-update-config")) {
             DataManager::updateAllConfigs();
         }
         PiggyCustomEnchantsLoader::load();
-        if(!PiggyCustomEnchantsLoader::isPluginLoaded()){
+        if(!PiggyCustomEnchantsLoader::isPluginLoaded()) {
             KitManager::loadAll();
-            if(DataManager::getKey(DataManager::CONFIG, "enable-categories")){
+            if(DataManager::getKey(DataManager::CONFIG, "enable-categories")) {
                 CategoryManager::loadAll();
             }
         }
@@ -55,11 +54,10 @@ class EasyKits extends PluginBase{
         if(!EconomyManager::isEconomyLoaded()) $this->getLogger()->notice("no compatible economy loaded");
     }
 
-    public function onEnable() : void
-    {
-        if(PiggyCustomEnchantsLoader::isPluginLoaded()){
+    public function onEnable() : void {
+        if(PiggyCustomEnchantsLoader::isPluginLoaded()) {
             KitManager::loadAll(); //because of PiggyCustomEnchants adding enchants in onEnable
-            if(DataManager::getKey(DataManager::CONFIG, "enable-categories")){
+            if(DataManager::getKey(DataManager::CONFIG, "enable-categories")) {
                 CategoryManager::loadAll();
             }
         }
@@ -71,13 +69,13 @@ class EasyKits extends PluginBase{
             new KitCommand(),
             new GivekitCommand(),
         ];
-        if(DataManager::getKey(DataManager::CONFIG, "enable-categories")){
+        if(DataManager::getKey(DataManager::CONFIG, "enable-categories")) {
             array_push($commands,
                 new CreatecategoryCommand(),
                 new DeletecategoryCommand()
             );
         }
-        foreach($commands as $command){
+        foreach($commands as $command) {
             $cmd = new PluginCommand($command->getName(), $this);
             $cmd->setExecutor($command);
             $cmd->setDescription($command->getDesc());
@@ -89,16 +87,15 @@ class EasyKits extends PluginBase{
         $listeners = [
             new InteractClaimListener(),
         ];
-        foreach ($listeners as $listener){
+        foreach($listeners as $listener) {
             $this->getServer()->getPluginManager()->registerEvents($listener, $this);
         }
-        if(!InvMenuHandler::isRegistered()){
+        if(!InvMenuHandler::isRegistered()) {
             InvMenuHandler::register($this);
         }
     }
 
-	public function onDisable()
-    {
+    public function onDisable() {
         KitManager::saveAll();
         CooldownManager::saveCooldowns();
         CategoryManager::saveAll();

@@ -15,24 +15,22 @@ use pocketmine\Player;
 
 class EKImportCommand extends EKExecutor {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->setDataFromConfig("ekimport");
 
     }
 
-    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
-    {
-        if(!$sender instanceof Player){
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
+        if(!$sender instanceof Player) {
             $sender->sendMessage(LangUtils::getMessage("sender-not-player"));
             return true;
         }
 
-        if(isset($args[0])){
-            switch (strtolower($args[0])){
+        if(isset($args[0])) {
+            switch(strtolower($args[0])) {
                 case "advancedkits":
                     $name = "AdvancedKits";
-                    if(!AdvancedKitsImporter::isPluginLoaded()){
+                    if(!AdvancedKitsImporter::isPluginLoaded()) {
                         $sender->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
                         return true;
                     }
@@ -40,7 +38,7 @@ class EKImportCommand extends EKExecutor {
                     break;
                 case "kitui":
                     $name = "KitUI";
-                    if(!KitUIImporter::isPluginLoaded()){
+                    if(!KitUIImporter::isPluginLoaded()) {
                         $sender->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
                         return true;
                     }
@@ -48,7 +46,7 @@ class EKImportCommand extends EKExecutor {
                     break;
                 case "kitsplus":
                     $name = "KitsPlus";
-                    if(!KitsPlusImporter::isPluginLoaded()){
+                    if(!KitsPlusImporter::isPluginLoaded()) {
                         $sender->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
                         return true;
                     }
@@ -61,7 +59,7 @@ class EKImportCommand extends EKExecutor {
             }
             $success = 0;
             $failed = 0;
-            foreach($return as $bool){
+            foreach($return as $bool) {
                 if($bool) $success++;
                 else $failed++;
             }

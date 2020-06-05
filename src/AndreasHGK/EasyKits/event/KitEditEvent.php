@@ -13,8 +13,7 @@ class KitEditEvent extends KitEvent {
      */
     protected $originalKit;
 
-    public function __construct(Kit $old, Kit $new)
-    {
+    public function __construct(Kit $old, Kit $new) {
         parent::__construct($new);
         $this->originalKit = $old;
     }
@@ -23,7 +22,7 @@ class KitEditEvent extends KitEvent {
      * @return Kit
      */
     public function getOriginalKit() : Kit {
-        return$this->originalKit;
+        return $this->originalKit;
     }
 
 }

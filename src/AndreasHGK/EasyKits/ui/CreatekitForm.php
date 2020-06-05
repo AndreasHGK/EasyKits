@@ -15,48 +15,47 @@ use pocketmine\utils\TextFormat;
 
 class CreatekitForm {
 
-    public static function sendTo(Player $player): void
-    {
+    public static function sendTo(Player $player) : void {
         $categories = [
             TextFormat::colorize("/"),
         ];
-        foreach(CategoryManager::getAll() as $category){
+        foreach(CategoryManager::getAll() as $category) {
             $categories[] = TextFormat::colorize($category->getName());
         }
 
-        $ui = new CustomForm(function(Player $player, $data) use ($categories){
-            if($data === null){
+        $ui = new CustomForm(function (Player $player, $data) use ($categories) {
+            if($data === null) {
                 $player->sendMessage(LangUtils::getMessage("createkit-cancelled"));
                 return;
             }
-            if(!isset($data["name"])){
+            if(!isset($data["name"])) {
                 $player->sendMessage(LangUtils::getMessage("createkit-no-name"));
                 return;
             }
 
             $name = (string)$data["name"];
 
-            if(KitManager::exists($name)){
+            if(KitManager::exists($name)) {
                 $player->sendMessage(LangUtils::getMessage("createkit-duplicate"));
                 return;
             }
 
-            if(!isset($data["price"])){
+            if(!isset($data["price"])) {
                 $price = 0;
-            }elseif(!is_numeric((float)$data["price"])){
+            } elseif(!is_numeric((float)$data["price"])) {
                 $player->sendMessage(LangUtils::getMessage("createkit-invalid-price"));
                 return;
-            }else{
+            } else {
                 $price = (float)$data["price"];
             }
 
-            if(!isset($data["cooldown"])){
+            if(!isset($data["cooldown"])) {
                 $cooldown = 0;
-            }elseif(!is_numeric((float)$data["cooldown"])){
+            } elseif(!is_numeric((float)$data["cooldown"])) {
                 //todo: date format to time
                 $player->sendMessage(LangUtils::getMessage("createkit-invalid-cooldown"));
                 return;
-            }else{
+            } else {
                 $cooldown = (int)$data["cooldown"];
             }
 
@@ -72,7 +71,7 @@ class CreatekitForm {
 
             $permission = $data["permission"] ?? $name;
 
-            if(empty($items) && empty($armor)){
+            if(empty($items) && empty($armor)) {
                 $player->sendMessage(LangUtils::getMessage("createkit-empty-inventory"));
                 return;
             }
@@ -85,9 +84,9 @@ class CreatekitForm {
             $kit->setAlwaysClaim($alwaysClaim);
             $kit->setChestKit($chestKit);
 
-            if(isset($data["category"]) && $data["category"] !== 0){
+            if(isset($data["category"]) && $data["category"] !== 0) {
                 $categoryName = $categories[$data["category"]];
-                if(!CategoryManager::exists($categoryName)){
+                if(!CategoryManager::exists($categoryName)) {
                     $player->sendMessage(LangUtils::getMessage("createkit-invalid-category"));
                     return;
                 }
@@ -110,7 +109,7 @@ class CreatekitForm {
         $ui->addInput(LangUtils::getMessage("createkit-permission"), LangUtils::getMessage("createkit-permission-tip"), null, "permission");
         $ui->addInput(LangUtils::getMessage("createkit-price"), "", "0", "price");
         $ui->addInput(LangUtils::getMessage("createkit-cooldown"), "", "60", "cooldown");
-        if(!empty(CategoryManager::getAll())){
+        if(!empty(CategoryManager::getAll())) {
             $ui->addDropdown(LangUtils::getMessage("createkit-category"), $categories, 0, "category");
         }
         $ui->addLabel(LangUtils::getMessage("createkit-flags"));

@@ -11,23 +11,22 @@ use pocketmine\Player;
 
 class DeletekitForm {
 
-    public static function sendTo(Player $player): void
-    {
+    public static function sendTo(Player $player) : void {
         $kits = [];
-        foreach(KitManager::getAll() as $kit){
+        foreach(KitManager::getAll() as $kit) {
             $kits[] = $kit->getName();
         }
 
-        $ui = new CustomForm(function(Player $player, $data) use($kits){
-            if($data === null){
+        $ui = new CustomForm(function (Player $player, $data) use ($kits) {
+            if($data === null) {
                 $player->sendMessage(LangUtils::getMessage("deletekit-cancelled"));
                 return;
             }
-            if(!isset($data["kit"])){
+            if(!isset($data["kit"])) {
                 $player->sendMessage(LangUtils::getMessage("deletekit-empty"));
                 return;
             }
-            if(!KitManager::exists($kits[$data["kit"]])){
+            if(!KitManager::exists($kits[$data["kit"]])) {
                 $player->sendMessage(LangUtils::getMessage("deletekit-not-found"));
                 return;
             }

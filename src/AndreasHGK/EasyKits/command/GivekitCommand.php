@@ -15,41 +15,38 @@ use pocketmine\command\CommandSender;
 use pocketmine\Player;
 use pocketmine\Server;
 
-class GivekitCommand extends EKExecutor
-{
+class GivekitCommand extends EKExecutor {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->setDataFromConfig("givekit");
 
     }
 
-    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
-    {
-        if (!$sender instanceof Player) { //executable from console if all args are given
-            if (!isset($args[0])) {
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
+        if(!$sender instanceof Player) { //executable from console if all args are given
+            if(!isset($args[0])) {
                 $sender->sendMessage(LangUtils::getMessage("givekit-missing-argument-0"));
                 return true;
             }
-            if (!isset($args[1])) {
+            if(!isset($args[1])) {
                 $sender->sendMessage(LangUtils::getMessage("givekit-missing-argument-1"));
                 return true;
             }
             $player = Server::getInstance()->getPlayer($args[0]);
-            if ($player === null) {
+            if($player === null) {
                 $sender->sendMessage(LangUtils::getMessage("givekit-player-not-found"));
                 return true;
             }
             $kit = KitManager::get($args[1]);
-            if ($kit === null) {
+            if($kit === null) {
                 $sender->sendMessage(LangUtils::getMessage("givekit-kit-not-found"));
                 return true;
             }
             try {
                 TryClaim::ForceClaim($player, $kit);
                 $sender->sendMessage(LangUtils::getMessage("givekit-success", true, ["{KIT}" => $kit->getName(), "{PLAYER}" => $player->getName()]));
-            } catch (KitException $e) {
-                switch ($e->getCode()) {
+            } catch(KitException $e) {
+                switch($e->getCode()) {
                     case 3:
                         $sender->sendMessage(LangUtils::getMessage("givekit-insufficient-space"));
                         break;
@@ -61,23 +58,23 @@ class GivekitCommand extends EKExecutor
             return true;
         }
 
-        if (isset($args[0])) {
+        if(isset($args[0])) {
             $player = Server::getInstance()->getPlayer($args[0]);
-            if ($player === null) {
+            if($player === null) {
                 $sender->sendMessage(LangUtils::getMessage("givekit-player-not-found"));
                 return true;
             }
-            if (isset($args[1])) {
+            if(isset($args[1])) {
                 $kit = KitManager::get($args[1]);
-                if ($kit === null) {
+                if($kit === null) {
                     $sender->sendMessage(LangUtils::getMessage("givekit-kit-not-found"));
                     return true;
                 }
                 try {
                     TryClaim::ForceClaim($player, $kit);
                     $sender->sendMessage(LangUtils::getMessage("givekit-success", true, ["{KIT}" => $kit->getName(), "{PLAYER}" => $player->getName()]));
-                } catch (KitException $e) {
-                    switch ($e->getCode()) {
+                } catch(KitException $e) {
+                    switch($e->getCode()) {
                         case 3:
                             $sender->sendMessage(LangUtils::getMessage("givekit-insufficient-space"));
                             break;

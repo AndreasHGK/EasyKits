@@ -11,8 +11,7 @@ class KitClaimEvent extends KitEvent {
 
     use PlayerEventTrait;
 
-    public function __construct(Kit $kit, Player $player)
-    {
+    public function __construct(Kit $kit, Player $player) {
         parent::__construct($kit);
         $this->player = $player;
     }

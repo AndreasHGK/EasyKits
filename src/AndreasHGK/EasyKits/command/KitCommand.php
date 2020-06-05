@@ -17,39 +17,37 @@ use pocketmine\Player;
 
 class KitCommand extends EKExecutor {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->setDataFromConfig("kit");
 
     }
 
-    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
-    {
-        if(!$sender instanceof Player){
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
+        if(!$sender instanceof Player) {
             $sender->sendMessage(LangUtils::getMessage("sender-not-player"));
             return true;
         }
 
-        if(!isset($args[0])){
-            if(empty(KitManager::getPermittedKitsFor($sender)) && (empty(KitManager::getAll()) && !DataManager::getKey(DataManager::CONFIG, "show-locked"))){
+        if(!isset($args[0])) {
+            if(empty(KitManager::getPermittedKitsFor($sender)) && (empty(KitManager::getAll()) && !DataManager::getKey(DataManager::CONFIG, "show-locked"))) {
                 $sender->sendMessage(LangUtils::getMessage("kit-none-available"));
                 return true;
             }
-            if(!DataManager::getKey(DataManager::CONFIG, "use-forms")){
+            if(!DataManager::getKey(DataManager::CONFIG, "use-forms")) {
                 $list = implode("§7, §f", KitManager::getPermittedKitsFor($sender));
                 $sender->sendMessage(LangUtils::getMessage("kit-list", true, ["{KITS}" => $list]));
                 return true;
             }
 
-            if(!empty(CategoryManager::getAll())){
+            if(!empty(CategoryManager::getAll())) {
                 CategorySelectForm::sendTo($sender);
-            }else{
+            } else {
                 KitSelectForm::sendTo($sender);
             }
             return true;
         }
 
-        if(!KitManager::exists($args[0])){
+        if(!KitManager::exists($args[0])) {
             $sender->sendMessage(LangUtils::getMessage("kit-not-found"));
             return true;
         }

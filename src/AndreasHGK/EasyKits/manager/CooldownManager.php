@@ -24,8 +24,8 @@ class CooldownManager {
      */
     public static function hasKitCooldown(Kit $kit, Player $player) : bool {
         $kitCooldowns = self::getCooldowns();
-        if(isset($kitCooldowns[$kit->getName()][$player->getName()])){
-            if($kitCooldowns[$kit->getName()][$player->getName()] + $kit->getCooldown() > time()){
+        if(isset($kitCooldowns[$kit->getName()][$player->getName()])) {
+            if($kitCooldowns[$kit->getName()][$player->getName()] + $kit->getCooldown() > time()) {
                 return true;
             }
             self::unsetKitCooldown($kit, $player);
@@ -65,10 +65,9 @@ class CooldownManager {
     }
 
 
-
     /**
-     * @internal
      * @return array
+     * @internal
      */
     public static function getCooldowns() : array {
         return self::getInstance()->cooldowns;
@@ -89,7 +88,8 @@ class CooldownManager {
         DataManager::save(DataManager::COOLDOWN);
     }
 
-    private function __construct(){}
+    private function __construct() {
+    }
 
     public static function getInstance() : self {
         if(self::$instance === null) self::$instance = new self();

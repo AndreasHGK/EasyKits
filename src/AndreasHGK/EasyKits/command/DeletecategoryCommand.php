@@ -12,15 +12,13 @@ use pocketmine\Player;
 
 class DeletecategoryCommand extends EKExecutor {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->setDataFromConfig("deletecategory");
 
     }
 
-    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
-    {
-        if(!$sender instanceof Player){
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
+        if(!$sender instanceof Player) {
             $sender->sendMessage(LangUtils::getMessage("sender-not-player"));
             return true;
         }

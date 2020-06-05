@@ -13,26 +13,24 @@ use pocketmine\Player;
 
 class EditkitCommand extends EKExecutor {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->setDataFromConfig("editkit");
     }
 
-    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
-    {
-        if(!$sender instanceof Player){
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
+        if(!$sender instanceof Player) {
             $sender->sendMessage(LangUtils::getMessage("sender-not-player"));
             return true;
         }
 
-        if(empty(KitManager::getAll())){
+        if(empty(KitManager::getAll())) {
             $sender->sendMessage(LangUtils::getMessage("editkit-none-available"));
             return true;
         }
 
-        if(isset($args[0])){
+        if(isset($args[0])) {
             $kitname = $args[0];
-            if(!KitManager::exists($kitname)){
+            if(!KitManager::exists($kitname)) {
                 $sender->sendMessage(LangUtils::getMessage("editkit-not-found"));
                 return true;
             }

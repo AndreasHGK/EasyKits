@@ -11,16 +11,15 @@ use pocketmine\Server;
 
 class GivekitPlayerSelectForm {
 
-    public static function sendTo(Player $player): void
-    {
+    public static function sendTo(Player $player) : void {
 
         $ui = new SimpleForm(function (Player $player, $data) {
-            if($data === null){
+            if($data === null) {
                 $player->sendMessage(LangUtils::getMessage("givekit-cancelled"));
                 return;
             }
             $target = Server::getInstance()->getPlayer($data);
-            if($target === null){
+            if($target === null) {
                 $player->sendMessage(LangUtils::getMessage("givekit-player-not-found"));
                 return;
             }

@@ -10,16 +10,15 @@ use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
 use pocketmine\Server;
 
-class AdvancedKitsImporter{
+class AdvancedKitsImporter {
 
     public static $kitPlugin;
 
-    public static function ImportAll(): array
-    {
+    public static function ImportAll() : array {
         $kp = self::getKitPlugin();
         if(!self::isPluginLoaded()) return [];
         $return = [];
-        foreach($kp->kits as $name => $kit){
+        foreach($kp->kits as $name => $kit) {
             $return[$name] = self::Import($kit);
         }
         KitManager::saveAll();
@@ -27,8 +26,7 @@ class AdvancedKitsImporter{
     }
 
     //a big thanks to AdvancedKits for no $kit->getItems() method
-    public static function Import(\AdvancedKits\Kit $akit): bool
-    {
+    public static function Import(\AdvancedKits\Kit $akit) : bool {
         $name = $akit->getName();
         if(KitManager::exists($name)) return false;
 
@@ -40,9 +38,9 @@ class AdvancedKitsImporter{
         $reflect->setAccessible(true);
         $akArmor = $reflect->getValue($akit);
         $armor = [];
-        foreach($akArmor as $slot => $akArmorItem){
+        foreach($akArmor as $slot => $akArmorItem) {
             if($akArmorItem === null) continue;
-            switch ($slot){
+            switch($slot) {
                 case "helmet":
                     $key = 0;
                     break;
@@ -62,7 +60,7 @@ class AdvancedKitsImporter{
         }
         $reflect = new \ReflectionProperty(\AdvancedKits\Kit::class, "coolDown");
         $reflect->setAccessible(true);
-        $cooldown = $reflect->getValue($akit)*60;
+        $cooldown = $reflect->getValue($akit) * 60;
 
         $reflect = new \ReflectionProperty(\AdvancedKits\Kit::class, "cost");
         $reflect->setAccessible(true);
@@ -72,14 +70,14 @@ class AdvancedKitsImporter{
         $reflect->setAccessible(true);
         $Aeffects = $reflect->getValue($akit);
         $effects = [];
-        foreach ($Aeffects as $effect){
+        foreach($Aeffects as $effect) {
             $effects[$effect->getId()] = $effect;
         }
 
-        $commands = \Closure::bind(function (){
+        $commands = \Closure::bind(function () {
             $cmds = [];
-            if(isset($this->data['commands']) && is_array($this->data['commands'])){
-                foreach($this->data['commands'] as $cmd){
+            if(isset($this->data['commands']) && is_array($this->data['commands'])) {
+                foreach($this->data['commands'] as $cmd) {
                     $cmds[] = str_replace("{player}", "{PLAYER}", $cmd);
                 }
             }
@@ -102,8 +100,7 @@ class AdvancedKitsImporter{
         return true;
     }
 
-    public static function getKitPlugin(): ?Main
-    {
+    public static function getKitPlugin() : ?Main {
         if(!isset(self::$kitPlugin)) self::$kitPlugin = Server::getInstance()->getPluginManager()->getPlugin("AdvancedKits");
         $pl = self::$kitPlugin;
         return $pl instanceof Main ? $pl : null;
@@ -113,8 +110,7 @@ class AdvancedKitsImporter{
         return self::getKitPlugin() !== null;
     }
 
-    private function __construct()
-    {
+    private function __construct() {
     }
 
 }

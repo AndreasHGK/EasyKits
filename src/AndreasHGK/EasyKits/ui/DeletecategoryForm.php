@@ -11,27 +11,26 @@ use pocketmine\Player;
 
 class DeletecategoryForm {
 
-    public static function sendTo(Player $player): void
-    {
+    public static function sendTo(Player $player) : void {
         $categories = [];
-        foreach(CategoryManager::getAll() as $category){
+        foreach(CategoryManager::getAll() as $category) {
             $categories[] = $category->getName();
         }
 
-        $ui = new CustomForm(function(Player $player, $data) use($categories){
-            if($data === null){
+        $ui = new CustomForm(function (Player $player, $data) use ($categories) {
+            if($data === null) {
                 $player->sendMessage(LangUtils::getMessage("deletecategory-cancelled"));
                 return;
             }
-            if(!isset($data["category"])){
+            if(!isset($data["category"])) {
                 $player->sendMessage(LangUtils::getMessage("deletecategory-empty"));
                 return;
             }
-            if(!CategoryManager::exists($categories[$data["category"]])){
+            if(!CategoryManager::exists($categories[$data["category"]])) {
                 $player->sendMessage(LangUtils::getMessage("deletecategory-not-found"));
                 return;
             }
-            if(CategoryManager::remove(CategoryManager::get($categories[$data["category"]]))){
+            if(CategoryManager::remove(CategoryManager::get($categories[$data["category"]]))) {
                 $player->sendMessage(LangUtils::getMessage("deletecategory-success", true, ["{NAME}" => $categories[$data["category"]]]));
                 CategoryManager::saveAll();
             }

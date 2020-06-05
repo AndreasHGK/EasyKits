@@ -11,8 +11,7 @@ class CategorySelectEvent extends CategoryEvent {
 
     use PlayerEventTrait;
 
-    public function __construct(Player $player, Category $category)
-    {
+    public function __construct(Player $player, Category $category) {
         parent::__construct($category);
         $this->player = $player;
     }

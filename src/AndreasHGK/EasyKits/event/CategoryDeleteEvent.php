@@ -8,8 +8,7 @@ use AndreasHGK\EasyKits\Category;
 
 class CategoryDeleteEvent extends CategoryEvent {
 
-    public function __construct(Category $category)
-    {
+    public function __construct(Category $category) {
         parent::__construct($category);
     }
 

@@ -22,8 +22,7 @@ use pocketmine\permission\PermissionManager;
 use pocketmine\Player;
 use pocketmine\Server;
 
-class Kit
-{
+class Kit {
 
     //items
     /**
@@ -84,28 +83,28 @@ class Kit
 
     public function claimChestKitFor(Player $player) : bool {
         if(!$this->hasPermission($player) && $this->isLocked()) throw new KitException("Player is not permitted to claim this kit", 4);
-        if($this->getCooldown() > 0){
-            if(CooldownManager::hasKitCooldown($this, $player)){
+        if($this->getCooldown() > 0) {
+            if(CooldownManager::hasKitCooldown($this, $player)) {
                 throw new KitException("Kit is on cooldown", 0);
             }
         }
-        if($this->getPrice() > 0){
-            if(EconomyManager::isEconomyLoaded()){
-                if(EconomyManager::getMoney($player) < $this->getPrice()){
+        if($this->getPrice() > 0) {
+            if(EconomyManager::isEconomyLoaded()) {
+                if(EconomyManager::getMoney($player) < $this->getPrice()) {
                     throw new KitException("Player has insufficient funds", 1);
                 }
-            }else{
+            } else {
                 throw new KitException("Economy not found", 2);
             }
         }
 
-        if(count($player->getInventory()->getContents(false)) >= $player->getInventory()->getSize()){
+        if(count($player->getInventory()->getContents(false)) >= $player->getInventory()->getSize()) {
             throw new KitException("Player has insufficient space", 3);
         }
 
         $kit = clone $this;
-        if($player->hasPermission(EasyKits::PERM_ROOT."free.".$kit->getPermission())) $kit->price = 0;
-        if($player->hasPermission(EasyKits::PERM_ROOT."instant.".$kit->getPermission())) $kit->cooldown = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT . "free." . $kit->getPermission())) $kit->price = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT . "instant." . $kit->getPermission())) $kit->cooldown = 0;
 
         $event = new InteractItemClaimEvent($kit, $player);
         $event->call();
@@ -116,10 +115,10 @@ class Kit
         $player = $event->getPlayer();
         $kit = $event->getKit();
 
-        if($kit->getCooldown() > 0){
+        if($kit->getCooldown() > 0) {
             CooldownManager::setKitCooldown($kit, $player);
         }
-        if($kit->getPrice() > 0){
+        if($kit->getPrice() > 0) {
             EconomyManager::reduceMoney($player, $kit->getPrice(), true);
         }
         $player->getInventory()->addItem($kit->getInteractItem());
@@ -134,17 +133,17 @@ class Kit
      */
     public function claimFor(Player $player) : bool {
         if(!$this->hasPermission($player) && $this->isLocked()) throw new KitException("Player is not permitted to claim this kit", 4);
-        if($this->getCooldown() > 0){
-            if(CooldownManager::hasKitCooldown($this, $player)){
+        if($this->getCooldown() > 0) {
+            if(CooldownManager::hasKitCooldown($this, $player)) {
                 throw new KitException("Kit is on cooldown", 0);
             }
         }
-        if($this->getPrice() > 0){
-            if(EconomyManager::isEconomyLoaded()){
-                if(EconomyManager::getMoney($player) < $this->getPrice()){
+        if($this->getPrice() > 0) {
+            if(EconomyManager::isEconomyLoaded()) {
+                if(EconomyManager::getMoney($player) < $this->getPrice()) {
                     throw new KitException("Player has insufficient funds", 1);
                 }
-            }else{
+            } else {
                 throw new KitException("Economy not found", 2);
             }
         }
@@ -156,24 +155,24 @@ class Kit
         $playerSlots = $playerInv->getContents(false);
         $invSlots = $this->getItems();
         $invCount = count($invSlots);
-        if($this->doOverrideArmor()){
-            foreach($armorSlots as $key => $armorSlot){
-                if($playerArmor[$key]->getId() !== Item::AIR){
+        if($this->doOverrideArmor()) {
+            foreach($armorSlots as $key => $armorSlot) {
+                if($playerArmor[$key]->getId() !== Item::AIR) {
                     $invCount++;
                 }
             }
         }
-        if(!$this->alwaysClaim()){
-            if($invCount > $playerInv->getSize()){
+        if(!$this->alwaysClaim()) {
+            if($invCount > $playerInv->getSize()) {
                 throw new KitException("Player has insufficient space", 3);
             }
-            if(!$this->emptyOnClaim() && !$this->doOverride() && $invCount > ($playerInv->getSize() - count($playerSlots))){
+            if(!$this->emptyOnClaim() && !$this->doOverride() && $invCount > ($playerInv->getSize() - count($playerSlots))) {
                 throw new KitException("Player has insufficient space", 3);
             }
         }
         $kit = clone $this;
-        if($player->hasPermission(EasyKits::PERM_ROOT."free.".$kit->getPermission())) $kit->price = 0;
-        if($player->hasPermission(EasyKits::PERM_ROOT."instant.".$kit->getPermission())) $kit->cooldown = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT . "free." . $kit->getPermission())) $kit->price = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT . "instant." . $kit->getPermission())) $kit->cooldown = 0;
         $event = new KitClaimEvent($kit, $player);
         $event->call();
 
@@ -182,29 +181,29 @@ class Kit
         $player = $event->getPlayer();
         $kit = $event->getKit();
 
-        if($kit->getCooldown() > 0){
+        if($kit->getCooldown() > 0) {
             CooldownManager::setKitCooldown($kit, $player);
         }
-        if($kit->getPrice() > 0){
+        if($kit->getPrice() > 0) {
             EconomyManager::reduceMoney($player, $kit->getPrice(), true);
         }
-        if($kit->emptyOnClaim()){
+        if($kit->emptyOnClaim()) {
             $playerInv->clearAll();
             $playerArmorInv->clearAll();
         }
-        foreach($invSlots as $key => $invSlot){
+        foreach($invSlots as $key => $invSlot) {
             if($kit->doOverride()) $playerInv->setItem($key, $invSlot);
             else $playerInv->addItem($invSlot);
         }
-        foreach($armorSlots as $key => $armorSlot){
+        foreach($armorSlots as $key => $armorSlot) {
             if($kit->doOverrideArmor()) $playerArmorInv->setItem($key, $armorSlot);
             elseif($playerArmorInv->getItem($key)->getId() !== Item::AIR) $playerInv->addItem($armorSlot);
             else $playerArmorInv->setItem($key, $armorSlot);
         }
-        foreach($kit->getEffects() as $effect){
+        foreach($kit->getEffects() as $effect) {
             $player->addEffect($effect);
         }
-        foreach($kit->getCommands() as $command){
+        foreach($kit->getCommands() as $command) {
             Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), LangUtils::replaceVariables($command, ["{PLAYER}" => $player->getName(), "{NICK}" => $player->getDisplayName()]));
         }
         return true;
@@ -219,7 +218,7 @@ class Kit
     }
 
     public function setInteractItem(Item $item) : void {
-        if(!$item->getNamedTag()->hasTag("ekit") || $item->getNamedTag()->getTagValue("ekit", StringTag::class) !== $this->getName()){
+        if(!$item->getNamedTag()->hasTag("ekit") || $item->getNamedTag()->getTagValue("ekit", StringTag::class) !== $this->getName()) {
             $item->setNamedTagEntry(new StringTag("ekit", $this->name));
         }
         $this->interactItem = $item;
@@ -230,7 +229,7 @@ class Kit
      * @return bool
      */
     public function hasPermission(Permissible $permissible) : bool {
-        return $permissible->hasPermission(EasyKits::PERM_ROOT."kit.".$this->getPermission()) || !$this->isLocked() || $permissible->hasPermission(EasyKits::PERM_ROOT."kit");
+        return $permissible->hasPermission(EasyKits::PERM_ROOT . "kit." . $this->getPermission()) || !$this->isLocked() || $permissible->hasPermission(EasyKits::PERM_ROOT . "kit");
     }
 
     /**
@@ -245,8 +244,8 @@ class Kit
     /**
      * Set the permission needed to claim the kit
      *
-     * @internal use the changePermission() function
      * @param string $permission
+     * @internal use the changePermission() function
      */
     public function setPermission(string $permission) : void {
         $this->permission = $permission;
@@ -266,8 +265,7 @@ class Kit
     /**
      * @return string
      */
-    public function getName(): string
-    {
+    public function getName() : string {
         return $this->name;
     }
 
@@ -281,8 +279,7 @@ class Kit
     /**
      * @return Item[]
      */
-    public function getItems(): array
-    {
+    public function getItems() : array {
         return $this->items;
     }
 
@@ -296,8 +293,7 @@ class Kit
     /**
      * @return Item[]
      */
-    public function getArmor(): array
-    {
+    public function getArmor() : array {
         return $this->armor;
     }
 
@@ -311,34 +307,30 @@ class Kit
     /**
      * @return float
      */
-    public function getPrice(): float
-    {
+    public function getPrice() : float {
         return $this->price;
     }
 
     /**
      * @param float $price
      */
-    public function setPrice(float $price): void
-    {
-        if ($price < 0) throw new KitException("price can't be below 0");
+    public function setPrice(float $price) : void {
+        if($price < 0) throw new KitException("price can't be below 0");
         $this->price = $price;
     }
 
     /**
      * @return int
      */
-    public function getCooldown(): int
-    {
+    public function getCooldown() : int {
         return $this->cooldown;
     }
 
     /**
      * @param int $cooldown
      */
-    public function setCooldown(int $cooldown): void
-    {
-        if ($cooldown < 0) throw new KitException("cooldown can't be below 0");
+    public function setCooldown(int $cooldown) : void {
+        if($cooldown < 0) throw new KitException("cooldown can't be below 0");
         $this->cooldown = $cooldown;
     }
 
@@ -373,80 +365,70 @@ class Kit
     /**
      * @return bool
      */
-    public function isLocked(): bool
-    {
+    public function isLocked() : bool {
         return $this->locked;
     }
 
     /**
      * @param bool $locked
      */
-    public function setLocked(bool $locked): void
-    {
+    public function setLocked(bool $locked) : void {
         $this->locked = $locked;
     }
 
     /**
      * @return bool
      */
-    public function doOverride(): bool
-    {
+    public function doOverride() : bool {
         return $this->doOverride;
     }
 
     /**
      * @param bool $doOverride
      */
-    public function setDoOverride(bool $doOverride): void
-    {
+    public function setDoOverride(bool $doOverride) : void {
         $this->doOverride = $doOverride;
     }
 
     /**
      * @return bool
      */
-    public function doOverrideArmor(): bool
-    {
+    public function doOverrideArmor() : bool {
         return $this->doOverrideArmor;
     }
 
     /**
      * @param bool $doOverrideArmor
      */
-    public function setDoOverrideArmor(bool $doOverrideArmor): void
-    {
+    public function setDoOverrideArmor(bool $doOverrideArmor) : void {
         $this->doOverrideArmor = $doOverrideArmor;
     }
 
     /**
      * @return bool
      */
-    public function alwaysClaim(): bool
-    {
+    public function alwaysClaim() : bool {
         return $this->alwaysClaim;
     }
 
     /**
      * @param bool $alwaysClaim
      */
-    public function setAlwaysClaim(bool $alwaysClaim): void
-    {
+    public function setAlwaysClaim(bool $alwaysClaim) : void {
         $this->alwaysClaim = $alwaysClaim;
     }
 
     /**
      * @return bool
      */
-    public function emptyOnClaim(): bool
-    {
+    public function emptyOnClaim() : bool {
         return $this->emptyOnClaim;
     }
 
     /**
      * @param bool $emptyOnClaim
      */
-    public function setEmptyOnClaim(bool $emptyOnClaim): void
-    {
+    public function setEmptyOnClaim(bool $emptyOnClaim) : void {
         $this->emptyOnClaim = $emptyOnClaim;
     }
 
@@ -462,12 +444,12 @@ class Kit
      */
     public function setChestKit(bool $bool) : void {
         $this->chestKit = $bool;
-        if($bool){
+        if($bool) {
             $item = ItemFactory::get(DataManager::getKey(DataManager::CONFIG, "chestKit-itemid"));
             $item->setCustomName(LangUtils::getMessage("chestkit-name", true, ["{NAME}" => $this->getName()]));
             $item->setLore(LangUtils::getMessage("chestkit-lore"));
             $this->setInteractItem($item);
-        }elseif(isset($this->chestKit)){
+        } elseif(isset($this->chestKit)) {
             $this->interactItem = null;
         }
     }
@@ -480,16 +462,16 @@ class Kit
     private function registerPermissions() : void {
         $permissionManager = PermissionManager::getInstance();
 
-        $permissionManager->addPermission(new Permission(EasyKits::PERM_ROOT."kit.".$this->getPermission(),
-            "permission to claim kit ".$this->getName(),
+        $permissionManager->addPermission(new Permission(EasyKits::PERM_ROOT . "kit." . $this->getPermission(),
+            "permission to claim kit " . $this->getName(),
             DataManager::getKey(DataManager::CONFIG, "op-has-all-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
 
-        $permissionManager->addPermission(new Permission(EasyKits::PERM_ROOT."free.".$this->getPermission(),
-            "permission to claim kit ".$this->getName()." for free",
+        $permissionManager->addPermission(new Permission(EasyKits::PERM_ROOT . "free." . $this->getPermission(),
+            "permission to claim kit " . $this->getName() . " for free",
             DataManager::getKey(DataManager::CONFIG, "op-has-free-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
 
-        $permissionManager->addPermission(new Permission(EasyKits::PERM_ROOT."instant.".$this->getPermission(),
-            "permission to claim kit ".$this->getName()." without cooldown",
+        $permissionManager->addPermission(new Permission(EasyKits::PERM_ROOT . "instant." . $this->getPermission(),
+            "permission to claim kit " . $this->getName() . " without cooldown",
             DataManager::getKey(DataManager::CONFIG, "op-has-instant-kits") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
     }
 
@@ -501,9 +483,9 @@ class Kit
     public function unregisterPermissions() : void {
         $permissionManager = PermissionManager::getInstance();
 
-        $permissionManager->removePermission(EasyKits::PERM_ROOT."kit.".$this->getPermission());
-        $permissionManager->removePermission(EasyKits::PERM_ROOT."free.".$this->getPermission());
-        $permissionManager->removePermission(EasyKits::PERM_ROOT."instant.".$this->getPermission());
+        $permissionManager->removePermission(EasyKits::PERM_ROOT . "kit." . $this->getPermission());
+        $permissionManager->removePermission(EasyKits::PERM_ROOT . "free." . $this->getPermission());
+        $permissionManager->removePermission(EasyKits::PERM_ROOT . "instant." . $this->getPermission());
     }
 
     public function __toString() {

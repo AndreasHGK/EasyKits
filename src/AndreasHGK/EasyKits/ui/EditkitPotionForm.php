@@ -15,17 +15,16 @@ use pocketmine\Player;
 
 class EditkitPotionForm {
 
-    public static function sendTo(Player $player, Kit $kit, int $potion): void
-    {
+    public static function sendTo(Player $player, Kit $kit, int $potion) : void {
         if(isset($kit->getEffects()[$potion])) $kitPot = $kit->getEffects()[$potion];
 
         $effect = Effect::getEffect($potion);
-        $ui = new CustomForm(function(Player $player, $data) use($kit, $potion, $effect){
-            if($data === null){
+        $ui = new CustomForm(function (Player $player, $data) use ($kit, $potion, $effect) {
+            if($data === null) {
                 EditkitPotionSelectForm::sendTo($player, $kit);
                 return;
             }
-            if(!$data["enabled"]){
+            if(!$data["enabled"]) {
                 $effects = $kit->getEffects();
                 if(isset($effects[$potion])) {
                     unset($effects[$potion]);
@@ -38,16 +37,16 @@ class EditkitPotionForm {
                 return;
             }
 
-            if(!is_int((int)$data["duration"]) || (int)$data["duration"] < 1){
+            if(!is_int((int)$data["duration"]) || (int)$data["duration"] < 1) {
                 $player->sendMessage(LangUtils::getMessage("editkit-potion-invalid-duration"));
                 return;
             }
-            if(!is_int((int)$data["amplifier"]) || (int)$data["amplifier"] < 1){
+            if(!is_int((int)$data["amplifier"]) || (int)$data["amplifier"] < 1) {
                 $player->sendMessage(LangUtils::getMessage("editkit-potion-invalid-amplifier"));
                 return;
             }
 
-            $instance = new EffectInstance($effect, (int)$data["duration"]*20, (int)$data["amplifier"]-1);
+            $instance = new EffectInstance($effect, (int)$data["duration"] * 20, (int)$data["amplifier"] - 1);
 
             $new = clone $kit;
 
@@ -55,7 +54,7 @@ class EditkitPotionForm {
             $eff[$potion] = $instance;
             $new->setEffects($eff);
 
-            if(KitManager::update($kit, $new)){
+            if(KitManager::update($kit, $new)) {
                 KitManager::saveAll();
 
                 $player->sendMessage(LangUtils::getMessage("editkit-potion-success-added", true, [
@@ -73,8 +72,8 @@ class EditkitPotionForm {
         ]));
 
         $ui->addToggle(LangUtils::getMessage("editkit-potion-toggle"), isset($kitPot), "enabled");
-        $ui->addInput(LangUtils::getMessage("editkit-potion-duration"), "", isset($kitPot) ? (string)($kitPot->getDuration()/20) : "10", "duration");
-        $ui->addInput(LangUtils::getMessage("editkit-potion-amplifier"), "", isset($kitPot) ? (string)($kitPot->getAmplifier()+1) : "1", "amplifier");
+        $ui->addInput(LangUtils::getMessage("editkit-potion-duration"), "", isset($kitPot) ? (string)($kitPot->getDuration() / 20) : "10", "duration");
+        $ui->addInput(LangUtils::getMessage("editkit-potion-amplifier"), "", isset($kitPot) ? (string)($kitPot->getAmplifier() + 1) : "1", "amplifier");
 
         $player->sendForm($ui);
     }

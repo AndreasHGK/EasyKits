@@ -14,10 +14,9 @@ use pocketmine\Player;
 
 class EditkitPotionSelectForm {
 
-    public static function sendTo(Player $player, Kit $kit): void
-    {
-        $ui = new SimpleForm(function(Player $player, $data) use($kit){
-            if($data === null){
+    public static function sendTo(Player $player, Kit $kit) : void {
+        $ui = new SimpleForm(function (Player $player, $data) use ($kit) {
+            if($data === null) {
                 EditkitMainForm::sendTo($player, $kit);
                 return;
             }
@@ -29,7 +28,9 @@ class EditkitPotionSelectForm {
         $ui->setTitle(LangUtils::getMessage("editkit-title"));
         $ui->setContent(LangUtils::getMessage("editkit-potionselect-text"));
 
-        $effects = Closure::bind(static function(){return Effect::$effects;}, null, Effect::class)();
+        $effects = Closure::bind(static function () {
+            return Effect::$effects;
+        }, null, Effect::class)();
         foreach($effects as $effect) {
             $ui->addButton(LangUtils::getMessage("editkit-potionselect-button", true, ["{POTION}" => new TranslationContainer($effect->getName())]), -1, "", (string)$effect->getId());
         }

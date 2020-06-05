@@ -14,11 +14,11 @@ abstract class TryClaim {
 
     public static function tryClaim(Kit $kit, Player $player) : void {
 
-        try{
+        try {
             if($kit->claim($player)) $player->sendMessage(LangUtils::getMessage("kit-claim-success", true, ["{NAME}" => $kit->getName()]));
 
-        }catch(KitException $e){
-            switch ($e->getCode()){
+        } catch(KitException $e) {
+            switch($e->getCode()) {
                 case 0:
                     $time = CooldownManager::getKitCooldown($kit, $player);
                     $timeString = TimeUtils::intToTimeString($time);
@@ -44,16 +44,16 @@ abstract class TryClaim {
     }
 
     public static function TryChestClaim(Player $player, Item $chestkit, Kit $kit) : void {
-        try{
+        try {
             $kit->setPrice(0);
             $kit->setCooldown(0);
-            if(!DataManager::getKey(DataManager::CONFIG, "chestKit-locked")){
+            if(!DataManager::getKey(DataManager::CONFIG, "chestKit-locked")) {
                 $kit->setLocked(false);
             }
             if($kit->claimFor($player)) $player->sendMessage(LangUtils::getMessage("chestclaim-success", true, ["{NAME}" => $kit->getName()]));
             $player->getInventory()->remove($chestkit);
-        }catch(KitException $e){
-            switch ($e->getCode()){
+        } catch(KitException $e) {
+            switch($e->getCode()) {
                 case 0:
                     $time = CooldownManager::getKitCooldown($kit, $player);
                     $timeString = TimeUtils::intToTimeString($time);

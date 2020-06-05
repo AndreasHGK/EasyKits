@@ -42,8 +42,8 @@ class KitManager {
      */
     public static function getPermittedKitsFor(Permissible $permissible) : array {
         $kits = [];
-        foreach(KitManager::getAll() as $kit){
-            if($kit->hasPermission($permissible)){
+        foreach(KitManager::getAll() as $kit) {
+            if($kit->hasPermission($permissible)) {
                 $kits[] = $kit;
             }
         }
@@ -57,7 +57,7 @@ class KitManager {
 
         if($event->isCancelled()) return false;
 
-        if($event->getOriginalKit()->getName() !== $event->getKit()->getName()){
+        if($event->getOriginalKit()->getName() !== $event->getKit()->getName()) {
             self::remove($old, true);
         }
         self::$kits[$event->getKit()->getName()] = $event->getKit();
@@ -108,7 +108,7 @@ class KitManager {
 
     public static function loadAll() : void {
         $file = self::getKitFile()->getAll();
-        foreach ($file as $name => $kit){
+        foreach($file as $name => $kit) {
             self::load((string)$name);
         }
     }
@@ -127,12 +127,12 @@ class KitManager {
         unset(self::$kits[$kit]);
     }
 
-    public static function exists(string $kit) : bool{
+    public static function exists(string $kit) : bool {
         return isset(self::$kits[$kit]);
     }
 
     public static function saveAll() : void {
-        foreach(self::getAll() as $name => $kit){
+        foreach(self::getAll() as $name => $kit) {
             self::save((string)$name);
         }
         DataManager::save(DataManager::KITS);
@@ -145,23 +145,23 @@ class KitManager {
     public static function load(string $name) : void {
         $file = self::getKitFile()->getAll();
         $kitdata = $file[$name];
-        try{
+        try {
 
             $items = [];
-            foreach ($kitdata["items"] as $slot => $itemData){
+            foreach($kitdata["items"] as $slot => $itemData) {
                 $items[$slot] = ItemUtils::dataToItem($itemData);
             }
 
             $armor = [];
-            foreach ($kitdata["armor"] as $slot => $itemData){
+            foreach($kitdata["armor"] as $slot => $itemData) {
                 $armor[$slot] = ItemUtils::dataToItem($itemData);;
             }
             $effects = [];
-            foreach($kitdata["effects"] ?? [] as $id => $effect){
+            foreach($kitdata["effects"] ?? [] as $id => $effect) {
                 $effects[$id] = new EffectInstance(Effect::getEffect($id), $effect["duration"] ?? null, $effect["amplifier"] ?? 0);
             }
             $commands = [];
-            foreach($kitdata["commands"] ?? [] as $command){
+            foreach($kitdata["commands"] ?? [] as $command) {
                 $commands[] = $command;
             }
 
@@ -180,8 +180,8 @@ class KitManager {
 
             self::$kits[$name] = $kit;
 
-        }catch (\Throwable $e){
-            EasyKits::get()->getLogger()->error("failed to load kit '".$name."'");
+        } catch(\Throwable $e) {
+            EasyKits::get()->getLogger()->error("failed to load kit '" . $name . "'");
             EasyKits::get()->getLogger()->debug($e->getMessage());
         }
     }
@@ -203,29 +203,30 @@ class KitManager {
         $kitData["flags"]["alwaysClaim"] = $kit->alwaysClaim();
         $kitData["flags"]["emptyOnClaim"] = $kit->emptyOnClaim();
         $kitData["flags"]["chestKit"] = $kit->isChestKit();
-        foreach($kit->getItems() as $slot => $item){
+        foreach($kit->getItems() as $slot => $item) {
             $kitData["items"][$slot] = ItemUtils::itemToData($item);
         }
-        foreach($kit->getArmor() as $slot => $item){
+        foreach($kit->getArmor() as $slot => $item) {
             $kitData["armor"][$slot] = ItemUtils::itemToData($item);
         }
-        foreach($kit->getEffects() as $effect){
+        foreach($kit->getEffects() as $effect) {
             $kitData["effects"][$effect->getId()] = [
                 "amplifier" => $effect->getAmplifier(),
                 "duration" => $effect->getDuration(),
             ];
         }
-        foreach ($kit->getCommands() as $command){
+        foreach($kit->getCommands() as $command) {
             $kitData["commands"][] = $command;
         }
         $file->set($kit->getName(), $kitData);
     }
 
-    private static function getKitFile() : Config{
+    private static function getKitFile() : Config {
         return DataManager::get(DataManager::KITS);
     }
 
-    private function __construct(){}
+    private function __construct() {
+    }
 
 
 }

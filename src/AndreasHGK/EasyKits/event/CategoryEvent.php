@@ -12,8 +12,7 @@ abstract class CategoryEvent extends Event implements Cancellable {
 
     protected $category;
 
-    public function __construct(Category $category)
-    {
+    public function __construct(Category $category) {
         $this->category = $category;
     }
 

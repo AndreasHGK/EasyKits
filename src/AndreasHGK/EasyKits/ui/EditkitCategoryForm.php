@@ -12,24 +12,23 @@ use pocketmine\Player;
 
 class EditkitCategoryForm {
 
-    public static function sendTo(Player $player, Kit $kit): void
-    {
+    public static function sendTo(Player $player, Kit $kit) : void {
 
-        $ui = new CustomForm(function(Player $player, $data) use($kit){
-            if($data === null){
+        $ui = new CustomForm(function (Player $player, $data) use ($kit) {
+            if($data === null) {
                 EditkitMainForm::sendTo($player, $kit);
                 return;
             }
             $success = 0;
             $removed = 0;
-            foreach($data as $name => $enabled){
+            foreach($data as $name => $enabled) {
                 if(!is_string($name)) continue;
                 $old = CategoryManager::get($name);
-                if($enabled){
+                if($enabled) {
                     $category = clone $old;
                     $category->addKit($kit);
                     if(CategoryManager::update($old, $category)) $success++;
-                }else{
+                } else {
                     $category = clone $old;
                     if($category->hasKit($kit)) {
                         $category->removeKit($kit);
@@ -45,7 +44,7 @@ class EditkitCategoryForm {
 
         $ui->addLabel(LangUtils::getMessage("editkit-general-categories"));
 
-        foreach(CategoryManager::getAll() as $category){
+        foreach(CategoryManager::getAll() as $category) {
             $ui->addToggle(LangUtils::getMessage("editkit-category-format", true, ["{NAME}" => $category->getName()]), $category->hasKit($kit), $category->getName());
         }
 

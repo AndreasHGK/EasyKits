@@ -9,7 +9,7 @@ use pocketmine\permission\Permissible;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 
-class Category{
+class Category {
 
     /** @var string */
     protected $name;
@@ -24,25 +24,25 @@ class Category{
      */
     public function getPermittedKitsFor(Permissible $permissible) : array {
         $kits = [];
-        foreach($this->kits as $kit){
+        foreach($this->kits as $kit) {
             if($kit->hasPermission($permissible)) $kits[$kit->getName()] = $kit;
         }
         return $kits;
     }
 
     public function hasPermission(Permissible $permissible) : bool {
-        return !$this->isLocked() || $permissible->hasPermission(EasyKits::PERM_ROOT."category.".$this->getName()) || $permissible->hasPermission(EasyKits::PERM_ROOT."category");
+        return !$this->isLocked() || $permissible->hasPermission(EasyKits::PERM_ROOT . "category." . $this->getName()) || $permissible->hasPermission(EasyKits::PERM_ROOT . "category");
     }
 
     public function hasKit(Kit $kit) : bool {
         return isset($this->kits[$kit->getName()]);
     }
 
-    public function addKit(Kit $kit){
+    public function addKit(Kit $kit) {
         $this->kits[$kit->getName()] = $kit;
     }
 
-    public function removeKit(Kit $kit){
+    public function removeKit(Kit $kit) {
         unset($this->kits[$kit->getName()]);
     }
 
@@ -73,10 +73,9 @@ class Category{
         $this->locked = $locked;
     }
 
-    public function __construct(string $name)
-    {
+    public function __construct(string $name) {
         $this->name = $name;
-        PermissionManager::getInstance()->addPermission(new Permission(EasyKits::PERM_ROOT."category.".$name, "permission to view category ".$name, DataManager::getKey(DataManager::CONFIG, "op-has-all-categories") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
+        PermissionManager::getInstance()->addPermission(new Permission(EasyKits::PERM_ROOT . "category." . $name, "permission to view category " . $name, DataManager::getKey(DataManager::CONFIG, "op-has-all-categories") ? Permission::DEFAULT_OP : Permission::DEFAULT_FALSE));
     }
 
 }

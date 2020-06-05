@@ -11,7 +11,6 @@ use AndreasHGK\EasyKits\event\CategoryDeleteEvent;
 use AndreasHGK\EasyKits\event\CategoryEditEvent;
 use AndreasHGK\EasyKits\Kit;
 use pocketmine\permission\Permissible;
-use pocketmine\Server;
 use pocketmine\utils\Config;
 
 class CategoryManager {
@@ -24,7 +23,7 @@ class CategoryManager {
     public static $categories = [];
 
 
-    public static function exists(string $file) : bool{
+    public static function exists(string $file) : bool {
         return isset(self::$categories[$file]);
     }
 
@@ -34,8 +33,8 @@ class CategoryManager {
      */
     public static function getPermittedCategoriesFor(Permissible $permissible) : array {
         $categories = [];
-        foreach(self::getAll() as $category){
-            if($category->hasPermission($permissible)){
+        foreach(self::getAll() as $category) {
+            if($category->hasPermission($permissible)) {
                 $categories[] = $category;
             }
         }
@@ -63,7 +62,7 @@ class CategoryManager {
 
         if($event->isCancelled()) return false;
 
-        if($event->getOriginalCategory()->getName() !== $event->getCategory()->getName()){
+        if($event->getOriginalCategory()->getName() !== $event->getCategory()->getName()) {
             self::remove($old, true);
         }
         self::$categories[$event->getCategory()->getName()] = $event->getCategory();
@@ -95,13 +94,13 @@ class CategoryManager {
 
     public static function loadAll() : void {
         $file = self::getCategoryFile()->getAll();
-        foreach ($file as $name => $category){
+        foreach($file as $name => $category) {
             self::load((string)$name);
         }
     }
 
     public static function saveAll() : void {
-        foreach(self::getAll() as $name => $category){
+        foreach(self::getAll() as $name => $category) {
             self::save((string)$name);
         }
         DataManager::save(DataManager::CATEGORIES);
@@ -124,17 +123,17 @@ class CategoryManager {
     public static function load(string $name) : void {
         $file = self::getCategoryFile()->getAll();
         $categorydata = $file[$name];
-        try{
+        try {
             $category = new Category($name);
             $kits = [];
-            foreach($categorydata["kits"] as $kitname){
+            foreach($categorydata["kits"] as $kitname) {
                 if(!KitManager::exists($kitname)) continue;
                 $kits[$kitname] = KitManager::get($kitname);
             }
             $category->setLocked($categorydata["locked"]);
             $category->setKits($kits);
             self::$categories[$name] = $category;
-        }catch (\Throwable $e) {
+        } catch(\Throwable $e) {
             EasyKits::get()->getLogger()->error("failed to load category '" . $name . "'");
             EasyKits::get()->getLogger()->debug($e->getMessage());
         }
@@ -144,18 +143,19 @@ class CategoryManager {
         $file = self::getCategoryFile();
         $category = self::get($name);
         $categoryData = self::CATEGORY_FORMAT;
-        foreach($category->getKits() as $kit){
+        foreach($category->getKits() as $kit) {
             $categoryData["kits"][] = $kit->getName();
         }
         $categoryData["locked"] = $category->isLocked();
         $file->set($category->getName(), $categoryData);
     }
 
-    private static function getCategoryFile() : Config{
+    private static function getCategoryFile() : Config {
         return DataManager::get(DataManager::CATEGORIES);
     }
 
 
-    private function __construct(){}
+    private function __construct() {
+    }
 
 }

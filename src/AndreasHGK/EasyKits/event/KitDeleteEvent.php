@@ -8,8 +8,7 @@ use AndreasHGK\EasyKits\Kit;
 
 class KitDeleteEvent extends KitEvent {
 
-    public function __construct(Kit $kit)
-    {
+    public function __construct(Kit $kit) {
         parent::__construct($kit);
     }
 

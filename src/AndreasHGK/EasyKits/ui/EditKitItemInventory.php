@@ -18,12 +18,11 @@ use pocketmine\Player;
 
 class EditKitItemInventory {
 
-    public static function sendTo(Player $player, Kit $kit): void
-    {
+    public static function sendTo(Player $player, Kit $kit) : void {
         $menu = InvMenu::create(DoubleChestInventory::class);
         $menu->readonly(false);
         $menu->setName(LangUtils::getMessage("editkit-items-title", true, ["{NAME}" => $kit->getName()]));
-        $menu->setInventoryCloseListener(function (Player $player, BaseFakeInventory $inventory) use($kit){
+        $menu->setInventoryCloseListener(function (Player $player, BaseFakeInventory $inventory) use ($kit) {
             $items = [];
             for($i = 0; $i < 36; $i++) {
                 $item = $inventory->getItem($i);
@@ -31,19 +30,19 @@ class EditKitItemInventory {
             }
             $armor = [];
             $armorPiece = $inventory->getItem(47);
-            if($armorPiece->getId() !== Item::AIR){
+            if($armorPiece->getId() !== Item::AIR) {
                 $armor[3] = $armorPiece;
             }
             $armorPiece = $inventory->getItem(48);
-            if($armorPiece->getId() !== Item::AIR){
+            if($armorPiece->getId() !== Item::AIR) {
                 $armor[2] = $armorPiece;
             }
             $armorPiece = $inventory->getItem(50);
-            if($armorPiece->getId() !== Item::AIR){
+            if($armorPiece->getId() !== Item::AIR) {
                 $armor[1] = $armorPiece;
             }
             $armorPiece = $inventory->getItem(51);
-            if($armorPiece->getId() !== Item::AIR){
+            if($armorPiece->getId() !== Item::AIR) {
                 $armor[0] = $armorPiece;
             }
             $new = clone $kit;
@@ -51,23 +50,23 @@ class EditKitItemInventory {
             $new->setItems($items);
             $new->setArmor($armor);
 
-            if($kit->getItems() === $items && $kit->getArmor() === $armor){
+            if($kit->getItems() === $items && $kit->getArmor() === $armor) {
                 EditkitMainForm::sendTo($player, $kit);
             }
-            if(KitManager::update($kit, $new)){
+            if(KitManager::update($kit, $new)) {
                 $player->sendMessage(LangUtils::getMessage("editkit-items-succes", true, ["{COUNT}" => count($items) + count($armor), "{NAME}" => $kit->getName()]));
                 EditkitMainForm::sendTo($player, KitManager::get($kit->getName()));
             }
         });
-        $menu->setListener(function(Player $player, Item $itemClicked, Item $itemClickedWith, SlotChangeAction $action){
-            if($itemClicked->getNamedTag()->hasTag("immovable", ByteTag::class)){
+        $menu->setListener(function (Player $player, Item $itemClicked, Item $itemClickedWith, SlotChangeAction $action) {
+            if($itemClicked->getNamedTag()->hasTag("immovable", ByteTag::class)) {
                 return false;
             }
             return true;
         });
         $menu->getInventory()->setContents($kit->getItems());
-        for($i = 36; $i < 54; $i++){
-            switch ($i){
+        for($i = 36; $i < 54; $i++) {
+            switch($i) {
                 case 42:
                     $item = ItemFactory::get(Item::STAINED_GLASS, 14, 1);
                     $item->setCustomName(LangUtils::getMessage("editkit-items-lockedname"));

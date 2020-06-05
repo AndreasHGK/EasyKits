@@ -13,17 +13,16 @@ use pocketmine\Player;
 
 class KitImportForm {
 
-    public static function sendTo(Player $player): void
-    {
-        $ui = new CustomForm(function(Player $player, $data){
-            if($data === null){
+    public static function sendTo(Player $player) : void {
+        $ui = new CustomForm(function (Player $player, $data) {
+            if($data === null) {
                 $player->sendMessage(LangUtils::getMessage("ekimport-cancelled"));
                 return;
             }
-            switch ($data["dropdown"]){
+            switch($data["dropdown"]) {
                 case 0:
                     $name = "AdvancedKits";
-                    if(!AdvancedKitsImporter::isPluginLoaded()){
+                    if(!AdvancedKitsImporter::isPluginLoaded()) {
                         $player->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
                         return;
                     }
@@ -31,7 +30,7 @@ class KitImportForm {
                     break;
                 case 1:
                     $name = "KitUI";
-                    if(!KitUIImporter::isPluginLoaded()){
+                    if(!KitUIImporter::isPluginLoaded()) {
                         $player->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
                         return;
                     }
@@ -39,7 +38,7 @@ class KitImportForm {
                     break;
                 case 2:
                     $name = "KitsPlus";
-                    if(!KitsPlusImporter::isPluginLoaded()){
+                    if(!KitsPlusImporter::isPluginLoaded()) {
                         $player->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
                         return;
                     }
@@ -52,7 +51,7 @@ class KitImportForm {
             }
             $success = 0;
             $failed = 0;
-            foreach($return as $bool){
+            foreach($return as $bool) {
                 if($bool) $success++;
                 else $failed++;
             }

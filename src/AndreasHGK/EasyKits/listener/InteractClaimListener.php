@@ -10,13 +10,13 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\nbt\tag\StringTag;
 
-class InteractClaimListener implements Listener{
+class InteractClaimListener implements Listener {
 
     public function onInteract(PlayerInteractEvent $ev) : void {
         $item = $ev->getItem();
-        if($item->getNamedTag()->hasTag("ekit", StringTag::class)){
+        if($item->getNamedTag()->hasTag("ekit", StringTag::class)) {
             $kitname = $item->getNamedTag()->getTagValue("ekit", StringTag::class);
-            if(KitManager::exists($kitname)){
+            if(KitManager::exists($kitname)) {
                 $ev->setCancelled();
                 $player = $ev->getPlayer();
                 $kit = KitManager::get($kitname);

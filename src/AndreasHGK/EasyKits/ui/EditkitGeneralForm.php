@@ -12,31 +12,30 @@ use pocketmine\Player;
 
 class EditkitGeneralForm {
 
-    public static function sendTo(Player $player, Kit $kit): void
-    {
+    public static function sendTo(Player $player, Kit $kit) : void {
 
-        $ui = new CustomForm(function(Player $player, $data) use($kit){
-            if($data === null){
+        $ui = new CustomForm(function (Player $player, $data) use ($kit) {
+            if($data === null) {
                 EditkitMainForm::sendTo($player, $kit);
                 return;
             }
 
-            if(!isset($data["name"])){
+            if(!isset($data["name"])) {
                 $player->sendMessage(LangUtils::getMessage("editkit-general-no-name"));
                 return;
             }
 
-            if(KitManager::exists((string)$data["name"]) && $kit->getName() !== (string)$data["name"]){
+            if(KitManager::exists((string)$data["name"]) && $kit->getName() !== (string)$data["name"]) {
                 $player->sendMessage(LangUtils::getMessage("editkit-general-duplicate"));
                 return;
             }
 
-            if(!is_float((float)$data["price"])){
+            if(!is_float((float)$data["price"])) {
                 $player->sendMessage(LangUtils::getMessage("editkit-general-invalid-price"));
                 return;
             }
 
-            if(!is_int((int)$data["cooldown"])){
+            if(!is_int((int)$data["cooldown"])) {
                 $player->sendMessage(LangUtils::getMessage("editkit-general-invalid-cooldown"));
                 return;
             }
@@ -54,7 +53,7 @@ class EditkitGeneralForm {
             $new->setChestKit($data["chestKit"]);
             $new->setPermission($data["permission"] ?? (string)$data["name"]);
 
-            if(KitManager::update($kit, $new, true)){
+            if(KitManager::update($kit, $new, true)) {
                 KitManager::saveAll();
                 $player->sendMessage(LangUtils::getMessage("editkit-success", true, ["{NAME}" => $kit->getName()]));
             }

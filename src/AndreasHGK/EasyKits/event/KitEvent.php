@@ -12,8 +12,7 @@ abstract class KitEvent extends Event implements Cancellable {
 
     protected $kit;
 
-    public function __construct(Kit $kit)
-    {
+    public function __construct(Kit $kit) {
         $this->kit = $kit;
     }
 

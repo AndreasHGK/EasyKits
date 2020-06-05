@@ -24,7 +24,8 @@ class DataManager {
     public const CATEGORIES = "categories.yml";
 
     /**
-     * @var DataManager */
+     * @var DataManager
+     */
     public static $instance = null;
 
     /**
@@ -38,7 +39,7 @@ class DataManager {
      * @param bool $default
      * @return mixed
      */
-    public static function getKey(string $file, string $key, $default = false){
+    public static function getKey(string $file, string $key, $default = false) {
         return self::get($file)->get($key, $default);
     }
 
@@ -49,13 +50,13 @@ class DataManager {
 
     public static function load(string $file, bool $keepLoaded = true) : Config {
         $data = self::getFile($file);
-        if($keepLoaded){
+        if($keepLoaded) {
             self::$memory[$file] = $data;
         }
         return $data;
     }
 
-    public static function reload(string $file, bool $save = false) : bool{
+    public static function reload(string $file, bool $save = false) : bool {
         if(!self::isLoaded($file)) return false;
         if($save) self::get($file)->save();
         self::get($file)->reload();
@@ -69,46 +70,46 @@ class DataManager {
         return true;
     }
 
-    public static function isLoaded(string $file) : bool{
+    public static function isLoaded(string $file) : bool {
         return isset(self::$memory[$file]);
     }
 
-    public static function save(string $file) : bool{
+    public static function save(string $file) : bool {
         if(!self::isLoaded($file)) return false;
         self::$memory[$file]->save();
         return true;
     }
 
-    public static function getFile(string $file) : Config{
-        return new Config(EasyKits::get()->getDataFolder().$file);
+    public static function getFile(string $file) : Config {
+        return new Config(EasyKits::get()->getDataFolder() . $file);
     }
 
     public static function deleteFile(string $file) : void {
-        unlink(EasyKits::get()->getDataFolder().$file);
+        unlink(EasyKits::get()->getDataFolder() . $file);
     }
 
     public static function exists(string $file) : bool {
-        return file_exists(EasyKits::get()->getDataFolder().$file);
+        return file_exists(EasyKits::get()->getDataFolder() . $file);
     }
 
     public static function loadDefault() : void {
-        if(EasyKits::get()->saveResource(self::CONFIG)) EasyKits::get()->getLogger()->debug("creating ".self::CONFIG);
+        if(EasyKits::get()->saveResource(self::CONFIG)) EasyKits::get()->getLogger()->debug("creating " . self::CONFIG);
         self::get(self::CONFIG);
-        if(self::getKey(self::CONFIG, "version") !== self::VERSIONS["config"]){
-            EasyKits::get()->getLogger()->warning(self::CONFIG." version incorrect. Please regenerate your config to avoid errors.");
+        if(self::getKey(self::CONFIG, "version") !== self::VERSIONS["config"]) {
+            EasyKits::get()->getLogger()->warning(self::CONFIG . " version incorrect. Please regenerate your config to avoid errors.");
         }
-        if(EasyKits::get()->saveResource(self::LANG)) EasyKits::get()->getLogger()->debug("creating ".self::LANG);
+        if(EasyKits::get()->saveResource(self::LANG)) EasyKits::get()->getLogger()->debug("creating " . self::LANG);
         self::get(self::LANG);
-        if(self::getKey(self::LANG, "version") !== self::VERSIONS["lang"]){
-            EasyKits::get()->getLogger()->warning(self::LANG." version incorrect. Please regenerate your config to avoid errors.");
+        if(self::getKey(self::LANG, "version") !== self::VERSIONS["lang"]) {
+            EasyKits::get()->getLogger()->warning(self::LANG . " version incorrect. Please regenerate your config to avoid errors.");
         }
-        if(EasyKits::get()->saveResource(self::COMMANDS)) EasyKits::get()->getLogger()->debug("creating ".self::COMMANDS);
+        if(EasyKits::get()->saveResource(self::COMMANDS)) EasyKits::get()->getLogger()->debug("creating " . self::COMMANDS);
         self::get(self::COMMANDS);
-        if(self::getKey(self::COMMANDS, "version") !== self::VERSIONS["commands"]){
-            EasyKits::get()->getLogger()->warning(self::COMMANDS." version incorrect. Please regenerate your config to avoid errors.");
+        if(self::getKey(self::COMMANDS, "version") !== self::VERSIONS["commands"]) {
+            EasyKits::get()->getLogger()->warning(self::COMMANDS . " version incorrect. Please regenerate your config to avoid errors.");
         }
-        if(EasyKits::get()->saveResource(self::KITS)) EasyKits::get()->getLogger()->debug("creating ".self::KITS);
-        if(EasyKits::get()->saveResource(self::CATEGORIES)) EasyKits::get()->getLogger()->debug("creating ".self::CATEGORIES);
+        if(EasyKits::get()->saveResource(self::KITS)) EasyKits::get()->getLogger()->debug("creating " . self::KITS);
+        if(EasyKits::get()->saveResource(self::CATEGORIES)) EasyKits::get()->getLogger()->debug("creating " . self::CATEGORIES);
         self::get(self::KITS);
         self::get(self::CATEGORIES);
         self::get(self::COOLDOWN);
@@ -120,7 +121,7 @@ class DataManager {
             self::COMMANDS,
             self::LANG,
         ];
-        foreach($cfgs as $cfg){
+        foreach($cfgs as $cfg) {
             self::updateConfig($cfg);
         }
     }
@@ -133,24 +134,25 @@ class DataManager {
         $Pfile = $reflect->getValue(EasyKits::get());
 
         $filename = rtrim(str_replace("\\", "/", $file), "/");
-        if(file_exists($Pfile . "resources/" . $filename)){
+        if(file_exists($Pfile . "resources/" . $filename)) {
             $resource = new Config($Pfile . "resources/" . $filename);
             $cfgResource = $resource->getAll();
         }
         $count = 0;
-        foreach($cfgResource as $key => $value){
-            if(!isset($cfg[$key])){
+        foreach($cfgResource as $key => $value) {
+            if(!isset($cfg[$key])) {
                 $count++;
                 $cfg[$key] = $value;
             }
         }
-        if($count > 0){
+        if($count > 0) {
             DataManager::get($file)->setAll($cfg);
             DataManager::save($file);
-            EasyKits::get()->getLogger()->notice("Auto updated ".$count." keys in ".$file);
+            EasyKits::get()->getLogger()->notice("Auto updated " . $count . " keys in " . $file);
         }
     }
 
-    private function __construct(){}
+    private function __construct() {
+    }
 
 }

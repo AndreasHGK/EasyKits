@@ -10,7 +10,7 @@ use pocketmine\Player;
 use pocketmine\Server;
 use Twisted\MultiEconomy\MultiEconomy;
 
-class EconomyManager{
+class EconomyManager {
 
     public static $instance;
 
@@ -20,7 +20,7 @@ class EconomyManager{
     public static $economy = null;
 
     public static function getMoney(Player $player) {
-        switch (true){
+        switch(true) {
             case self::getEconomy() instanceof EconomyAPI:
                 return self::getEconomy()->myMoney($player);
                 break;
@@ -32,7 +32,7 @@ class EconomyManager{
     }
 
     public static function setMoney(Player $player, $money, bool $force = false) {
-        switch (true){
+        switch(true) {
             case self::getEconomy() instanceof EconomyAPI:
                 self::getEconomy()->setMoney($player, $money);
                 break;
@@ -43,7 +43,7 @@ class EconomyManager{
     }
 
     public static function reduceMoney(Player $player, $money, bool $force = false) {
-        switch (true){
+        switch(true) {
             case self::getEconomy() instanceof EconomyAPI:
                 self::getEconomy()->reduceMoney($player, $money, $force);
                 break;
@@ -54,7 +54,7 @@ class EconomyManager{
     }
 
     public static function addMoney(Player $player, $money, bool $force = false) {
-        switch (true){
+        switch(true) {
             case self::getEconomy() instanceof EconomyAPI:
                 self::getEconomy()->addMoney($player, $money, $force);
                 break;
@@ -88,8 +88,7 @@ class EconomyManager{
         return self::$economy;
     }
 
-    private function __construct()
-    {
+    private function __construct() {
     }
 
 }

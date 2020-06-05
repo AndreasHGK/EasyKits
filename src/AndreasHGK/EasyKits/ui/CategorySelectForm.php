@@ -13,23 +13,22 @@ use pocketmine\Player;
 
 class CategorySelectForm {
 
-    public static function sendTo(Player $player): void
-    {
-        if(empty(CategoryManager::getPermittedCategoriesFor($player))){
+    public static function sendTo(Player $player) : void {
+        if(empty(CategoryManager::getPermittedCategoriesFor($player))) {
             $player->sendMessage(LangUtils::getMessage("no-categories"));
             return;
         }
 
-        $ui = new SimpleForm(function (Player $player, $data){
-            if($data === null){
+        $ui = new SimpleForm(function (Player $player, $data) {
+            if($data === null) {
                 return;
             }
             $category = CategoryManager::get($data);
-            if(!isset($category)){
+            if(!isset($category)) {
                 $player->sendMessage(LangUtils::getMessage("category-not-found"));
                 return;
             }
-            if(!$category->hasPermission($player)){
+            if(!$category->hasPermission($player)) {
                 $player->sendMessage(LangUtils::getMessage("category-no-permission"));
                 return;
             }
@@ -39,7 +38,7 @@ class CategorySelectForm {
 
             if($event->isCancelled()) return;
 
-            if(empty($event->getCategory()->getPermittedKitsFor($player))){
+            if(empty($event->getCategory()->getPermittedKitsFor($player))) {
                 $player->sendMessage(LangUtils::getMessage("category-empty"));
                 return;
             }
@@ -49,10 +48,10 @@ class CategorySelectForm {
         $ui->setTitle(LangUtils::getMessage("category-select-title"));
         $ui->setContent(LangUtils::getMessage("category-select-text"));
 
-        foreach(CategoryManager::getAll() as $category){
-            if($category->hasPermission($player)){
+        foreach(CategoryManager::getAll() as $category) {
+            if($category->hasPermission($player)) {
                 $ui->addButton(LangUtils::getMessage("category-unlocked-format", true, ["{NAME}" => $category->getName()]), -1, "", $category->getName());
-            }elseif(DataManager::getKey(DataManager::CONFIG, "show-locked-categories")){
+            } elseif(DataManager::getKey(DataManager::CONFIG, "show-locked-categories")) {
                 $ui->addButton(LangUtils::getMessage("category-locked-format", true, ["{NAME}" => $category->getName()]), -1, "", $category->getName());
             }
         }

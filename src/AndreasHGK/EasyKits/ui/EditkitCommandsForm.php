@@ -12,24 +12,23 @@ use pocketmine\Player;
 
 class EditkitCommandsForm {
 
-    public static function sendTo(Player $player, Kit $kit): void
-    {
+    public static function sendTo(Player $player, Kit $kit) : void {
 
-        $ui = new CustomForm(function(Player $player, $data) use($kit){
-            if($data === null){
+        $ui = new CustomForm(function (Player $player, $data) use ($kit) {
+            if($data === null) {
                 EditkitMainForm::sendTo($player, $kit);
                 return;
             }
 
             $commands = [];
-            foreach($data as $command){
+            foreach($data as $command) {
                 if($command !== "" && $command !== null) $commands[] = $command;
             }
 
             $new = clone $kit;
             $new->setCommands($commands);
 
-            if(KitManager::update($kit, $new)){
+            if(KitManager::update($kit, $new)) {
                 KitManager::saveAll();
 
                 $player->sendMessage(LangUtils::getMessage("editkit-commands-success", true, [
@@ -46,7 +45,7 @@ class EditkitCommandsForm {
         ]));
 
         $int = 0;
-        foreach($kit->getCommands() as $int => $command){
+        foreach($kit->getCommands() as $int => $command) {
             $ui->addInput(LangUtils::getMessage("editkit-commands-input", true, ["{NUMBER}" => $int + 1]), "", $command);
         }
         $ui->addInput(LangUtils::getMessage("editkit-commands-input", true, ["{NUMBER}" => $int + 1]));

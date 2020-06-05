@@ -8,8 +8,7 @@ use AndreasHGK\EasyKits\Kit;
 
 class KitCreateEvent extends KitEvent {
 
-    public function __construct(Kit $kit)
-    {
+    public function __construct(Kit $kit) {
         parent::__construct($kit);
     }
 

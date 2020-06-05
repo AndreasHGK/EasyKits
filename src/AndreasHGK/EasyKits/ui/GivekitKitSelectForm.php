@@ -13,24 +13,23 @@ use pocketmine\Player;
 
 class GivekitKitSelectForm {
 
-    public static function sendTo(Player $player, Player $target): void
-    {
+    public static function sendTo(Player $player, Player $target) : void {
 
-        $ui = new SimpleForm(function (Player $player, $data) use ($target){
-            if($data === null){
+        $ui = new SimpleForm(function (Player $player, $data) use ($target) {
+            if($data === null) {
                 $player->sendMessage(LangUtils::getMessage("givekit-cancelled"));
                 return;
             }
-            if(!KitManager::exists($data)){
+            if(!KitManager::exists($data)) {
                 $player->sendMessage(LangUtils::getMessage("givekit-kit-not-found"));
                 return;
             }
-            try{
+            try {
                 $kit = KitManager::get($data);
                 TryClaim::ForceClaim($player, $kit);
                 $player->sendMessage(LangUtils::getMessage("givekit-success", true, ["{KIT}" => $kit->getName(), "{PLAYER}" => $player->getName()]));
-            }catch(KitException $e){
-                switch ($e->getCode()){
+            } catch(KitException $e) {
+                switch($e->getCode()) {
                     case 3:
                         $player->sendMessage(LangUtils::getMessage("givekit-insufficient-space"));
                         break;
