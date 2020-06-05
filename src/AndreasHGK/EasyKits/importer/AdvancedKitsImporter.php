@@ -56,7 +56,7 @@ class AdvancedKitsImporter{
                     $key = 3;
                     break;
                 default:
-                    continue;
+                    continue 2;
             }
             $armor[$key] = $akArmorItem;
         }
