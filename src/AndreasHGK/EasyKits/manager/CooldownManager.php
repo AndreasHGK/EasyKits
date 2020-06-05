@@ -9,15 +9,17 @@ use pocketmine\Player;
 
 class CooldownManager {
 
-    /**
-     * @var self
-     */
+    /** @var self */
     public static $instance = null;
 
+    /**
+     * @var int[][]
+     */
     public $cooldowns = [];
 
     /**
-     * returns if the player has a cooldown for a kit
+     * Check if the player has an active cooldown for the given kit
+     *
      * @param Kit $kit
      * @param Player $player
      * @return bool
@@ -35,7 +37,8 @@ class CooldownManager {
     }
 
     /**
-     * returns the cooldown time left for a kit
+     * Check how long the cooldown for a player is for a given kit
+     *
      * @param Kit $kit
      * @param Player $player
      * @return int
@@ -47,6 +50,8 @@ class CooldownManager {
     }
 
     /**
+     * Change the cooldown that a player has for a kit
+     *
      * @param Kit $kit
      * @param Player $player
      */
@@ -56,6 +61,8 @@ class CooldownManager {
     }
 
     /**
+     * Remove the cooldown a player has for a kit
+     *
      * @param Kit $kit
      * @param Player $player
      */
@@ -66,6 +73,8 @@ class CooldownManager {
 
 
     /**
+     * Get all current cooldowns
+     *
      * @return array
      * @internal
      */

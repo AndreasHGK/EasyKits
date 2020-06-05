@@ -8,7 +8,9 @@ use AdvancedKits\Main;
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
+use Closure;
 use pocketmine\Server;
+use ReflectionProperty;
 
 class AdvancedKitsImporter {
 
@@ -30,11 +32,11 @@ class AdvancedKitsImporter {
         $name = $akit->getName();
         if(KitManager::exists($name)) return false;
 
-        $reflect = new \ReflectionProperty(\AdvancedKits\Kit::class, "items");
+        $reflect = new ReflectionProperty(\AdvancedKits\Kit::class, "items");
         $reflect->setAccessible(true);
         $items = $reflect->getValue($akit);
 
-        $reflect = new \ReflectionProperty(\AdvancedKits\Kit::class, "armor");
+        $reflect = new ReflectionProperty(\AdvancedKits\Kit::class, "armor");
         $reflect->setAccessible(true);
         $akArmor = $reflect->getValue($akit);
         $armor = [];
@@ -58,15 +60,15 @@ class AdvancedKitsImporter {
             }
             $armor[$key] = $akArmorItem;
         }
-        $reflect = new \ReflectionProperty(\AdvancedKits\Kit::class, "coolDown");
+        $reflect = new ReflectionProperty(\AdvancedKits\Kit::class, "coolDown");
         $reflect->setAccessible(true);
         $cooldown = $reflect->getValue($akit) * 60;
 
-        $reflect = new \ReflectionProperty(\AdvancedKits\Kit::class, "cost");
+        $reflect = new ReflectionProperty(\AdvancedKits\Kit::class, "cost");
         $reflect->setAccessible(true);
         $price = $reflect->getValue($akit);
 
-        $reflect = new \ReflectionProperty(\AdvancedKits\Kit::class, "effects");
+        $reflect = new ReflectionProperty(\AdvancedKits\Kit::class, "effects");
         $reflect->setAccessible(true);
         $Aeffects = $reflect->getValue($akit);
         $effects = [];
@@ -74,7 +76,7 @@ class AdvancedKitsImporter {
             $effects[$effect->getId()] = $effect;
         }
 
-        $commands = \Closure::bind(function () {
+        $commands = Closure::bind(function () {
             $cmds = [];
             if(isset($this->data['commands']) && is_array($this->data['commands'])) {
                 foreach($this->data['commands'] as $cmd) {

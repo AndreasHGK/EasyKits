@@ -7,6 +7,7 @@ namespace AndreasHGK\EasyKits\importer;
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\DataManager;
 use AndreasHGK\EasyKits\manager\KitManager;
+use Closure;
 use Infernus101\KitUI\Main;
 use pocketmine\entity\EffectInstance;
 use pocketmine\item\enchantment\Enchantment;
@@ -66,7 +67,7 @@ class KitUIImporter {
         $effects = [];
         if(isset($data["effects"])) {
             foreach($data["effects"] as $effectString) {
-                $e = \Closure::bind(function () use ($effectString) {
+                $e = Closure::bind(function () use ($effectString) {
                     return $this->loadEffect(...explode(":", $effectString));
                 }, $akit, \Infernus101\KitUI\Kit::class);
                 if($e instanceof EffectInstance) {

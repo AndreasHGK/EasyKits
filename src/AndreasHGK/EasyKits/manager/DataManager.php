@@ -7,6 +7,7 @@ namespace AndreasHGK\EasyKits\manager;
 use AndreasHGK\EasyKits\EasyKits;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use ReflectionProperty;
 
 class DataManager {
 
@@ -129,7 +130,7 @@ class DataManager {
     public static function updateConfig(string $file) : void {
         $cfg = self::get($file)->getAll();
 
-        $reflect = new \ReflectionProperty(PluginBase::class, "file");
+        $reflect = new ReflectionProperty(PluginBase::class, "file");
         $reflect->setAccessible(true);
         $Pfile = $reflect->getValue(EasyKits::get());
 

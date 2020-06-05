@@ -25,13 +25,9 @@ use pocketmine\Server;
 class Kit {
 
     //items
-    /**
-     * @var Item[]
-     */
+    /** @var Item[] */
     protected $items = [];
-    /**
-     * @var Item[]
-     */
+    /** @var Item[] */
     protected $armor = [];
 
     //settings
@@ -51,36 +47,36 @@ class Kit {
     protected $interactItem = null;
 
     //flags
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $locked = true;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $emptyOnClaim = true;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $doOverride = false;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $doOverrideArmor = false;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $alwaysClaim = false;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $chestKit = false;
 
+    /**
+     * The default claim function
+     *
+     * @param Player $player
+     * @return bool
+     */
     public function claim(Player $player) : bool {
         if($this->isChestKit()) return $this->claimChestKitFor($player);
         else return $this->claimFor($player);
     }
 
+    /**
+     * Claim the kit as a player and as a chestkit
+     *
+     * @param Player $player
+     * @return bool
+     */
     public function claimChestKitFor(Player $player) : bool {
         if(!$this->hasPermission($player) && $this->isLocked()) throw new KitException("Player is not permitted to claim this kit", 4);
         if($this->getCooldown() > 0) {
@@ -127,6 +123,7 @@ class Kit {
 
     /**
      * claim a kit as a player
+     *
      * @param Player $player
      * @return bool
      * @throws KitException
@@ -209,14 +206,29 @@ class Kit {
         return true;
     }
 
+    /**
+     * Get the item that you use to claim the kit (for chestkits)
+     *
+     * @return Item|null
+     */
     public function getInteractItem() : ?Item {
         return $this->interactItem;
     }
 
+    /**
+     * Check if the kit has an item that you use to claim it (for chestkits)
+     *
+     * @return bool
+     */
     public function hasInteractItem() : bool {
         return $this->getItems() !== null;
     }
 
+    /**
+     * Change the item that claims the kit when you use it (for chestkits)
+     *
+     * @param Item $item
+     */
     public function setInteractItem(Item $item) : void {
         if(!$item->getNamedTag()->hasTag("ekit") || $item->getNamedTag()->getTagValue("ekit", StringTag::class) !== $this->getName()) {
             $item->setNamedTagEntry(new StringTag("ekit", $this->name));
@@ -225,6 +237,8 @@ class Kit {
     }
 
     /**
+     * Check if a permissible has permission to claim the kit
+     *
      * @param Permissible $permissible
      * @return bool
      */
@@ -263,6 +277,8 @@ class Kit {
     }
 
     /**
+     * Get the name of the kit displayed to the player
+     *
      * @return string
      */
     public function getName() : string {
@@ -270,6 +286,8 @@ class Kit {
     }
 
     /**
+     * Set the name of the kit displayed to the player
+     *
      * @param string $name
      */
     public function setName(string $name) : void {
@@ -277,6 +295,8 @@ class Kit {
     }
 
     /**
+     * Get the inventory items of the kit
+     *
      * @return Item[]
      */
     public function getItems() : array {
@@ -284,6 +304,8 @@ class Kit {
     }
 
     /**
+     * Set the inventory items of the kit
+     *
      * @param array|Item[] $items
      */
     public function setItems(array $items) : void {
@@ -291,6 +313,8 @@ class Kit {
     }
 
     /**
+     * Get the armor items of the kit
+     *
      * @return Item[]
      */
     public function getArmor() : array {
@@ -298,6 +322,8 @@ class Kit {
     }
 
     /**
+     * Set the armor items of the kit
+     *
      * @param array|Item[] $armor
      */
     public function setArmor(array $armor) : void {
@@ -305,6 +331,8 @@ class Kit {
     }
 
     /**
+     * Get the cost of the kit that the player needs to pay when claiming
+     *
      * @return float
      */
     public function getPrice() : float {
@@ -312,6 +340,8 @@ class Kit {
     }
 
     /**
+     * Set the cost of the kit
+     *
      * @param float $price
      */
     public function setPrice(float $price) : void {
@@ -320,6 +350,8 @@ class Kit {
     }
 
     /**
+     * Get the cooldown time of the kit in seconds
+     *
      * @return int
      */
     public function getCooldown() : int {
@@ -327,6 +359,8 @@ class Kit {
     }
 
     /**
+     * Set the cooldown time of the kit in seconds
+     *
      * @param int $cooldown
      */
     public function setCooldown(int $cooldown) : void {
@@ -335,6 +369,8 @@ class Kit {
     }
 
     /**
+     * Get the potion effects the player gets when claiming the kit
+     *
      * @return EffectInstance[]|array
      */
     public function getEffects() : array {
@@ -342,6 +378,8 @@ class Kit {
     }
 
     /**
+     * Set the potion effects the player gets when claiming the kit
+     *
      * @param array|EffectInstance[] $effects
      */
     public function setEffects(array $effects) : void {
@@ -349,20 +387,26 @@ class Kit {
     }
 
     /**
-     * @return array|string[]
+     * Get the commands that are ran when a player claims the kit
+     *
+     * @return string[]
      */
     public function getCommands() : array {
         return $this->commands;
     }
 
     /**
-     * @param array|string[] $commands
+     * Set the commands that are ran when a player claims the kit
+     *
+     * @param string[] $commands
      */
     public function setCommands(array $commands) : void {
         $this->commands = $commands;
     }
 
     /**
+     * Check whether the kit needs permission to be claimed
+     *
      * @return bool
      */
     public function isLocked() : bool {
@@ -370,6 +414,8 @@ class Kit {
     }
 
     /**
+     * Change whether the kit needs permission to be claimed
+     *
      * @param bool $locked
      */
     public function setLocked(bool $locked) : void {
@@ -377,6 +423,9 @@ class Kit {
     }
 
     /**
+     * Check whether the kit overrides items in the inventory when claiming the kit
+     * (it will use the spots that you put the items in when making it, no matter what)
+     *
      * @return bool
      */
     public function doOverride() : bool {
@@ -384,6 +433,8 @@ class Kit {
     }
 
     /**
+     * Change whether to override items
+     *
      * @param bool $doOverride
      */
     public function setDoOverride(bool $doOverride) : void {
@@ -391,6 +442,9 @@ class Kit {
     }
 
     /**
+     * heck whether the kit overrides items in the armor inventory when claiming the kit
+     * (it will use the spots that you put the items in when making it, no matter what)
+     *
      * @return bool
      */
     public function doOverrideArmor() : bool {
@@ -398,6 +452,8 @@ class Kit {
     }
 
     /**
+     * Change whether to override items in the armor inventory
+     *
      * @param bool $doOverrideArmor
      */
     public function setDoOverrideArmor(bool $doOverrideArmor) : void {
@@ -405,6 +461,8 @@ class Kit {
     }
 
     /**
+     * Check whether the kit is claimable, even when the receiver inventory is full
+     *
      * @return bool
      */
     public function alwaysClaim() : bool {
@@ -412,6 +470,8 @@ class Kit {
     }
 
     /**
+     * Change whether the kit is claimable, even when the receiver inventory is full
+     *
      * @param bool $alwaysClaim
      */
     public function setAlwaysClaim(bool $alwaysClaim) : void {
@@ -419,6 +479,8 @@ class Kit {
     }
 
     /**
+     * Check whether the player's inventory will be cleared before claiming the kit
+     *
      * @return bool
      */
     public function emptyOnClaim() : bool {
@@ -426,6 +488,8 @@ class Kit {
     }
 
     /**
+     * Change whether the player's inventory will be cleared before claiming the kit
+     *
      * @param bool $emptyOnClaim
      */
     public function setEmptyOnClaim(bool $emptyOnClaim) : void {
@@ -433,6 +497,8 @@ class Kit {
     }
 
     /**
+     * Check whether the kit is a chestkit and has an item that you use to claim it instead of directly claiming
+     *
      * @return bool
      */
     public function isChestKit() : bool {
@@ -440,6 +506,8 @@ class Kit {
     }
 
     /**
+     * Change whether this kit is a chestkit
+     *
      * @param bool $bool
      */
     public function setChestKit(bool $bool) : void {

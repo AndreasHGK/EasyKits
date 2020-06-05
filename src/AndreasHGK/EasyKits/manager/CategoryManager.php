@@ -12,6 +12,7 @@ use AndreasHGK\EasyKits\event\CategoryEditEvent;
 use AndreasHGK\EasyKits\Kit;
 use pocketmine\permission\Permissible;
 use pocketmine\utils\Config;
+use Throwable;
 
 class CategoryManager {
 
@@ -133,7 +134,7 @@ class CategoryManager {
             $category->setLocked($categorydata["locked"]);
             $category->setKits($kits);
             self::$categories[$name] = $category;
-        } catch(\Throwable $e) {
+        } catch(Throwable $e) {
             EasyKits::get()->getLogger()->error("failed to load category '" . $name . "'");
             EasyKits::get()->getLogger()->debug($e->getMessage());
         }

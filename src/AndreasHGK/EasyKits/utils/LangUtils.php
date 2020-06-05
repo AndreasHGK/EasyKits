@@ -10,6 +10,8 @@ use pocketmine\utils\TextFormat;
 abstract class LangUtils {
 
     /**
+     * Get a message from the lang.yml file
+     *
      * @param string $key
      * @param bool $colorize
      * @param array $replace
