@@ -26,39 +26,39 @@ class Kit {
 
     //items
     /** @var Item[] */
-    protected $items = [];
+    private $items = [];
     /** @var Item[] */
-    protected $armor = [];
+    private $armor = [];
 
     //settings
     /** @var string */
-    protected $name;
+    private $name;
     /** @var string */
-    protected $permission;
+    private $permission;
     /** @var float */
-    protected $price = 0;
+    private $price = 0;
     /** @var int */
-    protected $cooldown = 60;
+    private $cooldown = 60;
     /** @var EffectInstance[] */
-    protected $effects = [];
+    private $effects = [];
     /** @var string[] */
-    protected $commands = [];
+    private $commands = [];
     /** @var Item|null */
-    protected $interactItem = null;
+    private $interactItem = null;
 
     //flags
     /** @var bool */
-    protected $locked = true;
+    private $locked = true;
     /** @var bool */
-    protected $emptyOnClaim = true;
+    private $emptyOnClaim = true;
     /** @var bool */
-    protected $doOverride = false;
+    private $doOverride = false;
     /** @var bool */
-    protected $doOverrideArmor = false;
+    private $doOverrideArmor = false;
     /** @var bool */
-    protected $alwaysClaim = false;
+    private $alwaysClaim = false;
     /** @var bool */
-    protected $chestKit = false;
+    private $chestKit = false;
 
     /**
      * The default claim function
