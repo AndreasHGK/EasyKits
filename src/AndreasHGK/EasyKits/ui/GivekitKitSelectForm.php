@@ -26,7 +26,7 @@ class GivekitKitSelectForm {
             }
             try {
                 $kit = KitManager::get($data);
-                TryClaim::ForceClaim($player, $kit);
+                TryClaim::ForceClaim($target, $kit);
                 $player->sendMessage(LangUtils::getMessage("givekit-success", true, ["{KIT}" => $kit->getName(), "{PLAYER}" => $player->getName()]));
             } catch(KitException $e) {
                 switch($e->getCode()) {
