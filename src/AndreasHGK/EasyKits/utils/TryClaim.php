@@ -51,7 +51,12 @@ abstract class TryClaim {
                 $kit->setLocked(false);
             }
             if($kit->claimFor($player)) $player->sendMessage(LangUtils::getMessage("chestclaim-success", true, ["{NAME}" => $kit->getName()]));
-            $player->getInventory()->remove($chestkit);
+            foreach($player->getInventory()->getContents() as $index => $i){
+                if(!$chestkit->equals($i)) continue;
+                $i->pop();
+                $player->getInventory()->setItem($index, $i);
+                return;
+            }
         } catch(KitException $e) {
             switch($e->getCode()) {
                 case 0:
