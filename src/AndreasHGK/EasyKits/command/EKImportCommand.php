@@ -55,7 +55,6 @@ class EKImportCommand extends EKExecutor {
                 default:
                     $sender->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
                     return true;
-                    break;
             }
             $success = 0;
             $failed = 0;

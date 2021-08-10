@@ -6,9 +6,9 @@ namespace AndreasHGK\EasyKits\manager;
 
 use AndreasHGK\EasyKits\EasyKits;
 use onebone\economyapi\EconomyAPI;
+use twisted\multieconomy\MultiEconomy;
 use pocketmine\Player;
 use pocketmine\Server;
-use Twisted\MultiEconomy\MultiEconomy;
 
 class EconomyManager {
 
@@ -22,10 +22,10 @@ class EconomyManager {
     public static function getMoney(Player $player) {
         switch(true) {
             case self::getEconomy() instanceof EconomyAPI:
-                return self::getEconomy()->myMoney($player);
+                self::getEconomy()->myMoney($player);
                 break;
             case self::getEconomy() instanceof MultiEconomy:
-                return self::getEconomy()->getAPI()->getBalance($player->getName(), DataManager::getKey(DataManager::CONFIG, "multieconomy-currency"));
+                self::getEconomy()->getCurrency(DataManager::getKey(DataManager::CONFIG, "multieconomy-currency"))->getBalance($player->getName());
                 break;
         }
         return 0;
@@ -37,7 +37,7 @@ class EconomyManager {
                 self::getEconomy()->setMoney($player, $money);
                 break;
             case self::getEconomy() instanceof MultiEconomy:
-                self::getEconomy()->getAPI()->setBalance($player->getName(), DataManager::getKey(DataManager::CONFIG, "multieconomy-currency"), $money);
+                self::getEconomy()->getCurrency(DataManager::getKey(DataManager::CONFIG, "multieconomy-currency"))->setBalance($player->getName(), $money);
                 break;
         }
     }
@@ -48,7 +48,7 @@ class EconomyManager {
                 self::getEconomy()->reduceMoney($player, $money, $force);
                 break;
             case self::getEconomy() instanceof MultiEconomy:
-                self::getEconomy()->getAPI()->takeFromBalance($player->getName(), DataManager::getKey(DataManager::CONFIG, "multieconomy-currency"), $money);
+                self::getEconomy()->getCurrency(DataManager::getKey(DataManager::CONFIG, "multieconomy-currency"))->removeFromBalance($player->getName(), $money);
                 break;
         }
     }
@@ -59,7 +59,7 @@ class EconomyManager {
                 self::getEconomy()->addMoney($player, $money, $force);
                 break;
             case self::getEconomy() instanceof MultiEconomy:
-                self::getEconomy()->getAPI()->addToBalance($player->getName(), DataManager::getKey(DataManager::CONFIG, "multieconomy-currency"), $money);
+                self::getEconomy()->getCurrency(DataManager::getKey(DataManager::CONFIG, "multieconomy-currency"))->addToBalance($player->getName(), $money);
                 break;
         }
     }

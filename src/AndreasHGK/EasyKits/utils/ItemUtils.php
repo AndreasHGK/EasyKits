@@ -7,7 +7,6 @@ namespace AndreasHGK\EasyKits\utils;
 use AndreasHGK\EasyKits\customenchants\PiggyCustomEnchantsLoader;
 use AndreasHGK\EasyKits\manager\DataManager;
 use DaPigGuy\PiggyCustomEnchants\CustomEnchantManager;
-use DaPigGuy\PiggyCustomEnchants\CustomEnchants\CustomEnchants;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
@@ -21,12 +20,8 @@ abstract class ItemUtils {
         "damage" => 0,
         "count" => 1,
         "display_name" => "",
-        "lore" => [
-
-        ],
-        "enchants" => [
-
-        ],
+        "lore" => [],
+        "enchants" => [],
     ];
 
     /**
@@ -36,28 +31,18 @@ abstract class ItemUtils {
     public static function dataToItem(array $itemData) : Item {
         switch(strtolower($itemData["format"] ?? "")) {
             case "nbt":
-
                 $item = Item::jsonDeserialize($itemData);
                 return $item;
-
             default:
-
                 $item = ItemFactory::get($itemData["id"], $itemData["damage"] ?? 0, $itemData["count"] ?? 1);
                 if(isset($itemData["enchants"])) {
                     foreach($itemData["enchants"] as $ename => $level) {
                         $ench = Enchantment::getEnchantment((int)$ename);
                         if(PiggyCustomEnchantsLoader::isPluginLoaded() && $ench === null) {
-
-                            if(!PiggyCustomEnchantsLoader::isNewVersion()) $ench = CustomEnchants::getEnchantment((int)$ename);
-                            else $ench = CustomEnchantManager::getEnchantment((int)$ename);
-
+                            $ench = CustomEnchantManager::getEnchantment((int)$ename);
                         }
                         if($ench === null) continue;
-                        if(!PiggyCustomEnchantsLoader::isNewVersion() && $ench instanceof CustomEnchants) {
-                            PiggyCustomEnchantsLoader::getPlugin()->addEnchantment($item, $ench->getName(), $level);
-                        } else {
-                            $item->addEnchantment(new EnchantmentInstance($ench, $level));
-                        }
+                        $item->addEnchantment(new EnchantmentInstance($ench, $level));
                     }
                 }
                 if(isset($itemData["display_name"])) $item->setCustomName(TextFormat::colorize($itemData["display_name"]));
@@ -69,7 +54,6 @@ abstract class ItemUtils {
                     $item->setLore($lore);
                 }
                 return $item;
-
         }
     }
 
@@ -81,13 +65,11 @@ abstract class ItemUtils {
         $format = DataManager::getKey(DataManager::CONFIG, "item-format");
         switch(strtolower($format)) {
             case "nbt":
-
                 $itemData = $item->jsonSerialize();
                 if(isset($itemData["nbt_b64"]) || isset($itemData["nbt_hex"]) || isset($itemData["nbt"])) {
                     $itemData["format"] = "nbt";
                 }
                 return $itemData;
-
             default:
                 $itemData = self::ITEM_FORMAT;
                 $itemData["id"] = $item->getId();
@@ -110,9 +92,7 @@ abstract class ItemUtils {
                 } else {
                     unset($itemData["enchants"]);
                 }
-
                 return $itemData;
         }
     }
-
 }

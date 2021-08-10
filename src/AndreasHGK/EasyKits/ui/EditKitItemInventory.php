@@ -7,9 +7,10 @@ namespace AndreasHGK\EasyKits\ui;
 use AndreasHGK\EasyKits\Kit;
 use AndreasHGK\EasyKits\manager\KitManager;
 use AndreasHGK\EasyKits\utils\LangUtils;
-use muqsit\invmenu\inventories\BaseFakeInventory;
-use muqsit\invmenu\inventories\DoubleChestInventory;
 use muqsit\invmenu\InvMenu;
+use muqsit\invmenu\inventory\InvMenuInventory;
+use muqsit\invmenu\transaction\InvMenuTransaction;
+use muqsit\invmenu\transaction\InvMenuTransactionResult;
 use pocketmine\inventory\transaction\action\SlotChangeAction;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
@@ -19,10 +20,9 @@ use pocketmine\Player;
 class EditKitItemInventory {
 
     public static function sendTo(Player $player, Kit $kit) : void {
-        $menu = InvMenu::create(DoubleChestInventory::class);
-        $menu->readonly(false);
+        $menu = InvMenu::create(InvMenu::TYPE_DOUBLE_CHEST);
         $menu->setName(LangUtils::getMessage("editkit-items-title", true, ["{NAME}" => $kit->getName()]));
-        $menu->setInventoryCloseListener(function (Player $player, BaseFakeInventory $inventory) use ($kit) {
+        $menu->setInventoryCloseListener(function (Player $player, InvMenuInventory $inventory) use ($kit) {
             $items = [];
             for($i = 0; $i < 36; $i++) {
                 $item = $inventory->getItem($i);
@@ -46,10 +46,8 @@ class EditKitItemInventory {
                 $armor[0] = $armorPiece;
             }
             $new = clone $kit;
-
             $new->setItems($items);
             $new->setArmor($armor);
-
             if($kit->getItems() === $items && $kit->getArmor() === $armor) {
                 EditkitMainForm::sendTo($player, $kit);
             }
@@ -58,11 +56,11 @@ class EditKitItemInventory {
                 EditkitMainForm::sendTo($player, KitManager::get($kit->getName()));
             }
         });
-        $menu->setListener(function (Player $player, Item $itemClicked, Item $itemClickedWith, SlotChangeAction $action) {
-            if($itemClicked->getNamedTag()->hasTag("immovable", ByteTag::class)) {
-                return false;
+        $menu->setListener(function(InvMenuTransaction $transaction) : InvMenuTransactionResult{
+            if($transaction->getItemClicked()->getNamedTag()->hasTag("immovable", ByteTag::class)) {
+                return $transaction->discard();
             }
-            return true;
+            return $transaction->continue();
         });
         $menu->getInventory()->setContents($kit->getItems());
         for($i = 36; $i < 54; $i++) {
@@ -115,8 +113,6 @@ class EditKitItemInventory {
                     break;
             }
         }
-
         $menu->send($player);
     }
-
 }

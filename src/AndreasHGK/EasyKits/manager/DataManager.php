@@ -129,12 +129,11 @@ class DataManager {
 
     public static function updateConfig(string $file) : void {
         $cfg = self::get($file)->getAll();
-
         $reflect = new ReflectionProperty(PluginBase::class, "file");
         $reflect->setAccessible(true);
         $Pfile = $reflect->getValue(EasyKits::get());
-
         $filename = rtrim(str_replace("\\", "/", $file), "/");
+        $cfgResource = null;
         if(file_exists($Pfile . "resources/" . $filename)) {
             $resource = new Config($Pfile . "resources/" . $filename);
             $cfgResource = $resource->getAll();
@@ -155,5 +154,4 @@ class DataManager {
 
     private function __construct() {
     }
-
 }

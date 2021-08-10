@@ -47,7 +47,6 @@ class KitImportForm {
                 default:
                     $player->sendMessage(LangUtils::getMessage("ekimport-not-loaded"));
                     return;
-                    break;
             }
             $success = 0;
             $failed = 0;
