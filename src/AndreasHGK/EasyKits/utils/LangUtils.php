@@ -39,7 +39,7 @@ abstract class LangUtils {
 
     public static function replaceVariables(string $text, array $variables) : string {
         foreach($variables as $variable => $replace) {
-            $text = str_replace($variable, $replace, $text);
+            $text = str_replace((string) $variable, (string) $replace, $text);
         }
         return $text;
     }
