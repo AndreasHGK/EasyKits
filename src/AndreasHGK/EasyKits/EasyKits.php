@@ -37,7 +37,7 @@ class EasyKits extends PluginBase {
     public function onLoad() : void {
         self::$instance = $this;
 
-        UpdateNotifier::checkUpdate($this, $this->getName(), $this->getDescription()->getVersion());
+        UpdateNotifier::checkUpdate($this->getName(), $this->getDescription()->getVersion());
         DataManager::loadDefault();
         if(DataManager::getKey(DataManager::CONFIG, "auto-update-config")) {
             DataManager::updateAllConfigs();
