@@ -79,14 +79,19 @@ class Kit {
      */
     public function claimChestKitFor(Player $player) : bool {
         if(!$this->hasPermission($player) && $this->isLocked()) throw new KitException("Player is not permitted to claim this kit", 4);
-        if($this->getCooldown() > 0) {
-            if(CooldownManager::hasKitCooldown($this, $player)) {
+        
+        $kit = clone $this;
+        if($player->hasPermission(EasyKits::PERM_ROOT . "free." . $kit->getPermission())) $kit->price = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT . "instant." . $kit->getPermission())) $kit->cooldown = 0;
+
+        if($kit->getCooldown() > 0) {
+            if(CooldownManager::hasKitCooldown($kit, $player)) {
                 throw new KitException("Kit is on cooldown", 0);
             }
         }
-        if($this->getPrice() > 0) {
+        if($kit->getPrice() > 0) {
             if(EconomyManager::isEconomyLoaded()) {
-                if(EconomyManager::getMoney($player) < $this->getPrice()) {
+                if(EconomyManager::getMoney($player) < $kit->getPrice()) {
                     throw new KitException("Player has insufficient funds", 1);
                 }
             } else {
@@ -97,10 +102,6 @@ class Kit {
         if(count($player->getInventory()->getContents(false)) >= $player->getInventory()->getSize()) {
             throw new KitException("Player has insufficient space", 3);
         }
-
-        $kit = clone $this;
-        if($player->hasPermission(EasyKits::PERM_ROOT . "free." . $kit->getPermission())) $kit->price = 0;
-        if($player->hasPermission(EasyKits::PERM_ROOT . "instant." . $kit->getPermission())) $kit->cooldown = 0;
 
         $event = new InteractItemClaimEvent($kit, $player);
         $event->call();
@@ -130,14 +131,19 @@ class Kit {
      */
     public function claimFor(Player $player) : bool {
         if(!$this->hasPermission($player) && $this->isLocked()) throw new KitException("Player is not permitted to claim this kit", 4);
-        if($this->getCooldown() > 0) {
-            if(CooldownManager::hasKitCooldown($this, $player)) {
+
+        $kit = clone $this;
+        if($player->hasPermission(EasyKits::PERM_ROOT . "free." . $kit->getPermission())) $kit->price = 0;
+        if($player->hasPermission(EasyKits::PERM_ROOT . "instant." . $kit->getPermission())) $kit->cooldown = 0;
+
+        if($kit->getCooldown() > 0) {
+            if(CooldownManager::hasKitCooldown($kit, $player)) {
                 throw new KitException("Kit is on cooldown", 0);
             }
         }
-        if($this->getPrice() > 0) {
+        if($kit->getPrice() > 0) {
             if(EconomyManager::isEconomyLoaded()) {
-                if(EconomyManager::getMoney($player) < $this->getPrice()) {
+                if(EconomyManager::getMoney($player) < $kit->getPrice()) {
                     throw new KitException("Player has insufficient funds", 1);
                 }
             } else {
@@ -167,9 +173,6 @@ class Kit {
                 throw new KitException("Player has insufficient space", 3);
             }
         }
-        $kit = clone $this;
-        if($player->hasPermission(EasyKits::PERM_ROOT . "free." . $kit->getPermission())) $kit->price = 0;
-        if($player->hasPermission(EasyKits::PERM_ROOT . "instant." . $kit->getPermission())) $kit->cooldown = 0;
         $event = new KitClaimEvent($kit, $player);
         $event->call();
 
